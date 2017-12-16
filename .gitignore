@@ -1,0 +1,13 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+.idea/*.iml
+.idea/modules.xml
+.idea/workspace.xml
+.idea/encodings.xml
+/node_modules
+
+# misc
+.DS_Store
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

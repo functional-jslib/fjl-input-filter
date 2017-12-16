@@ -1,0 +1,144 @@
+{
+  "name": "fjl-input-filter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "BSD",
+  "dependencies": {
+    "fjl": "^0.17.14",
+    "fjl-mutable": "^0.16.0",
+    "fjl-validator": "^0.5.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "fjl-range": "^1.0.3",
+    "graceful-fs": "^4.1.11",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-better-rollup": "^2.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^4.0.0",
+    "gulp-fncallback": "^2.0.2",
+    "gulp-header": "^1.8.9",
+    "gulp-jsdoc3": "^1.0.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-uglify-es": "^0.1.9",
+    "jest": "^21.2.1",
+    "lazypipe": "^1.0.1",
+    "minimatch": "^3.0.4",
+    "rollup": "^0.52.1",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "yargs": "^10.0.3"
+  },
+  "jest": {
+    "testMatch": [
+      "**/tests/test-*.js"
+    ],
+    "testEnvironment": "node"
+  },
+  "buildConfig": {
+    "inputModuleName": "fjlInputFilter",
+    "inputFilePath": "./src/fjlInputFilter.js",
+    "outputFileName": "fjl-input-filter.js",
+    "outputFileNameMin": "fjl-input-filter.min.js",
+    "srcsGlob": "./src/**/*.js",
+    "paths": {
+      "dist": "./dist",
+      "docs": "./docs"
+    },
+    "folderNames": {
+      "amd": "amd",
+      "cjs": "cjs",
+      "iife": "iife",
+      "umd": "umd",
+      "es6Module": "es6-module"
+    },
+    "es6ModuleRollup": {
+      "config": {
+        "input": "./src/fjlInputFilter.js",
+        "external": [
+          "fjl",
+          "fjl-mutable"
+        ]
+      },
+      "write": {
+        "file": "./dist/es6-module/fjl-input-filter.js",
+        "format": "es",
+        "sourcemap": true
+      }
+    },
+    "amdRollup": {
+      "babelPlugin": {
+        "babelrc": false,
+        "presets": [
+          [
+            "env",
+            {
+              "modules": false
+            }
+          ]
+        ],
+        "plugins": [
+          "transform-es2015-modules-amd"
+        ]
+      }
+    },
+    "cjsRollup": {
+      "babelPlugin": {
+        "babelrc": false,
+        "presets": [
+          [
+            "env",
+            {
+              "modules": false
+            }
+          ]
+        ],
+        "plugins": [
+          "babel-plugin-add-module-exports"
+        ]
+      }
+    },
+    "iifeRollup": {
+      "babelPlugin": {
+        "babelrc": false,
+        "presets": [
+          [
+            "env",
+            {
+              "modules": false
+            }
+          ]
+        ],
+        "plugins": [
+          "external-helpers"
+        ]
+      }
+    },
+    "umdRollup": {
+      "babelPlugin": {
+        "babelrc": false,
+        "presets": [
+          [
+            "env",
+            {
+              "modules": false
+            }
+          ]
+        ],
+        "plugins": [
+          "babel-plugin-add-module-exports",
+          "transform-es2015-modules-umd"
+        ]
+      }
+    }
+  }
+}
