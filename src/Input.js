@@ -10,7 +10,7 @@ import {validationResult} from "fjl-validator";
 
 export const
 
-    validate = (value, input) => {
+    validateInput = (input, value) => {
         const
             {validators, filters, breakOnFailure} = input,
             vResult = validators && validators.length ?
@@ -38,7 +38,7 @@ export const
             const
                 validator = validators[i],
                 vResult = validator === 'object' ?
-                    validator.validate(value) : validator(value, options),
+                    validator.validateInput(value) : validator(value, options),
             {result: interimResult, messages: msgs} = vResult;
             results.push(vResult);
             if (!interimResult) {
@@ -87,11 +87,11 @@ export class Input {
     }
 
     validate (value) {
-        return validate(value, this);
+        return validateInput(value, this);
     }
 
     isValid (value) {
-        return validate(value, this).result;
+        return validateInput(value, this).result;
     }
 
 }
