@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "BSD",
+  "scripts": {
+    "build": "gulp clean && gulp build && npm run test-builds",
+    "docs": "gulp jsdoc",
+    "test-builds": "jest --testMatch **/tests/*-test-*.js",
+    "test": "jest --testMatch **/tests/test-*.js"
+  },
   "dependencies": {
     "fjl": "^0.17.14",
     "fjl-mutable": "^0.16.0",
-    "fjl-validator": "^0.5.0"
+    "fjl-validator": "^0.5.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

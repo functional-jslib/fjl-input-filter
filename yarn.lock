@@ -1696,9 +1696,9 @@ fjl-range@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/fjl-range/-/fjl-range-1.0.3.tgz#89ef9d2312fde50835603c95ffa52da72f10f138"
 
-fjl-validator@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/fjl-validator/-/fjl-validator-0.5.0.tgz#80ec94eefabd177667cca9b6890766eec58fe1da"
+fjl-validator@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/fjl-validator/-/fjl-validator-0.5.3.tgz#7872f9f7cb5c1d1f3f4afd868ea80c6c12e389ce"
   dependencies:
     fjl "^0.17.14"
     fjl-mutable "^0.16.0"

@@ -3,21 +3,20 @@
  */
 import {typeOf, keys, isType, flip} from 'fjl';
 import {expect, assert} from 'chai';
-import NotEmptyValidator from '../src/validator/NotEmptyValidator'
-import RegexValidator from '../src/validator/RegexValidator'
-import Input, {validate} from '../src/input/Input';
+import {notEmptyValidator, regexValidator} from 'fjl-validator';
+import Input, {validateInput} from '../src/Input';
 
 describe ('sjl.input.Input', function () {
 
     describe ('#Constructor', function () {
-        it ('should construct successfully without params.', function () {
+        test ('should construct successfully without params.', function () {
             expect((new Input())).to.be.instanceof(Input);
         });
-        it ('should construct an instance with the `name` property populated when first parameter is a string.', function () {
+        test ('should construct an instance with the `name` property populated when first parameter is a string.', function () {
             let name = 'hello';
             expect((new Input(name)).name).to.equal(name);
         });
-        it ('should populate all properties passed in via hash object.', function () {
+        test ('should populate all properties passed in via hash object.', function () {
             let options = {
                     name: 'hello',
                     breakOnFailure: true,
@@ -56,9 +55,9 @@ describe ('sjl.input.Input', function () {
 
     });
 
-    describe ('#validate', function () {
-        it ('should return a validation result', function () {
-            const rslt = validate(0, {});
+    describe ('#validateInput', function () {
+        test ('should return a validation result', function () {
+            const rslt = validateInput({}, 0);
             ['result', 'value', 'messsages'].forEach(key => expect(rslt.hasOwnProperty(key)));
         });
     });
@@ -92,17 +91,17 @@ describe ('sjl.input.Input', function () {
             const input = inputs[key];
             inputValues[key].forEach(function (args) {
                 let inputObj = new Input(input);
-                it ('should return true when value is tested directly from `value` and passes validation.', function () {
+                test ('should return true when value is tested directly from `value` and passes validation.', function () {
                     inputObj.value = args[0];
                     expect(inputObj.isValid()).to.equal(true);
                 });
-                it ('should set `value` to filtered value.', function () {
+                test ('should set `value` to filtered value.', function () {
                     expect(inputObj.value).to.equal(args[1]);
                 });
-                it ('should have `rawValue` to the initial value to test.', function () {
+                test ('should have `rawValue` to the initial value to test.', function () {
                     expect(inputObj.rawValue).to.equal(args[0]);
                 });
-                it ('should return false when value doesn\'t pass validation.', function () {
+                test ('should return false when value doesn\'t pass validation.', function () {
                     let inputObj2 = new Input(input);
                     inputObj2.value = args[2];
                     expect(inputObj2.isValid()).to.equal(false);
@@ -117,14 +116,14 @@ describe ('sjl.input.Input', function () {
             const input = inputs[key];
             inputValues[key].forEach(function (args) {
                 let inputObj = new Input(input);
-                it ('should return true when value is tested directly from `rawValue`.', function () {
+                test ('should return true when value is tested directly from `rawValue`.', function () {
                     inputObj.rawValue = args[0];
                     expect(inputObj.isValid()).to.equal(true);
                 });
-                it ('should set `value` to filtered value.', function () {
+                test ('should set `value` to filtered value.', function () {
                     expect(inputObj.value).to.equal(args[1]);
                 });
-                it ('should have `rawValue` to the initial value to test.', function () {
+                test ('should have `rawValue` to the initial value to test.', function () {
                     expect(inputObj.rawValue).to.equal(args[0]);
                 });
             });
@@ -135,13 +134,13 @@ describe ('sjl.input.Input', function () {
             const input = inputs[key];
             inputValues[key].forEach(args => {
                 let inputObj = new Input(input);
-                it ('should return true when value to is directly passed in and validates.', function () {
+                test ('should return true when value to is directly passed in and validates.', function () {
                     expect(inputObj.isValid(args[0])).to.equal(true);
                 });
-                it ('should set `value` to filtered value.', function () {
+                test ('should set `value` to filtered value.', function () {
                     expect(inputObj.value).to.equal(args[1]);
                 });
-                it ('should have `rawValue` to the initial value to test.', function () {
+                test ('should have `rawValue` to the initial value to test.', function () {
                     expect(inputObj.rawValue).to.equal(args[0]);
                 });
             });
@@ -162,7 +161,7 @@ describe ('sjl.input.Input', function () {
                 ['Hello World', 'hello world'],
             ];
         argsToTest.forEach(function (args) {
-            it ('should return expected filtered value for filter set.', function () {
+            test ('should return expected filtered value for filter set.', function () {
                 let result = input.filter(args[0]);
                 expect(result).to.equal(args[1]);
             });
