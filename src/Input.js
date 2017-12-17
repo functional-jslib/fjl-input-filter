@@ -11,37 +11,55 @@ import {validationResult} from "fjl-validator";
 export const
 
     validateInput = (input, value) => {
-        const
-            {validators, filters, breakOnFailure} = input,
-            vResult = validators && validators.length ?
-                runValidators(validators, value, breakOnFailure) : {result: false},
-            {result} = vResult;
-
-        vResult.value = value;
-        if (result && filters && filters.length) {
-            vResult.filteredValue = runFilters(filters, value);
-        }
-        return validationResult(vResult);
+        const {validators, filters} = input,
+            pendingValidation = validators && validators.length ?
+                runValidators(validators, value, input) : {result: true};
+        return pendingValidation.then(result => {
+            if (result.result && filters && filters.length) {
+                return runIOFilters(filters, value)
+                    .then(filteredValue => {
+                        result.filteredValue = filteredValue;
+                        return validationResult(result);
+                    });
+            }
+            return Promise.resolve(validationResult(result));
+        });
     },
 
-    runValidators = (validators, value, options) => {
-        const
-            limit = validators.length,
-            {breakOnFailure} = options,
-            results = [];
-        let
-            i = 0,
-            result = true;
+    validateInputIO = (input, value) => {
+        const {validators, filters} = input,
+            pendingValidation = validators && validators.length ?
+                runIOValidators(validators, value, input) :
+                    Promise.resolve({result: true})
+        ;
+        return pendingValidation.then(result => {
+            if (result.result && filters && filters.length) {
+                return runIOFilters(filters, value)
+                    .then(filteredValue => {
+                        result.filteredValue = filteredValue;
+                        return validationResult(result);
+                    });
+            }
+            return Promise.resolve(validationResult(result));
+        });
+    },
 
-        // Run validators
+    runValidators = (input, validators, value) => {},
+
+    runIOValidators = (input, validators, value) => {
+        const limit = validators.length,
+            {breakOnFailure} = options,
+            pendingResults = [];
+        let i = 0,
+            result = true;
         for (; i < limit; i++) {
-            const
-                validator = validators[i],
-                vResult = validator === 'object' ?
-                    validator.validateInput(value) : validator(value, options),
-            {result: interimResult, messages: msgs} = vResult;
-            results.push(vResult);
-            if (!interimResult) {
+            const validator = validators[i],
+                vResult = validator(options, value);
+            pendingResults.push(vResult);
+            if (vResult instanceof Promise) {
+                continue;
+            }
+            if (!vResult.result) {
                 result = false;
                 if (breakOnFailure) {
                     break;
@@ -49,19 +67,27 @@ export const
             }
         }
 
-        // Return result
-        return new ValidationResult({
-            result,
-            value,
-
-            // if messages pull them out and concat into one array or empty array
-            messages: !result ? concat(results.map(({messages}) => messages)) : []
-        });
+        return Promise.all(pendingResults)
+            .then(results => {
+                const interimResult = results.filter(rslt => !rslt.result)
+                    .reduce((agg, item) => {
+                        agg.result = item.result;
+                        agg.messages = agg.messages.concat(item.messages);
+                        return agg;
+                    }, {result, messages: []});
+                if (interimResult.messages.length) {
+                    interimResult.result = false;
+                }
+                return interimResult;
+            })
+            .then(vResult2 => new ValidationResult(vResult2));
     },
 
     runFilters = (filters, value) => filters.length ?
-        apply(compose, filters)(value) : value
+        apply(compose, filters)(value) : value,
 
+    runIOFilters = (filters, value, errorCallback = console.log.bind(console)) =>
+        runFilters(map(filter => x => x.then(filter), filters), Promise.resolve(value).catch(errorCallback))
 ;
 
 export class Input {
@@ -71,12 +97,7 @@ export class Input {
             [Boolean,   'required', true],
             [Array,     'filters', []],
             [Array,     'validators', []],
-            [Boolean,   'breakOnFailure', false],
-
-            // Protect from adding programmatic validators,
-            // from within `isValid`, more than once
-            [Boolean, 'validationHasRun', false], // @todo evaluate the necessity
-                                                // of this functionality
+            [Boolean,   'breakOnFailure', false]
         ], this);
         if (isString(options)) {
             this.name = options;
@@ -85,15 +106,6 @@ export class Input {
             assign(this, options);
         }
     }
-
-    validate (value) {
-        return validateInput(value, this);
-    }
-
-    isValid (value) {
-        return validateInput(value, this).result;
-    }
-
 }
 
 export default Input;

@@ -29,15 +29,6 @@ describe ('sjl.input.Input', function () {
         });
     });
 
-    describe ('#Interface', function () {
-        let input = new Input();
-        ['isValid', 'validate'].forEach(function (method) {
-            it('should have a `' + method + '` method.', function () {
-                expect(input[method]).to.be.instanceof(Function);
-            });
-        });
-    });
-
     describe ('#Properties.', function () {
         let input = new Input();
         [
@@ -56,9 +47,15 @@ describe ('sjl.input.Input', function () {
     });
 
     describe ('#validateInput', function () {
-        test ('should return a validation result', function () {
-            const rslt = validateInput({}, 0);
-            ['result', 'value', 'messsages'].forEach(key => expect(rslt.hasOwnProperty(key)));
+        test ('should return a promise', function () {
+            expect(validateInput({}, 0)).to.be.instanceOf(Promise);
+        });
+        test ('returned promise should resolve to a validation result', function () {
+            return validateInput({}, 0)
+                .then(result =>
+                    ['result', 'value', 'messsages']
+                        .map(key => expect(result.hasOwnProperty(key)))
+                )
         });
     });
 
