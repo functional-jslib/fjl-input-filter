@@ -6,7 +6,7 @@
  */
 import {defineEnumProps$} from 'fjl-mutable';
 import {assign, apply, compose, concat, isString, isUndefined} from 'fjl';
-import {validationResult} from "fjl-validator";
+import {toValidationResult} from "fjl-validator";
 
 export const
 
@@ -19,10 +19,10 @@ export const
                 return runIOFilters(filters, value)
                     .then(filteredValue => {
                         result.filteredValue = filteredValue;
-                        return validationResult(result);
+                        return toValidationResult(result);
                     });
             }
-            return Promise.resolve(validationResult(result));
+            return Promise.resolve(toValidationResult(result));
         });
     },
 
@@ -37,10 +37,10 @@ export const
                 return runIOFilters(filters, value)
                     .then(filteredValue => {
                         result.filteredValue = filteredValue;
-                        return validationResult(result);
+                        return toValidationResult(result);
                     });
             }
-            return Promise.resolve(validationResult(result));
+            return Promise.resolve(toValidationResult(result));
         });
     },
 
@@ -87,25 +87,22 @@ export const
         apply(compose, filters)(value) : value,
 
     runIOFilters = (filters, value, errorCallback = console.log.bind(console)) =>
-        runFilters(map(filter => x => x.then(filter), filters), Promise.resolve(value).catch(errorCallback))
-;
+        runFilters(map(filter => x => x.then(filter), filters), Promise.resolve(value).catch(errorCallback)),
 
-export class Input {
-    constructor (options) {
-        defineEnumProps$([
+    toInputOptions = options => {
+        const inputOptions = defineEnumProps$([
             [String,    'name', ''],
             [Boolean,   'required', true],
             [Array,     'filters', []],
             [Array,     'validators', []],
             [Boolean,   'breakOnFailure', false]
-        ], this);
+        ], {});
         if (isString(options)) {
-            this.name = options;
+            inputOptions.name = options;
         }
         else if (options) {
-            assign(this, options);
+            assign(inputOptions, options);
         }
+        return inputOptions;
     }
-}
-
-export default Input;
+;

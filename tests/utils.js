@@ -1,4 +1,6 @@
 import {range$} from 'fjl-range';
+import {apply} from 'fjl';
+import {expect, assert} from 'chai';
 
 export const
 
@@ -16,6 +18,19 @@ export const
 
     genRanStr = (min = 0, max = 100) =>
         range$(min, max)
-            .reduce(str => str + genRanChar(min, max), '')
+            .reduce(str => str + genRanChar(min, max), ''),
+
+    runHasPropOfType = (Type, propName, [correctValue, incorrectValue], x) => {
+        expect(x.hasOwnProperty(propName)).to.equal(true);
+        assert.throws(() => x[propName] = incorrectValue, Error);
+        expect(x[propName] = correctValue).to.equal(correctValue);
+    },
+
+    runHasPropTypes = (propTypeArgsList, x) =>
+        propTypeArgsList.forEach(args => {
+            const _args = args.slice(0);
+            _args.push(x);
+            apply(runHasPropOfType, _args);
+        })
 
 ;

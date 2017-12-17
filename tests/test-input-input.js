@@ -4,17 +4,24 @@
 import {typeOf, keys, isType, flip} from 'fjl';
 import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator} from 'fjl-validator';
-import Input, {validateInput} from '../src/Input';
+import {toInputOptions, validateInput} from '../src/Input';
+import {runHasPropTypes} from "./utils";
 
 describe ('sjl.input.Input', function () {
 
-    describe ('#Constructor', function () {
-        test ('should construct successfully without params.', function () {
-            expect((new Input())).to.be.instanceof(Input);
+    describe ('#toInputOptions', function () {
+        test ('should return an `InputOptions` object.', function () {
+            runHasPropTypes([
+                [String, 'name', ['', 99]],
+                [Boolean, 'required', [true, 99]],
+                [Boolean, 'breakOnFailure', [true, 99]],
+                [Array, 'filters', [[], 99]],
+                [Array, 'validators', [[], 99]]
+            ], toInputOptions());
         });
-        test ('should construct an instance with the `name` property populated when first parameter is a string.', function () {
+        test ('should return an instance with the `name` property populated when `options` parameter is a string.', function () {
             let name = 'hello';
-            expect((new Input(name)).name).to.equal(name);
+            expect((toInputOptions(name)).name).to.equal(name);
         });
         test ('should populate all properties passed in via hash object.', function () {
             let options = {
@@ -22,31 +29,14 @@ describe ('sjl.input.Input', function () {
                     breakOnFailure: true,
                     fallbackValue: 'hello world'
                 },
-                input = new Input(options);
+                input = toInputOptions(options);
             keys(options).forEach(function (key) {
                 expect(input[key]).to.equal(options[key]);
             });
         });
     });
 
-    describe ('#Properties.', function () {
-        let input = new Input();
-        [
-            ['name', String],
-            ['required', Boolean],
-            ['breakOnFailure', Boolean],
-            ['filters', Array],
-            ['validators', Array]
-        ].forEach(function (args) {
-            it('should have an `' + args[0] + '` property.', function () {
-                let isValidProp = isType(args[1], input[args[0]]);
-                expect(isValidProp).to.equal(true);
-            });
-        });
-
-    });
-
-    describe ('#validateInput', function () {
+    /*describe ('#validateInput', function () {
         test ('should return a promise', function () {
             expect(validateInput({}, 0)).to.be.instanceOf(Promise);
         });
@@ -58,6 +48,7 @@ describe ('sjl.input.Input', function () {
                 )
         });
     });
+    */
 
     /*describe ('#isValid, #validate', function () {
         let inputs = {
