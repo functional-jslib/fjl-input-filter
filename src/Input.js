@@ -12,18 +12,9 @@ export const
 
     validateInput = (input, value) => {
         const {validators, filters} = input,
-            pendingValidation = validators && validators.length ?
+            result = validators && validators.length ?
                 runValidators(validators, value, input) : {result: true};
-        return pendingValidation.then(result => {
-            if (result.result && filters && filters.length) {
-                return runIOFilters(filters, value)
-                    .then(filteredValue => {
-                        result.filteredValue = filteredValue;
-                        return toValidationResult(result);
-                    });
-            }
-            return Promise.resolve(toValidationResult(result));
-        });
+        return toValidationResult(result);
     },
 
     validateInputIO = (input, value) => {
@@ -44,7 +35,26 @@ export const
         });
     },
 
-    runValidators = (input, validators, value) => {},
+    runValidators = (inputOptions, value) => {
+        const {validators} = inputOptions,
+            limit = validators.length,
+            {breakOnFailure} = inputOptions;
+        let i = 0,
+            result = true,
+            messages = [];
+        for (; i < limit; i++) {
+            const validator = validators[i],
+                vResult = validator(value);
+            if (!vResult.result) {
+                messages = messages.concat(vResult.messages);
+                result = false;
+                if (breakOnFailure) {
+                    break;
+                }
+            }
+        }
+        return toValidationResult({result, messages, value});
+    },
 
     runIOValidators = (input, validators, value) => {
         const limit = validators.length,
@@ -80,7 +90,7 @@ export const
                 }
                 return interimResult;
             })
-            .then(vResult2 => new ValidationResult(vResult2));
+            .then(vResult2 => toValidationResult(vResult2));
     },
 
     runFilters = (filters, value) => filters.length ?

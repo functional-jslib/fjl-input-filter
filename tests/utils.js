@@ -21,9 +21,16 @@ export const
             .reduce(str => str + genRanChar(min, max), ''),
 
     runHasPropOfType = (Type, propName, [correctValue, incorrectValue], x) => {
-        expect(x.hasOwnProperty(propName)).to.equal(true);
-        assert.throws(() => x[propName] = incorrectValue, Error);
-        expect(x[propName] = correctValue).to.equal(correctValue);
+        test (`it should have the a \`${propName}\` property`, function () {
+            expect(x.hasOwnProperty(propName)).to.equal(true);
+        });
+        test (`it should throw an error when setting \`${propName}\` to ${incorrectValue}`, function () {
+            assert.throws(() => x[propName] = incorrectValue, Error);
+        });
+        test (`it should set value correctly for \`${propName}\` when value is of correct type`, function () {
+            expect(x[propName] = correctValue).to.equal(correctValue);
+        });
+        // log(Type, propName, correctValue, incorrectValue, x);
     },
 
     runHasPropTypes = (propTypeArgsList, x) =>

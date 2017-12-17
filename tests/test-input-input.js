@@ -3,21 +3,23 @@
  */
 import {typeOf, keys, isType, flip} from 'fjl';
 import {expect, assert} from 'chai';
-import {notEmptyValidator, regexValidator} from 'fjl-validator';
-import {toInputOptions, validateInput} from '../src/Input';
-import {runHasPropTypes} from "./utils";
+import {notEmptyValidator, regexValidator, stringLengthValidator} from 'fjl-validator';
+import {runValidators, toInputOptions, validateInput} from '../src/Input';
+import {runHasPropTypes, log} from "./utils";
 
 describe ('sjl.input.Input', function () {
 
     describe ('#toInputOptions', function () {
-        test ('should return an `InputOptions` object.', function () {
-            runHasPropTypes([
-                [String, 'name', ['', 99]],
-                [Boolean, 'required', [true, 99]],
-                [Boolean, 'breakOnFailure', [true, 99]],
-                [Array, 'filters', [[], 99]],
-                [Array, 'validators', [[], 99]]
-            ], toInputOptions());
+        describe ('#InputOptions', function () {
+            // Ensure properties on inputOptions default
+            [toInputOptions(), toInputOptions({})]
+                .forEach(inputOptions => runHasPropTypes([
+                    [String, 'name', ['', 99]],
+                    [Boolean, 'required', [true, 99]],
+                    [Boolean, 'breakOnFailure', [true, 99]],
+                    [Array, 'filters', [[], 99]],
+                    [Array, 'validators', [[], 99]]
+                ], inputOptions));
         });
         test ('should return an instance with the `name` property populated when `options` parameter is a string.', function () {
             let name = 'hello';
@@ -35,6 +37,43 @@ describe ('sjl.input.Input', function () {
             });
         });
     });
+
+    describe ('#runValidators', function () {
+        test ('it should return a `ValidationResult` object', function () {
+            [
+                [
+                    runValidators({
+                        validators: [
+                            notEmptyValidator({}),
+                            stringLengthValidator({min: 3})
+                        ]
+                    }, 'hello-world'),
+                    true, 0
+                ],
+                [
+                    runValidators({
+                        validators: [
+                            x => {
+                                const messages = [];
+                                let result = true;
+                                if (!x || !x.length) {
+                                    result = false;
+                                    messages.push('Empty is not allowed');
+                                }
+                                return {result, messages};
+                            },
+                            stringLengthValidator({min: 3})
+                        ]
+                    }, ''),
+                    false, 1
+                ]
+            ]
+                .forEach(([{result, messages}, expectedResult, expectedMsgsLen]) => {
+                    expect(result).to.equal(expectedResult);
+                    expect(messages.length).to.equal(expectedMsgsLen);
+                });
+        });
+    })
 
     /*describe ('#validateInput', function () {
         test ('should return a promise', function () {
