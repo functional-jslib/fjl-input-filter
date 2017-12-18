@@ -1,9 +1,9 @@
 /**
  * Created by Ely on 3/26/2016.
  */
-import {typeOf, keys, isType, flip} from 'fjl';
+import {typeOf, keys, isType, flip, subsequences, repeat} from 'fjl';
 import {expect, assert} from 'chai';
-import {notEmptyValidator, regexValidator, stringLengthValidator} from 'fjl-validator';
+import {notEmptyValidator, regexValidator, stringLengthValidator, toValidationResult, toValidationOptions} from 'fjl-validator';
 import {runValidators, toInputOptions, validateInput} from '../src/Input';
 import {runHasPropTypes, log} from "./utils";
 
@@ -39,41 +39,43 @@ describe ('sjl.input.Input', function () {
     });
 
     describe ('#runValidators', function () {
-        test ('it should return a `ValidationResult` object', function () {
+        test ('it should return a `ValidationResult` object with the expected results', function () {
+            const inputOptionObjs = [
+                    {
+                        validators: [
+                            stringLengthValidator({min: 0, max: 99})
+                        ],
+                    },
+                    {
+                        validators: [
+                            notEmptyValidator(null),
+                            stringLengthValidator({min: 3, max: 99})
+                        ]
+                    }
+                ];
             [
-                [
-                    runValidators({
-                        validators: [
-                            notEmptyValidator({}),
-                            stringLengthValidator({min: 3})
-                        ]
-                    }, 'hello-world'),
-                    true, 0
-                ],
-                [
-                    runValidators({
-                        validators: [
-                            x => {
-                                const messages = [];
-                                let result = true;
-                                if (!x || !x.length) {
-                                    result = false;
-                                    messages.push('Empty is not allowed');
-                                }
-                                return {result, messages};
-                            },
-                            stringLengthValidator({min: 3})
-                        ]
-                    }, ''),
-                    false, 1
-                ]
+                // [ValidationResult, ExpectedResultResult, MessagesLength]
+                [runValidators(inputOptionObjs[0], 'hello-world'), true, 0],
+                [runValidators(inputOptionObjs[1], ''), false, 2],
+                [runValidators(inputOptionObjs[1], repeat(100, 'a').join('')), false, 1]
             ]
+                .concat(
+                    subsequences('hello-world')
+                        .map(x => [runValidators(inputOptionObjs[0], x.join('')), true, 0])
+                )
                 .forEach(([{result, messages}, expectedResult, expectedMsgsLen]) => {
                     expect(result).to.equal(expectedResult);
                     expect(messages.length).to.equal(expectedMsgsLen);
                 });
         });
-    })
+        test ('it should return `true` if passed in `inputOptions` doesn\'t have any validators', function () {
+            expect(runValidators({}, 'hello-world').result).to.equal(true);
+        });
+    });
+
+    describe ('#runFilters', function () {
+
+    });
 
     /*describe ('#validateInput', function () {
         test ('should return a promise', function () {

@@ -36,9 +36,8 @@ export const
     },
 
     runValidators = (inputOptions, value) => {
-        const {validators} = inputOptions,
-            limit = validators.length,
-            {breakOnFailure} = inputOptions;
+        const {validators, breakOnFailure} = toInputOptions(inputOptions),
+            limit = validators.length;
         let i = 0,
             result = true,
             messages = [];
