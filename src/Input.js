@@ -8,7 +8,10 @@ import {defineEnumProps$} from 'fjl-mutable';
 import {assign, apply, compose, concat, isString, isUndefined} from 'fjl';
 import {toValidationResult} from "fjl-validator";
 
+
 export const
+
+    defaultErrorCallback = console.log.bind(console),
 
     validateInput = (input, value) => {
         const {validators, filters} = input,
@@ -55,19 +58,22 @@ export const
         return toValidationResult({result, messages, value});
     },
 
-    runIOValidators = (input, validators, value) => {
-        const limit = validators.length,
-            {breakOnFailure} = options,
+    runIOValidators = (inputOptions, value, errorCallback = defaultErrorCallback) => {
+        const {validators, breakOnFailure} = inputOptions,
+            limit = validators.length,
             pendingResults = [];
         let i = 0,
             result = true;
         for (; i < limit; i++) {
             const validator = validators[i],
-                vResult = validator(options, value);
-            pendingResults.push(vResult);
+                vResult = validator(value);
             if (vResult instanceof Promise) {
+                pendingResults.push(vResult.catch(errorCallback));
                 continue;
             }
+
+            pendingResults.push(vResult);
+
             if (!vResult.result) {
                 result = false;
                 if (breakOnFailure) {
@@ -78,24 +84,23 @@ export const
 
         return Promise.all(pendingResults)
             .then(results => {
-                const interimResult = results.filter(rslt => !rslt.result)
-                    .reduce((agg, item) => {
-                        agg.result = item.result;
+                const failedResults = results.filter(rslt => !rslt.result),
+                    interimResult = failedResults.reduce((agg, item) => {
                         agg.messages = agg.messages.concat(item.messages);
                         return agg;
                     }, {result, messages: []});
-                if (interimResult.messages.length) {
+                if (failedResults.length) {
                     interimResult.result = false;
                 }
-                return interimResult;
+                return toValidationResult(interimResult);
             })
-            .then(vResult2 => toValidationResult(vResult2));
+            .catch(errorCallback);
     },
 
     runFilters = (filters, value) => filters.length ?
         apply(compose, filters)(value) : value,
 
-    runIOFilters = (filters, value, errorCallback = console.log.bind(console)) =>
+    runIOFilters = (filters, value, errorCallback = defaultErrorCallback) =>
         runFilters(map(filter => x => x.then(filter), filters), Promise.resolve(value).catch(errorCallback)),
 
     toInputOptions = options => {

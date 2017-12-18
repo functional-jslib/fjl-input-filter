@@ -1,11 +1,12 @@
 /**
  * Created by Ely on 3/26/2016.
  */
-import {typeOf, keys, isType, flip, subsequences, repeat} from 'fjl';
+import {typeOf, keys, isType, flip, subsequences, repeat, curry,
+    isEmpty, isArray, isBoolean} from 'fjl';
 import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator, toValidationResult, toValidationOptions} from 'fjl-validator';
-import {runValidators, toInputOptions, validateInput} from '../src/Input';
-import {runHasPropTypes, log} from "./utils";
+import {runValidators, runIOValidators, toInputOptions, validateInput} from '../src/Input';
+import {runHasPropTypes, log, peek} from "./utils";
 
 describe ('sjl.input.Input', function () {
 
@@ -70,6 +71,59 @@ describe ('sjl.input.Input', function () {
         });
         test ('it should return `true` if passed in `inputOptions` doesn\'t have any validators', function () {
             expect(runValidators({}, 'hello-world').result).to.equal(true);
+        });
+    });
+
+    describe ('#runIOValidators', function () {
+        // Prepare some IO validators (promised based validators)
+        const someIOValidateNotEmpty = x => {
+                const result = !isEmpty(x),
+                    messages = [];
+                if (!result) {
+                    messages.push('Empty not allowed');
+                }
+                return Promise.resolve({result, messages});
+            },
+            someIOValidateLength = curry((options, x) =>
+                Promise.resolve(stringLengthValidator(options, x))
+            );
+
+        test ('it should return a promise whether truthy result or falsy result', function () {
+            const expectedPromise = runIOValidators({
+                    validators: [
+                        someIOValidateNotEmpty,
+                        someIOValidateLength({min: 3, max: 21})
+                    ]
+                }, '').catch(peek);
+            expect(expectedPromise).to.be.instanceOf(Promise);
+        });
+
+        test ('the retured promise should resolve to a validation result object whether falsy or truthy result.result', function () {
+            return Promise.all([
+                    runIOValidators({
+                        validators: [
+                            someIOValidateNotEmpty,
+                            someIOValidateLength({min: 3, max: 21})
+                        ]
+                    }, ''),
+                    runIOValidators({
+                        validators: [
+                            someIOValidateNotEmpty,
+                            someIOValidateLength({min: 3, max: 21})
+                        ]
+                    }, 'hello-world')
+                ])
+                .then(results => {
+                    const [falsyResult, truthyResult] = results;
+                    expect(falsyResult.result).to.equal(false);
+                    expect(truthyResult.result).to.equal(true);
+                    expect(falsyResult.messages.length).to.equal(2);
+                    expect(truthyResult.messages.length).to.equal(0);
+                    results.forEach(rslt => {
+                        expect(isArray(rslt.messages)).to.equal(true);
+                        expect(isBoolean(rslt.result)).to.equal(true);
+                    });
+                }, peek);
         });
     });
 
