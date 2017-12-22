@@ -5,7 +5,7 @@ import {typeOf, keys, isType, flip, subsequences, repeat, curry,
     isEmpty, isArray, isBoolean} from 'fjl';
 import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator, toValidationResult, toValidationOptions} from 'fjl-validator';
-import {runValidators, runIOValidators, toInputOptions, validateInput} from '../src/Input';
+import {runValidators, runIOValidators, runFilters, runIOFilters, toInputOptions, validateInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
 
 describe ('sjl.input.Input', function () {
@@ -128,7 +128,24 @@ describe ('sjl.input.Input', function () {
     });
 
     describe ('#runFilters', function () {
+        it ('should run all filters in compositional order', function () {
+            expect(runFilters([
+                x => (x + '').trim(),
+                x => (x + '').toLowerCase(),
+                x => (x + '').replace(/[^a-z\d\-_\s]+/gim, '')
+            ], '  Hello#-#World ')).to.equal('hello-world');
+        });
+    });
 
+    describe ('#runIOFilters', function () {
+        test ('should run all filters in compositional order', function () {
+            return runIOFilters([
+                x => (x + '').trim(),
+                x => Promise.resolve((x + '').toLowerCase()),
+                x => (x + '').replace(/[^a-z\d\-_\s]+/gim, '')
+            ], '  Hello#-#World ')
+                .then(x => expect(peek(x)).to.equal('hello-world'));
+        });
     });
 
     /*describe ('#validateInput', function () {
@@ -156,7 +173,7 @@ describe ('sjl.input.Input', function () {
                     filters: [
                         // new StringToLowerFilter(),
                         // new StringTrimFilter()
-                        //new SlugFilter()
+                        // new SlugFilter()
                     ]
                 }
             },

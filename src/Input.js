@@ -5,19 +5,23 @@
  *      functionality for javascript
  */
 import {defineEnumProps$} from 'fjl-mutable';
-import {assign, apply, compose, concat, isString, isUndefined} from 'fjl';
-import {toValidationResult} from "fjl-validator";
-
+import {assign, apply, compose, concat, isString, isUndefined, map} from 'fjl';
+import {toValidationResult, toValidationOptions} from "fjl-validator";
 
 export const
 
     defaultErrorCallback = console.log.bind(console),
 
     validateInput = (input, value) => {
-        const {validators, filters} = input,
-            result = validators && validators.length ?
-                runValidators(validators, value, input) : {result: true};
-        return toValidationResult(result);
+        const vResult = runValidators(input, value),
+            fResult = runFilters(input, value),
+            oResult = runObscurator(input, value);
+        return toValidationResult({
+            ...vResult,
+            value: value,
+            filteredValue: fResult,
+            obscuredValue: oResult
+        });
     },
 
     validateInputIO = (input, value) => {
@@ -103,6 +107,11 @@ export const
     runIOFilters = (filters, value, errorCallback = defaultErrorCallback) =>
         runFilters(map(filter => x => x.then(filter), filters), Promise.resolve(value).catch(errorCallback)),
 
+    runObscurator = (inputOptions, value) => {
+        const {valueObscured, valueObscurator} = inputOptions;
+        return (valueObscured && valueObscurator) ? valueObscurator(value) : value;
+    },
+
     toInputOptions = options => {
         const inputOptions = defineEnumProps$([
             [String,    'name', ''],
@@ -110,7 +119,7 @@ export const
             [Array,     'filters', []],
             [Array,     'validators', []],
             [Boolean,   'breakOnFailure', false]
-        ], {});
+        ], toValidationOptions());
         if (isString(options)) {
             inputOptions.name = options;
         }
