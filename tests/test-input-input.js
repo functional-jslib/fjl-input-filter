@@ -4,11 +4,14 @@
 import {typeOf, keys, isType, flip, subsequences, repeat, curry,
     isEmpty, isArray, isBoolean} from 'fjl';
 import {expect, assert} from 'chai';
-import {notEmptyValidator, regexValidator, stringLengthValidator, toValidationResult, toValidationOptions} from 'fjl-validator';
+import {notEmptyValidator, regexValidator, stringLengthValidator,
+    toValidationResult, toValidationOptions} from 'fjl-validator';
 import {runValidators, runIOValidators, runFilters, runIOFilters, toInputOptions, validateInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
 
 describe ('sjl.input.Input', function () {
+
+    const toSlug = x => (x + '').replace(/[^a-z\d\-_]+/, '-');
 
     describe ('#toInputOptions', function () {
         describe ('#InputOptions', function () {
@@ -146,6 +149,17 @@ describe ('sjl.input.Input', function () {
             ], '  Hello#-#World ')
                 .then(x => expect(peek(x)).to.equal('hello-world'));
         });
+    });
+
+    describe ('#validateInput', function () {
+        const {result, messages} = validateInput(toInputOptions({
+            validators: [
+                notEmptyValidator(null),
+                stringLengthValidator({min: 5})
+            ],
+            filters: [toSlug]
+        }), '')
+        log(result, messages);
     });
 
     /*describe ('#validateInput', function () {
