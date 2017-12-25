@@ -11,7 +11,10 @@ import {runHasPropTypes, log, peek} from "./utils";
 
 describe ('sjl.input.Input', function () {
 
-    const toSlug = x => (x + '').replace(/[^a-z\d\-_]+/, '-');
+    const toSlug = x => (x + '').replace(/[^a-z\d\-_]+/gim, '-').toLowerCase(),
+        isValidateInputResult = rsltObj =>
+            ['result', 'messages', 'value', 'rawValue', 'filteredValue', 'obscuredValue']
+                .every(key => rsltObj.hasOwnProperty(key));
 
     describe ('#toInputOptions', function () {
         describe ('#InputOptions', function () {
@@ -147,19 +150,58 @@ describe ('sjl.input.Input', function () {
                 x => Promise.resolve((x + '').toLowerCase()),
                 x => (x + '').replace(/[^a-z\d\-_\s]+/gim, '')
             ], '  Hello#-#World ')
-                .then(x => expect(peek(x)).to.equal('hello-world'));
+                .then(x => expect(x).to.equal('hello-world'));
         });
     });
 
     describe ('#validateInput', function () {
-        const {result, messages} = validateInput(toInputOptions({
-            validators: [
-                notEmptyValidator(null),
-                stringLengthValidator({min: 5})
-            ],
-            filters: [toSlug]
-        }), '')
-        log(result, messages);
+        const baseExampleOptions = {
+                validators: [
+                    notEmptyValidator(null),
+                    stringLengthValidator({min: 5})
+                ],
+                filters: [toSlug]
+            },
+            // Array<Array<ValidationResult, ExpectedResultBln, ExpectedMessagesLen, ExpectedFilteredValue>>
+            results = [
+                [validateInput(toInputOptions({
+                    breakOnFailure: true,
+                    ...baseExampleOptions
+                }), ''), false, 1],
+                [validateInput(toInputOptions({
+                    breakOnFailure: false,
+                    ...baseExampleOptions
+                }), ''), false, 2],
+                [validateInput(toInputOptions({
+                    breakOnFailure: true,
+                    ...baseExampleOptions
+                }), 'abc'), false, 1],            // less than min stringlength 5
+                [validateInput(toInputOptions({
+                    breakOnFailure: false,
+                    ...baseExampleOptions
+                }), 'Hello World'), true, 0, 'hello-world']     // greater than min stringlength 5
+            ]
+        ;
+
+        test ('should return an input validation result object', function () {
+            expect(
+                results.every(([validationResult]) =>
+                    isValidateInputResult(validationResult)
+                )
+            ).to.equal(true);
+        });
+
+        test ('should return expected result object for given arguments', function () {
+            results.forEach(([validationResult, expectedResultBln, expectedMsgsLen, expectedValue]) => {
+                const {result, messages, value} = validationResult;
+                expect(messages.length).to.equal(expectedMsgsLen);
+                expect(result).to.equal(expectedResultBln);
+                if (!result) {
+                    return;
+                }
+                expect(value).to.equal(expectedValue);
+            });
+        });
     });
 
     /*describe ('#validateInput', function () {

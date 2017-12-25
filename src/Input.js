@@ -14,11 +14,12 @@ export const
 
     validateInput = (input, value) => {
         const vResult = runValidators(input, value),
-            fResult = runFilters(input, value),
+            fResult = runFilters(input.filters || null, value),
             oResult = runObscurator(input, value);
         return toValidationResult({
             ...vResult,
-            value: value,
+            rawValue: value,
+            value: fResult,
             filteredValue: fResult,
             obscuredValue: oResult
         });
