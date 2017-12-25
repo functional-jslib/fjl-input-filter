@@ -12,7 +12,7 @@
   "dependencies": {
     "fjl": "^0.17.14",
     "fjl-mutable": "^0.16.0",
-    "fjl-validator": "^0.6.1"
+    "fjl-validator": "0.6.3"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
