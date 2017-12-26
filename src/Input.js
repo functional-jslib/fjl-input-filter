@@ -13,9 +13,9 @@ export const
     defaultErrorCallback = console.log.bind(console),
 
     validateInput = (input, value) => {
-        const vResult = runValidators(input, value),
+        const vResult = runValidatorsOnInput(input, value),
             fResult = runFilters(input.filters || null, value),
-            oResult = runObscurator(input, value);
+            oResult = runObscurator(input, fResult);
         return toValidationResult({
             ...vResult,
             rawValue: value,
@@ -35,7 +35,9 @@ export const
             if (result.result && filters && filters.length) {
                 return runIOFilters(filters, value)
                     .then(filteredValue => {
-                        result.filteredValue = filteredValue;
+                        result.rawValue = value;
+                        result.value = result.filteredValue = filteredValue;
+                        result.obscuredValue = runObscurator(input, filteredValue);
                         return toValidationResult(result);
                     });
             }
@@ -43,12 +45,14 @@ export const
         });
     },
 
-    runValidators = (inputOptions, value) => {
-        const {validators, breakOnFailure} = toInputOptions(inputOptions),
-            limit = validators.length;
+    runValidators = (validators, breakOnFailure, value) => {
+        let result = true;
+        if (!validators || !validators.length) {
+            return {result, value};
+        }
         let i = 0,
-            result = true,
-            messages = [];
+            messages = [],
+            limit = validators.length;
         for (; i < limit; i++) {
             const validator = validators[i],
                 vResult = validator(value);
@@ -61,6 +65,11 @@ export const
             }
         }
         return toValidationResult({result, messages, value});
+    },
+
+    runValidatorsOnInput = (input, value) => {
+        const {validators, breakOnFailure} = input;
+        return runValidators(validators, breakOnFailure, value);
     },
 
     runIOValidators = (inputOptions, value, errorCallback = defaultErrorCallback) => {
@@ -102,11 +111,22 @@ export const
             .catch(errorCallback);
     },
 
-    runFilters = (filters, value) => filters.length ?
+    runIOValidatorsOnInput = (input, value, errorCallback = defaultErrorCallback) => {
+
+    },
+
+    runFilters = (filters, value) => filters && filters.length ?
         apply(compose, filters)(value) : value,
 
+    runFiltersOnInput = (input, value) => runFilters(
+        input ? input.filters : null, value),
+
     runIOFilters = (filters, value, errorCallback = defaultErrorCallback) =>
-        runFilters(map(filter => x => x.then(filter), filters), Promise.resolve(value).catch(errorCallback)),
+        runFilters(filters ? map(filter => x => x.then(filter), filters) : null,
+            Promise.resolve(value).catch(errorCallback)),
+
+    runIOFiltersOnInput = (input, value, errorCallback = defaultErrorCallback) =>
+        runIOFilters(input ? input.filters : null, value, errorCallback),
 
     runObscurator = (inputOptions, value) => {
         const {valueObscured, valueObscurator} = inputOptions;
