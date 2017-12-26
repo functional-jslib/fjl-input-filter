@@ -13,10 +13,12 @@ export const
     defaultErrorCallback = console.log.bind(console),
 
     validateInput = (input, value) => {
-        const vResult = runValidatorsOnInput(input, value),
-            fResult = runFilters(input.filters || null, value),
-            oResult = runObscurator(input, fResult);
-        return toValidationResult({
+        const {validators, filters, breakOnFailure,
+                valueObscured, valueObscurator} = input,
+            vResult = runValidators(validators, breakOnFailure, value),
+            fResult = runFilters(filters, value),
+            oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
+        return toInputValidationResult({
             ...vResult,
             rawValue: value,
             value: fResult,
@@ -26,7 +28,8 @@ export const
     },
 
     validateInputIO = (input, value) => {
-        const {validators, filters} = input,
+        const {validators, filters, breakOnFailure,
+                valueObscured, valueObscurator} = input,
             pendingValidation = validators && validators.length ?
                 runIOValidators(validators, value, input) :
                     Promise.resolve({result: true})
@@ -37,44 +40,42 @@ export const
                     .then(filteredValue => {
                         result.rawValue = value;
                         result.value = result.filteredValue = filteredValue;
-                        result.obscuredValue = runObscurator(input, filteredValue);
-                        return toValidationResult(result);
+                        result.obscuredValue =
+                            valueObscured && valueObscurator ?
+                                valueObscurator(filteredValue) : filteredValue;
+                        return toInputValidationResult(result);
                     });
             }
-            return Promise.resolve(toValidationResult(result));
+            return Promise.resolve(toInputValidationResult(result));
         });
     },
 
     runValidators = (validators, breakOnFailure, value) => {
         let result = true;
         if (!validators || !validators.length) {
-            return {result, value};
+            return toValidationResult({result});
         }
         let i = 0,
-            messages = [],
+            messageResults = [],
             limit = validators.length;
         for (; i < limit; i++) {
-            const validator = validators[i],
-                vResult = validator(value);
+            const vResult = validators[i](value);
             if (!vResult.result) {
-                messages = messages.concat(vResult.messages);
+                messageResults.push(vResult.messages);
                 result = false;
                 if (breakOnFailure) {
                     break;
                 }
             }
         }
-        return toValidationResult({result, messages, value});
+        return toValidationResult({result, messages: concat(messageResults)});
     },
 
-    runValidatorsOnInput = (input, value) => {
-        const {validators, breakOnFailure} = input;
-        return runValidators(validators, breakOnFailure, value);
-    },
-
-    runIOValidators = (inputOptions, value, errorCallback = defaultErrorCallback) => {
-        const {validators, breakOnFailure} = inputOptions,
-            limit = validators.length,
+    runIOValidators = (validators, breakOnFailure, value, errorCallback = defaultErrorCallback) => {
+        if (!validators || !validators.length) {
+            return Promise.resolve(toValidationResult({result: true}));
+        }
+        const limit = validators.length,
             pendingResults = [];
         let i = 0,
             result = true;
@@ -85,9 +86,7 @@ export const
                 pendingResults.push(vResult.catch(errorCallback));
                 continue;
             }
-
             pendingResults.push(vResult);
-
             if (!vResult.result) {
                 result = false;
                 if (breakOnFailure) {
@@ -111,27 +110,12 @@ export const
             .catch(errorCallback);
     },
 
-    runIOValidatorsOnInput = (input, value, errorCallback = defaultErrorCallback) => {
-
-    },
-
     runFilters = (filters, value) => filters && filters.length ?
         apply(compose, filters)(value) : value,
-
-    runFiltersOnInput = (input, value) => runFilters(
-        input ? input.filters : null, value),
 
     runIOFilters = (filters, value, errorCallback = defaultErrorCallback) =>
         runFilters(filters ? map(filter => x => x.then(filter), filters) : null,
             Promise.resolve(value).catch(errorCallback)),
-
-    runIOFiltersOnInput = (input, value, errorCallback = defaultErrorCallback) =>
-        runIOFilters(input ? input.filters : null, value, errorCallback),
-
-    runObscurator = (inputOptions, value) => {
-        const {valueObscured, valueObscurator} = inputOptions;
-        return (valueObscured && valueObscurator) ? valueObscurator(value) : value;
-    },
 
     toInputOptions = options => {
         const inputOptions = defineEnumProps$([
@@ -148,5 +132,14 @@ export const
             assign(inputOptions, options);
         }
         return inputOptions;
-    }
+    },
+
+    toInputValidationResult = rsltObj =>
+        toValidationResult({
+                value: null,
+                rawValue: null,
+                obscuredValue: null,
+                filteredValue: null,
+                ...rsltObj
+            })
 ;

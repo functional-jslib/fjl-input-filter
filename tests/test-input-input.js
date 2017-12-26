@@ -46,6 +46,7 @@ describe ('sjl.input.Input', function () {
     });
 
     describe ('#runValidators', function () {
+        const breakOnFailure = false;
         test ('it should return a `ValidationResult` object with the expected results', function () {
             const inputOptionObjs = [
                     {
@@ -62,27 +63,31 @@ describe ('sjl.input.Input', function () {
                 ];
             [
                 // [ValidationResult, ExpectedResultResult, MessagesLength]
-                [runValidators(inputOptionObjs[0], 'hello-world'), true, 0],
-                [runValidators(inputOptionObjs[1], ''), false, 2],
-                [runValidators(inputOptionObjs[1], repeat(100, 'a').join('')), false, 1]
+                [runValidators(inputOptionObjs[0].validators, breakOnFailure, 'hello-world'), true, 0],
+                [runValidators(inputOptionObjs[1].validators, breakOnFailure, ''), false, 2],
+                [runValidators(inputOptionObjs[1].validators, breakOnFailure, repeat(100, 'a').join('')), false, 1]
             ]
-                .concat(
-                    subsequences('hello-world')
-                        .map(x => [runValidators(inputOptionObjs[0], x.join('')), true, 0])
-                )
-                .forEach(([{result, messages}, expectedResult, expectedMsgsLen]) => {
-                    expect(result).to.equal(expectedResult);
+            .concat(
+                subsequences('hello')
+                    .map(x => [runValidators(inputOptionObjs[0].validators, breakOnFailure, x.join('')), true, 0])
+            )
+            .forEach(([rsltObj, expectedResult, expectedMsgsLen]) => {
+                const {result, messages} = rsltObj;
+                expect(result).to.equal(expectedResult);
+                if (messages) {
                     expect(messages.length).to.equal(expectedMsgsLen);
-                });
+                }
+            });
         });
         test ('it should return `true` if passed in `inputOptions` doesn\'t have any validators', function () {
-            expect(runValidators({}, 'hello-world').result).to.equal(true);
+            expect(runValidators(null, breakOnFailure, 'hello-world').result).to.equal(true);
         });
     });
 
     describe ('#runIOValidators', function () {
         // Prepare some IO validators (promised based validators)
-        const someIOValidateNotEmpty = x => {
+        const defaulBreakOnFailure = false,
+            someIOValidateNotEmpty = x => {
                 const result = !isEmpty(x),
                     messages = [];
                 if (!result) {
@@ -95,29 +100,24 @@ describe ('sjl.input.Input', function () {
             );
 
         test ('it should return a promise whether truthy result or falsy result', function () {
-            const expectedPromise = runIOValidators({
-                    validators: [
+            const expectedPromise = runIOValidators([
                         someIOValidateNotEmpty,
                         someIOValidateLength({min: 3, max: 21})
-                    ]
-                }, '').catch(peek);
+                    ], defaulBreakOnFailure, '').catch(peek);
             expect(expectedPromise).to.be.instanceOf(Promise);
         });
 
-        test ('the retured promise should resolve to a validation result object whether falsy or truthy result.result', function () {
+        test ('the retured promise should resolve to a validation result object ' +
+            'whether falsy or truthy result.result', function () {
             return Promise.all([
-                    runIOValidators({
-                        validators: [
+                    runIOValidators([
                             someIOValidateNotEmpty,
                             someIOValidateLength({min: 3, max: 21})
-                        ]
-                    }, ''),
-                    runIOValidators({
-                        validators: [
+                        ], defaulBreakOnFailure, ''),
+                    runIOValidators([
                             someIOValidateNotEmpty,
                             someIOValidateLength({min: 3, max: 21})
-                        ]
-                    }, 'hello-world')
+                        ], defaulBreakOnFailure, 'hello-world')
                 ])
                 .then(results => {
                     const [falsyResult, truthyResult] = results;
@@ -179,7 +179,7 @@ describe ('sjl.input.Input', function () {
                 [validateInput(toInputOptions({
                     breakOnFailure: false,
                     ...baseExampleOptions
-                }), 'Hello World'), true, 0, 'hello-world']     // greater than min stringlength 5
+                }), 'Hello World'), true, 0, 'hello-world']             // greater than min stringlength 5
             ]
         ;
 
@@ -192,31 +192,20 @@ describe ('sjl.input.Input', function () {
         });
 
         test ('should return expected result object for given arguments', function () {
-            results.forEach(([validationResult, expectedResultBln, expectedMsgsLen, expectedValue]) => {
+            results.forEach(([validationResult, expectedResultBln,
+                                 expectedMsgsLen, expectedValue]) => {
                 const {result, messages, value} = validationResult;
-                expect(messages.length).to.equal(expectedMsgsLen);
                 expect(result).to.equal(expectedResultBln);
                 if (!result) {
                     return;
+                }
+                if (messages) {
+                    expect(messages.length).to.equal(expectedMsgsLen);
                 }
                 expect(value).to.equal(expectedValue);
             });
         });
     });
-
-    /*describe ('#validateInput', function () {
-        test ('should return a promise', function () {
-            expect(validateInput({}, 0)).to.be.instanceOf(Promise);
-        });
-        test ('returned promise should resolve to a validation result', function () {
-            return validateInput({}, 0)
-                .then(result =>
-                    ['result', 'value', 'messsages']
-                        .map(key => expect(result.hasOwnProperty(key)))
-                )
-        });
-    });
-    */
 
     /*describe ('#isValid, #validate', function () {
         let inputs = {
