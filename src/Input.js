@@ -6,7 +6,7 @@
  */
 import {defineEnumProps$} from 'fjl-mutable';
 import {assign, apply, compose, concat, isString, isUndefined, map} from 'fjl';
-import {toValidationResult, toValidationOptions} from "fjl-validator";
+import {toValidationResult, toValidationOptions, notEmptyValidator} from "fjl-validator";
 
 export const
 
@@ -120,7 +120,7 @@ export const
     toInputOptions = options => {
         const inputOptions = defineEnumProps$([
             [String,    'name', ''],
-            [Boolean,   'required', true],
+            [Boolean,   'required', false],
             [Array,     'filters', []],
             [Array,     'validators', []],
             [Boolean,   'breakOnFailure', false]
@@ -130,6 +130,9 @@ export const
         }
         else if (options) {
             assign(inputOptions, options);
+        }
+        if (inputOptions.required) {
+            inputOptions.validators.push(notEmptyValidator(null));
         }
         return inputOptions;
     },
