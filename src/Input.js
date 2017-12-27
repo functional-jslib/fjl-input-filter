@@ -27,27 +27,24 @@ export const
         });
     },
 
-    validateInputIO = (input, value) => {
+    validateIOInput = (input, value) => {
         const {validators, filters, breakOnFailure,
                 valueObscured, valueObscurator} = input,
             pendingValidation = validators && validators.length ?
                 runIOValidators(validators, value, input) :
                     Promise.resolve({result: true})
         ;
-        return pendingValidation.then(result => {
-            if (result.result && filters && filters.length) {
-                return runIOFilters(filters, value)
-                    .then(filteredValue => {
-                        result.rawValue = value;
-                        result.value = result.filteredValue = filteredValue;
-                        result.obscuredValue =
-                            valueObscured && valueObscurator ?
-                                valueObscurator(filteredValue) : filteredValue;
-                        return toInputValidationResult(result);
-                    });
-            }
-            return Promise.resolve(toInputValidationResult(result));
-        });
+        return pendingValidation.then(result =>
+            runIOFilters(filters, value)
+                .then(filteredValue => {
+                    result.rawValue = value;
+                    result.value = result.filteredValue = filteredValue;
+                    result.obscuredValue =
+                        valueObscured && valueObscurator ?
+                            valueObscurator(filteredValue) : filteredValue;
+                    return toInputValidationResult(result);
+                })
+        );
     },
 
     runValidators = (validators, breakOnFailure, value) => {
@@ -98,10 +95,13 @@ export const
         return Promise.all(pendingResults)
             .then(results => {
                 const failedResults = results.filter(rslt => !rslt.result),
-                    interimResult = failedResults.reduce((agg, item) => {
-                        agg.messages = agg.messages.concat(item.messages);
-                        return agg;
-                    }, {result, messages: []});
+                    interimResult = {
+                        result,
+                        messages: failedResults.reduce((agg, item) => {
+                            agg = agg.concat(item.messages);
+                            return agg;
+                        }, [])
+                    };
                 if (failedResults.length) {
                     interimResult.result = false;
                 }

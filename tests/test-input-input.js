@@ -6,7 +6,8 @@ import {typeOf, keys, isType, flip, subsequences, repeat, curry,
 import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator,
     toValidationResult, toValidationOptions} from 'fjl-validator';
-import {runValidators, runIOValidators, runFilters, runIOFilters, toInputOptions, validateInput} from '../src/Input';
+import {runValidators, runIOValidators, runFilters, runIOFilters,
+    toInputOptions, validateInput, validateIOInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
 
 describe ('sjl.input.Input', function () {
@@ -233,6 +234,95 @@ describe ('sjl.input.Input', function () {
             expect(result).to.equal(false);
             expect(messages.length).to.equal(1);
             expect(messages[0].indexOf('Empty')).to.equal(0);
+        });
+    });
+
+    describe ('#validateIOInput', function () {
+        const baseExampleOptions = {
+                validators: [
+                    notEmptyValidator(null),
+                    stringLengthValidator({min: 5})
+                ],
+                filters: [toSlug]
+            },
+            otherInputOptions = {
+                name: 'otherInput',
+                required: true,
+                validators: [
+                    regexValidator({pattern: /^\s?[a-z][a-z\d\-\s]+/})
+                ],
+                filters: [
+                    toSlug,
+                    trim
+                ]
+            },
+            // Format `[[ValidationResult, ExpectedResultBln, ExpectedMessagesLen, ExpectedFilteredValue]]`
+            testCases = [
+                [validateIOInput(toInputOptions({
+                    breakOnFailure: true,
+                    ...baseExampleOptions
+                }), ''), false, 1, ''],
+
+                [validateIOInput(toInputOptions({
+                    breakOnFailure: false,
+                    ...baseExampleOptions
+                }), ''), false, 2, ''],
+
+                // less than min stringlength 5
+                [validateIOInput(toInputOptions({
+                    breakOnFailure: true,
+                    ...baseExampleOptions
+                }), 'abc'), false, 1, 'abc'],
+            ]
+                .concat(
+                    [
+                        ['Hello World', 'hello-world', baseExampleOptions],
+                        ['hello-world', 'hello-world', otherInputOptions],
+                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', otherInputOptions],
+                        ['a9_B99_999 ', 'a9_b99_999', otherInputOptions]
+                    ]
+                        .map(([value, expectedValue, options]) =>
+                            [validateIOInput(options, value), true, 0, expectedValue])
+                ),
+            results = testCases.map(([rslts]) => rslts)
+        ;
+
+        test ('should return an input validation result object', function () {
+            return Promise.all(results)
+                .then(rslts => {
+                    return expect(
+                        rslts.every(validationResult =>
+                            isValidateInputResult(validationResult)
+                        )
+                    ).to.equal(true)
+                });
+        });
+
+        test ('should return expected result object for given arguments', async function () {
+            const rslts = await Promise.all(results);
+            rslts.forEach((rslt, ind) => {
+                log('result:', rslt.result, rslt);
+                const {result, messages, value} = rslt,
+                    [_, expectedResultBln, expectedMsgsLen, expectedValue] = testCases[ind];
+                log(value, expectedValue);
+                const expected = [];
+                expect(result).to.equal(expectedResultBln);
+                if (messages) {
+                    expect(messages.length).to.equal(expectedMsgsLen);
+                }
+                expect(value).to.equal(expectedValue);
+            });
+        });
+
+        test ('when input has `required` set to true a `notEmptyValidator` should be added to `validators`', function () {
+            return validateIOInput(toInputOptions({ required: true }), '')
+                .then(({result, messages}) =>
+                    Promise.all([
+                        expect(result).to.equal(false),
+                        expect(messages.length).to.equal(1),
+                        expect(messages[0].indexOf('Empty')).to.equal(0)
+                    ])
+                );
         });
     });
 });
