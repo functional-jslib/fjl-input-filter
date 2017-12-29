@@ -31,7 +31,7 @@ export const
         const {validators, filters, breakOnFailure,
                 valueObscured, valueObscurator} = input,
             pendingValidation = validators && validators.length ?
-                runIOValidators(validators, value, input) :
+                runIOValidators(validators, breakOnFailure, value, input) :
                     Promise.resolve({result: true})
         ;
         return pendingValidation.then(result =>

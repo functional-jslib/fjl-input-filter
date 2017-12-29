@@ -256,6 +256,9 @@ describe ('sjl.input.Input', function () {
                     trim
                 ]
             },
+            errorCallback = () => {
+
+            },
             // Format `[[ValidationResult, ExpectedResultBln, ExpectedMessagesLen, ExpectedFilteredValue]]`
             testCases = [
                 [validateIOInput(toInputOptions({
@@ -301,11 +304,10 @@ describe ('sjl.input.Input', function () {
         test ('should return expected result object for given arguments', async function () {
             const rslts = await Promise.all(results);
             rslts.forEach((rslt, ind) => {
-                log('result:', rslt.result, rslt);
                 const {result, messages, value} = rslt,
                     [_, expectedResultBln, expectedMsgsLen, expectedValue] = testCases[ind];
-                log(value, expectedValue);
-                const expected = [];
+                // log('result:', rslt.result, rslt);
+                // log(value, expectedValue, messages);
                 expect(result).to.equal(expectedResultBln);
                 if (messages) {
                     expect(messages.length).to.equal(expectedMsgsLen);
