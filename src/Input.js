@@ -14,11 +14,12 @@ export const
 
     validateInput = (input, value) => {
         const {validators, filters, breakOnFailure,
-                valueObscured, valueObscurator} = input,
+                valueObscured, valueObscurator, name} = input,
             vResult = runValidators(validators, breakOnFailure, value),
             fResult = runFilters(filters, value),
             oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
         return toInputValidationResult({
+            name: name || '',
             ...vResult,
             rawValue: value,
             value: fResult,
@@ -137,12 +138,18 @@ export const
         return inputOptions;
     },
 
-    toInputValidationResult = rsltObj =>
-        toValidationResult({
-                value: null,
-                rawValue: null,
-                obscuredValue: null,
-                filteredValue: null,
-                ...rsltObj
-            })
+    toInputValidationResult = resultObj => {
+        const _result = defineEnumProps$([
+            [String, 'name', ''],
+            [Boolean, 'result', false],
+            [Array, 'messages', []]
+        ], {});
+        return assign(_result, {
+            value: null,
+            rawValue: null,
+            obscuredValue: null,
+            filteredValue: null,
+            ...resultObj
+        });
+    }
 ;

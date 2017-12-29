@@ -7,7 +7,7 @@ import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator,
     toValidationResult, toValidationOptions} from 'fjl-validator';
 import {runValidators, runIOValidators, runFilters, runIOFilters,
-    toInputOptions, validateInput, validateIOInput} from '../src/Input';
+    toInputOptions, toInputValidationResult, validateInput, validateIOInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
 
 describe ('sjl.input.Input', function () {
@@ -45,6 +45,17 @@ describe ('sjl.input.Input', function () {
                 expect(input[key]).to.equal(options[key]);
             });
         });
+    });
+
+    describe ('#toInputValidationResult', function () {
+        // Will test for correct-value when setting it and for error throwing when
+        //  setting incorrect type
+        [toInputValidationResult(), toInputValidationResult({})]
+            .forEach(x => runHasPropTypes([
+                [Boolean,   'result',   [false, 99]],
+                [String,    'name',     ['correct-value', 99]],
+                [Array,     'messages', [[], 99]]
+            ], x));
     });
 
     describe ('#runValidators', function () {
