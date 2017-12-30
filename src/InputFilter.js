@@ -1,6 +1,6 @@
-import {partition, concatMap, foldl, assign} from 'fjl';
+import {partition, concatMap, foldl, map, assign, keys} from 'fjl';
 
-import {validateInput, validateIOInput} from './Input';
+import {validateInput, validateIOInput, toInputOptions} from './Input';
 
 import {defineEnumProps$} from 'fjl-mutable';
 
@@ -39,6 +39,12 @@ export const
             messages
         });
     },
+
+    toInputFilter = obj =>
+        Object.defineProperties({}, foldl((agg, [key, inputObj]) => {
+                agg[key] = {value: toInputOptions(assign(inputObj, {name: key})), enumerable: true};
+                return agg;
+            }, {}, map(key => [key, obj[key]], keys(obj)))),
 
     toInputFilterResult = result => {
         const _result = defineEnumProps$([

@@ -267,9 +267,6 @@ describe ('sjl.input.Input', function () {
                     trim
                 ]
             },
-            errorCallback = () => {
-
-            },
             // Format `[[ValidationResult, ExpectedResultBln, ExpectedMessagesLen, ExpectedFilteredValue]]`
             testCases = [
                 [validateIOInput(toInputOptions({
