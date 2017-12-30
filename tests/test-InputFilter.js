@@ -68,5 +68,8 @@ describe ('InputFilter', function () {
 
     describe ('validateInputFilter', function () {
         test ('should have more tests');
+        test ('should return an "input-filter-result"', function () {
+
+        });
     });
 });

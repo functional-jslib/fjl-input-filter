@@ -1,24 +1,13 @@
-# sjl-validator (ALPHA)
-A set of common validators needed for both front and backend development with javascript (
-copied over from zend framework's Zend\Validator and Zend\Filter packages (with some modifications
-to adhere to javascript and a more functional coding style).
+# fjl-input-filter (ALPHA)
+Input filter validation functions (allows
+you to easily validate a body of input fields
+with a set of rules quickly and easily).
 
 ## Usage:
-### Prerequisites:
-- sjljs v5.0.1+
-    - For frontend 
-
-### For in browser development:
-~~1.  Import the 'src/sjl.js' file and then the files for the
-filters and validators you require.~~  Not ready for browser use yet.
-
-### For nodejs development:
-@todo Coming soon.
-
-### Todos:
-- Add a feature for adding third party filter and 
-validator namespaces to search on when using factory methods 
-for generating `InputFilter` and `Input` instances.
+**Note**: Even though there are constructors
+for data objects, if you decide to use them directly (via `new ...`)
+you should try to use them compositionally and
+not extend them.  This will keep your code more functional (or more on the functional side).
 
 ## License
-MIT & GPL V3+
+BSD 3.0+

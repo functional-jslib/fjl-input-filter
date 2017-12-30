@@ -40,20 +40,57 @@ export const
         });
     },
 
-    toInputFilter = obj =>
-        Object.defineProperties({}, foldl((agg, [key, inputObj]) => {
-                agg[key] = {value: toInputOptions(assign(inputObj, {name: key})), enumerable: true};
-                return agg;
-            }, {}, map(key => [key, obj[key]], keys(obj)))),
+    toInputFilter = (inObj,  outObj = {}) =>
+        Object.defineProperties(outObj,
+            foldl((agg, [key, inputOpsObj]) => {
+                    agg[key] = {
+                        value: toInputOptions(assign(inputOpsObj, {name: key})),
+                        enumerable: true
+                    };
+                    return agg;
+                }, {}, map(key =>
+                    [key, inObj[key]],
+                    keys(inObj)
+                )
+            )
+        ),
 
-    toInputFilterResult = result => {
-        const _result = defineEnumProps$([
+    toInputFilterResult = (inResult, outResult = {}) => {
+        const _outResult = defineEnumProps$([
             [Boolean, 'result', false],
             [Object,  'messages', {}],
             [Object,  'validInputs', {}],
             [Object,  'invalidInputs', {}]
-        ], {});
-        return result ? assign(_result, result) : _result;
+        ], outResult);
+        return inResult ? assign(_outResult, inResult) : _outResult;
     }
 
 ;
+
+export class InputFilter {
+    constructor (options) {
+        toInputFilter(options, this);
+    }
+    static of (options) {
+        return new InputFilter(options);
+    }
+}
+
+export class InputFilterResult {
+    constructor (options) {
+        toInputFilterResult(options, this);
+    }
+    static of (options) {
+        return new InputFilterResult(options);
+    }
+}
+
+export default {
+    InputFilter,
+    InputFilterResult,
+    toInputFilter,
+    toInputFilterResult,
+    validateInputFilter,
+    toArrayMap,
+    fromArrayMap
+};
