@@ -6,7 +6,7 @@ import {notEmptyValidator, regexValidator, stringLengthValidator,
 import {runValidators, runIOValidators, runFilters, runIOFilters,
     toInputOptions, validateInput, validateIOInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
-import {toInputFilterResult, toInputFilter} from "../src/InputFilter";
+import {toInputFilterResult, toInputFilter, validateInputFilter} from "../src/InputFilter";
 
 describe ('InputFilter', function () {
     describe ('toInputFilterResult', function () {
@@ -68,8 +68,32 @@ describe ('InputFilter', function () {
 
     describe ('validateInputFilter', function () {
         test ('should have more tests');
-        test ('should return an "input-filter-result"', function () {
+        const inputFilter = toInputFilter({
+                name: {required: true},
+                email: {required: true, filters: [x => (x + '').toLowerCase()]},
+                subject: {},
+                message: {},
+                zipCode: {},
+                phoneNumber: {}
+            }),
+            possibleValues = [
+                {
+                    name: 'Hello World',
+                    email: 'hI@HeLlO.CoM',
+                    subject: '',
+                    message: '',
+                    zipCode: null,
+                    phoneNumber: null
+                },
+            ],
+            filteredInputFilter = validateInputFilter(inputFilter, possibleValues[0]);
 
-        });
+        // Should return a valid InputFilterResult
+        runHasPropTypes([
+            [Boolean, 'result', [false, 99]],
+            [Object, 'messages', [{}, 99]],
+            [Object, 'validInputs', [{}, 99]],
+            [Object, 'invalidInputs', [{}, 99]]
+        ], filteredInputFilter);
     });
 });

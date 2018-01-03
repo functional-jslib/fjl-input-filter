@@ -10,6 +10,7 @@ export const
 
     fromArrayMap = arrayMap => foldl((agg, [key, value]) => {
             agg[key] = value;
+            return agg;
         }, {}, arrayMap),
 
     validateInputFilter = (inputsObj, valuesObj) => {
@@ -25,7 +26,7 @@ export const
             messages = foldl((agg, [key, result]) => {
                 agg[key] = result.messages;
                 return agg;
-            }, {}),
+            }, {}, invalidResults),
             validInputs = fromArrayMap(validResults),
             invalidInputs = fromArrayMap(invalidResults),
             result = !invalidResults.length
