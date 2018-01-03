@@ -1685,12 +1685,25 @@ fjl-error-throwing@^0.7.5:
   dependencies:
     fjl "^0.17.7"
 
+fjl-error-throwing@^0.7.6:
+  version "0.7.7"
+  resolved "https://registry.yarnpkg.com/fjl-error-throwing/-/fjl-error-throwing-0.7.7.tgz#18e1dceb047f52016879e5ac7646fa08e7dc6ee1"
+  dependencies:
+    fjl "0.19.0"
+
 fjl-mutable@^0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/fjl-mutable/-/fjl-mutable-0.16.0.tgz#bafc805d085957c5e1a9f034e547a4d2cb408fa6"
   dependencies:
     fjl "^0.17.14"
     fjl-error-throwing "^0.7.5"
+
+fjl-mutable@^0.16.4:
+  version "0.16.4"
+  resolved "https://registry.yarnpkg.com/fjl-mutable/-/fjl-mutable-0.16.4.tgz#b566fcc32ae61e0e105d03640f20f635c00b1a6e"
+  dependencies:
+    fjl "0.19.0"
+    fjl-error-throwing "^0.7.6"
 
 fjl-range@^1.0.3:
   version "1.0.3"
@@ -1702,6 +1715,10 @@ fjl-validator@0.6.4:
   dependencies:
     fjl "^0.17.14"
     fjl-mutable "^0.16.0"
+
+fjl@0.19.0, fjl@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/fjl/-/fjl-0.19.0.tgz#aeec6eb469a12f00c1204af2ab5fbd1f94a4e6c5"
 
 fjl@^0.17.14, fjl@^0.17.7:
   version "0.17.14"
