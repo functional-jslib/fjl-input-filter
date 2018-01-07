@@ -143,12 +143,13 @@ export const
             [String, 'name', ''],
             [Boolean, 'result', false],
             [Array, 'messages', []]
-        ], {});
-        return assign(_result, {
+        ], {
             value: null,
             rawValue: null,
             obscuredValue: null,
-            filteredValue: null,
+            filteredValue: null
+        });
+        return assign(_result, {
             ...resultObj
         });
     }
