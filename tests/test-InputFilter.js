@@ -93,7 +93,7 @@ describe ('InputFilter', function () {
                     filters: [x => (x + '').toLowerCase()]},
                 subject: {
                     validators: [],
-                    filters: [encodeHtmlEntities]
+                    filters: []
                 },
                 message: {},
                 zipCode: {},
