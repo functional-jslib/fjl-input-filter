@@ -68,25 +68,50 @@ describe ('InputFilter', function () {
 
     describe ('validateInputFilter', function () {
         test ('should have more tests');
+        // Input filter
+        // Expected values
+        // Incoming values
         const inputFilter = toInputFilter({
                 name: {required: true},
-                email: {required: true, filters: [x => (x + '').toLowerCase()]},
-                subject: {},
+                email: {required: true,
+                    // Cheap email validate
+                    validators: [
+                        stringLengthValidator({min: 3, max: 55}), // string length error messages
+                        x => {                                    // Invalid email error messages
+                            let result = false;
+                            if (!x || typeof x !== 'string') {
+                                return {result, messages: ['`email` should be a non-empty string']}
+                            }
+                            const atSym = '@',
+                                indexOfAt = x.indexOf(atSym);
+                            if (indexOfAt !== x.lastIndexOf()) {
+                                return {result, messages: ['Invalid email']};
+                            }
+                            return {result: true, messages: []};
+                        }
+                    ],
+                    filters: [x => (x + '').toLowerCase()]},
+                subject: {
+                    validators: [],
+                    filters: [encodeHtmlEntities]
+                },
                 message: {},
                 zipCode: {},
                 phoneNumber: {}
             }),
-            possibleValues = [
-                {
-                    name: 'Hello World',
-                    email: 'hI@HeLlO.CoM',
-                    subject: '',
-                    message: '',
-                    zipCode: null,
-                    phoneNumber: null
-                },
-            ],
-            filteredInputFilter = validateInputFilter(inputFilter, possibleValues[0]);
+            incomingValues = [{
+                name: 'Hello World',
+                email: 'hI@HeLlO.CoM',
+                subject: '',
+                message: '',
+                zipCode: null,
+                phoneNumber: null
+            }],
+            filteredInputFilter = validateInputFilter(inputFilter, incomingValues[0]);
+
+        test ('', function () {
+            // log(JSON.stringify(filteredInputFilter));
+        });
 
         test('', function () {
             log(filteredInputFilter);
