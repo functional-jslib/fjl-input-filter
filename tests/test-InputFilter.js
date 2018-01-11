@@ -99,31 +99,33 @@ describe ('InputFilter', function () {
                 zipCode: {},
                 phoneNumber: {}
             }),
-            incomingValues = [{
+            // [[inputFilterOptions, expectedValues]]
+            incomingValues = [[{
                 name: 'Hello World',
                 email: 'hI@HeLlO.CoM',
                 subject: '',
                 message: '',
                 zipCode: null,
                 phoneNumber: null
-            }],
-            filteredInputFilter = validateInputFilter(inputFilter, incomingValues[0]);
+            }, {name: 'Hello World', email: 'hi@hello.com'}]];
 
-        test ('', function () {
+        test ('should return expected result', function () {
+            incomingValues.forEach(([options, expected]) => {
+                const filtered = validateInputFilter(inputFilter, options),
+                    expectedKeys = keys(expected);
+                expect(expectedKeys.every(key => filtered.validInputs.hasOwnProperty(key))).to.equal(true);
+                // expect(.every(key => filtered.validInputs[key].value === expected[key]))
+                //         .to.equal(true);
+            });
             // log(JSON.stringify(filteredInputFilter));
         });
 
-        test('', function () {
-            log(filteredInputFilter);
-        });
-        //
-        //
-        // // Should return a valid InputFilterResult
-        // runHasPropTypes([
-        //     [Boolean, 'result', [false, 99]],
-        //     [Object, 'messages', [{}, 99]],
-        //     [Object, 'validInputs', [{}, 99]],
-        //     [Object, 'invalidInputs', [{}, 99]]
-        // ], filteredInputFilter);
+        // Should return a valid InputFilterResult
+        runHasPropTypes([
+            [Boolean, 'result', [false, 99]],
+            [Object, 'messages', [{}, 99]],
+            [Object, 'validInputs', [{}, 99]],
+            [Object, 'invalidInputs', [{}, 99]]
+        ], validateInputFilter(inputFilter, {}));
     });
 });
