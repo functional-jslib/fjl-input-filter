@@ -10,7 +10,7 @@ import {runValidators, runIOValidators, runFilters, runIOFilters,
     toInputOptions, toInputValidationResult, validateInput, validateIOInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
 
-describe ('sjl.input.Input', function () {
+describe ('Input', function () {
 
     const toSlug = x => (x + '').replace(/[^a-z\d\-_]+/gim, '-').toLowerCase(),
         trim = x => x ? (x + '').trim() : x,
@@ -41,6 +41,7 @@ describe ('sjl.input.Input', function () {
                     fallbackValue: 'hello world'
                 },
                 input = toInputOptions(options);
+            log(input);
             keys(options).forEach(function (key) {
                 expect(input[key]).to.equal(options[key]);
             });

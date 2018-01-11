@@ -11,8 +11,8 @@ import {toInputFilterResult, toInputFilter, validateInputFilter} from "../src/In
 describe ('InputFilter', function () {
     describe ('toInputFilterResult', function () {
         // Ensure properties on inputFilter default
-       [toInputFilterResult(), toInputFilterResult({})]
-           .forEach(inputOptions => runHasPropTypes([
+       [toInputFilterResult({result: true}), toInputFilterResult()]
+           .forEach(inputOptions => !log(inputOptions.result, inputOptions) && runHasPropTypes([
                [Boolean, 'result', [false, 99]],
                [Object, 'messages', [{}, 99]],
                [Object, 'validInputs', [{}, 99]],
@@ -88,12 +88,17 @@ describe ('InputFilter', function () {
             ],
             filteredInputFilter = validateInputFilter(inputFilter, possibleValues[0]);
 
-        // Should return a valid InputFilterResult
-        runHasPropTypes([
-            [Boolean, 'result', [false, 99]],
-            [Object, 'messages', [{}, 99]],
-            [Object, 'validInputs', [{}, 99]],
-            [Object, 'invalidInputs', [{}, 99]]
-        ], filteredInputFilter);
+        test('', function () {
+            log(filteredInputFilter);
+        });
+        //
+        //
+        // // Should return a valid InputFilterResult
+        // runHasPropTypes([
+        //     [Boolean, 'result', [false, 99]],
+        //     [Object, 'messages', [{}, 99]],
+        //     [Object, 'validInputs', [{}, 99]],
+        //     [Object, 'invalidInputs', [{}, 99]]
+        // ], filteredInputFilter);
     });
 });
