@@ -1,6 +1,6 @@
 import {partition, concatMap, foldl, map, assign, keys} from 'fjl';
 
-import {validateInput, validateIOInput, toInputOptions} from './Input';
+import {validateInput, validateIOInput, toInput} from './Input';
 
 import {defineEnumProps$} from 'fjl-mutable';
 
@@ -83,7 +83,7 @@ export const
         Object.defineProperties(outObj,
             foldl((agg, [key, inputOpsObj]) => {
                     agg[key] = {
-                        value: toInputOptions(assign(inputOpsObj, {name: key})),
+                        value: toInput(assign(inputOpsObj, {name: key})),
                         enumerable: true
                     };
                     return agg;

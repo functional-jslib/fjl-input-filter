@@ -4,7 +4,7 @@ import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator,
     toValidationResult, toValidationOptions} from 'fjl-validator';
 import {runValidators, runIOValidators, runFilters, runIOFilters,
-    toInputOptions, validateInput, validateIOInput} from '../src/Input';
+    toInput, validateInput, validateIOInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
 import {toInputFilterResult, toInputFilter, validateInputFilter, validateIOInputFilter} from "../src/InputFilter";
 

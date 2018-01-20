@@ -7,7 +7,7 @@ import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator,
     toValidationResult, toValidationOptions} from 'fjl-validator';
 import {runValidators, runIOValidators, runFilters, runIOFilters,
-    toInputOptions, toInputValidationResult, validateInput, validateIOInput} from '../src/Input';
+    toInput, toInputValidationResult, validateInput, validateIOInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
 
 describe ('Input', function () {
@@ -18,10 +18,10 @@ describe ('Input', function () {
             ['result', 'messages', 'value', 'rawValue', 'filteredValue', 'obscuredValue']
                 .every(key => rsltObj.hasOwnProperty(key));
 
-    describe ('#toInputOptions', function () {
-        describe ('#InputOptions', function () {
+    describe ('#toInput', function () {
+        describe ('#Input', function () {
             // Ensure properties on inputOptions default
-            [toInputOptions(), toInputOptions({})]
+            [toInput(), toInput({})]
                 .forEach(inputOptions => runHasPropTypes([
                     [String, 'name', ['', 99]],
                     [Boolean, 'required', [true, 99]],
@@ -32,7 +32,7 @@ describe ('Input', function () {
         });
         test ('should return an instance with the `name` property populated when `options` parameter is a string.', function () {
             let name = 'hello';
-            expect((toInputOptions(name)).name).to.equal(name);
+            expect((toInput(name)).name).to.equal(name);
         });
         test ('should populate all properties passed in via hash object.', function () {
             let options = {
@@ -40,7 +40,7 @@ describe ('Input', function () {
                     breakOnFailure: true,
                     fallbackValue: 'hello world'
                 },
-                input = toInputOptions(options);
+                input = toInput(options);
             log(input);
             keys(options).forEach(function (key) {
                 expect(input[key]).to.equal(options[key]);
@@ -176,7 +176,7 @@ describe ('Input', function () {
                 ],
                 filters: [toSlug]
             },
-            otherInputOptions = {
+            otherInput = {
                 name: 'otherInput',
                 required: true,
                 validators: [
@@ -189,18 +189,18 @@ describe ('Input', function () {
             },
             // Format `[[ValidationResult, ExpectedResultBln, ExpectedMessagesLen, ExpectedFilteredValue]]`
             results = [
-                [validateInput(toInputOptions({
+                [validateInput(toInput({
                     breakOnFailure: true,
                     ...baseExampleOptions
                 }), ''), false, 1],
 
-                [validateInput(toInputOptions({
+                [validateInput(toInput({
                     breakOnFailure: false,
                     ...baseExampleOptions
                 }), ''), false, 2],
 
                 // less than min stringlength 5
-                [validateInput(toInputOptions({
+                [validateInput(toInput({
                     breakOnFailure: true,
                     ...baseExampleOptions
                 }), 'abc'), false, 1],
@@ -208,9 +208,9 @@ describe ('Input', function () {
                 .concat(
                     [
                         ['Hello World', 'hello-world', baseExampleOptions],
-                        ['hello-world', 'hello-world', otherInputOptions],
-                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', otherInputOptions],
-                        ['a9_B99_999 ', 'a9_b99_999', otherInputOptions]
+                        ['hello-world', 'hello-world', otherInput],
+                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', otherInput],
+                        ['a9_B99_999 ', 'a9_b99_999', otherInput]
                     ]
                         .map(([value, expectedValue, options]) =>
                             [validateInput(options, value), true, 0, expectedValue])
@@ -241,7 +241,7 @@ describe ('Input', function () {
         });
 
         test ('when input has `required` set to true a `notEmptyValidator` should be added to `validators`', function () {
-            const rslt = validateInput(toInputOptions({ required: true }), ''),
+            const rslt = validateInput(toInput({ required: true }), ''),
                 {result, messages} = rslt;
             expect(result).to.equal(false);
             expect(messages.length).to.equal(1);
@@ -257,7 +257,7 @@ describe ('Input', function () {
                 ],
                 filters: [toSlug]
             },
-            otherInputOptions = {
+            otherInput = {
                 name: 'otherInput',
                 required: true,
                 validators: [
@@ -270,18 +270,18 @@ describe ('Input', function () {
             },
             // Format `[[ValidationResult, ExpectedResultBln, ExpectedMessagesLen, ExpectedFilteredValue]]`
             testCases = [
-                [validateIOInput(toInputOptions({
+                [validateIOInput(toInput({
                     breakOnFailure: true,
                     ...baseExampleOptions
                 }), ''), false, 1, ''],
 
-                [validateIOInput(toInputOptions({
+                [validateIOInput(toInput({
                     breakOnFailure: false,
                     ...baseExampleOptions
                 }), ''), false, 2, ''],
 
                 // less than min stringlength 5
-                [validateIOInput(toInputOptions({
+                [validateIOInput(toInput({
                     breakOnFailure: true,
                     ...baseExampleOptions
                 }), 'abc'), false, 1, 'abc'],
@@ -289,9 +289,9 @@ describe ('Input', function () {
                 .concat(
                     [
                         ['Hello World', 'hello-world', baseExampleOptions],
-                        ['hello-world', 'hello-world', otherInputOptions],
-                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', otherInputOptions],
-                        ['a9_B99_999 ', 'a9_b99_999', otherInputOptions]
+                        ['hello-world', 'hello-world', otherInput],
+                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', otherInput],
+                        ['a9_B99_999 ', 'a9_b99_999', otherInput]
                     ]
                         .map(([value, expectedValue, options]) =>
                             [validateIOInput(options, value), true, 0, expectedValue])
@@ -326,7 +326,7 @@ describe ('Input', function () {
         });
 
         test ('when input has `required` set to true a `notEmptyValidator` should be added to `validators`', function () {
-            return validateIOInput(toInputOptions({ required: true }), '')
+            return validateIOInput(toInput({ required: true }), '')
                 .then(({result, messages}) =>
                     Promise.all([
                         expect(result).to.equal(false),

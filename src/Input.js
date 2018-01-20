@@ -118,7 +118,7 @@ export const
         runFilters(filters ? map(filter => x => x.then(filter), filters) : null,
             Promise.resolve(value).catch(errorCallback)),
 
-    toInputOptions = (options, out = {}) => {
+    toInput = (options, out = {}) => {
         const inputOptions = defineEnumProps$([
             [String,    'name', ''],
             [Boolean,   'required', false],
@@ -157,7 +157,7 @@ export const
 
 export class Input {
     constructor (options) {
-        toInputOptions(options, this);
+        toInput(options, this);
     }
     static of (options) {
         return new Input(options);
