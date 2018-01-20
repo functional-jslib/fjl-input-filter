@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>fjl-input-filter (Beta)</h1><p>Input filter validation functions - These allows you to create input and input-filter objects that can be used (by included utility functions)
+to easily validate a body of input fields quickly and easily (see usage examples further below).</p>
+<h2>In this readme:</h2><ul>
+<li>Basic idea</li>
+<li>Usage</li>
+<li>Api</li>
+<li>Constructors</li>
+<li>Virtual Types</li>
+<li>External Virtual Types</li>
+<li>License </li>
+</ul>
+<h2>Basic idea:</h2><p><strong>Validators</strong> - Functions that validate a given input and return a validation result.
+<strong>Filters</strong> - Functions that take a value and give you a 'possibly' transformed value.
+<strong>Inputs</strong> - Objects that contain rules used for validation (breakOnFailure, a list of validators, a list of filters etc.)
+<strong>InputFilters</strong> - Collection of input objects that can be validated together as a whole.
+(see usage example(s) below): </p>
+<h2>Usage:</h2><h3>Importing code:</h3><p>Default exports are available via 'cjs' and/or 'es6-module' formats.
+Other formats are available via './dist' folder (iife, es6-module, umd, amd, and cjs) </p>
+<h3>Usage in code:</h3><h4>Functional approach:</h4><pre class="prettyprint source"><code>// Example input filter obj:
+const contactFormFilter = toInputFilter({
+        name: {
+            required: true,
+            validators: [stringLengthValidator({min: 2, max: 89})]
+        },
+        email: {
+            required: true,
+            validators: [
+                stringLengthValidator({min: 3, max: 55}), // string length error messages
+                // Cheap email validate (for example)
+                x => {                                    // Invalid email error messages
+                    let result = false;
+                    if (!x || typeof x !== 'string') {
+                        return {result, messages: ['`email` should be a non-empty string']}
+                    }
+                    const atSym = '@',
+                        indexOfAt = x.indexOf(atSym);
+                    if (indexOfAt !== x.lastIndexOf(atSym)) {
+                        return {result, messages: ['Invalid email']};
+                    }
+                    return {result: true, messages: []};
+                },
+            ],
+            filters: [x => (x + '').toLowerCase()]
+        },
+        subject: {
+            validators: [stringLengthValidator({max: 128})],
+            filters: [htmlEncodeEntities] // example validator doesn't exist yet
+        },
+        message: {
+            validators: [stringLengthValidator({max: 128})],
+            filters: [htmlEncodeEntities]
+        }
+    }),
+
+    validateForm = e => {
+        e.preventDefault();
+        const form = e.currentTarget;
+
+        // Run validation
+        const validationResult = validateInputFilter(contactFormInputFilter, dataFromContactForm),
+            {result, validResults, invalidResults, messages} = validationResult;
+
+        if (!result) {
+            // Assign error messages underneath form elements (for example...)
+            invalidResults.forEach(([key, vResult]) => {
+                const messageElm = formElement.elements[key].querySelector('+ .messages');
+                messageElm.innerHTML = '';
+                messageElm.innerHTML = vResult.messages.join(' &lt;br />');
+            });
+            // Mabye add custom error message above form etc...
+            return;
+        }
+
+        // Else
+        // Proceed with form submission
+        // ...etc...
+        const serializable = 
+            validResults.reduce((agg, [key, resultObj]) => {
+                agg[key] = resultObj.value;
+                return agg;
+            }, {});
+
+        // Example Send data to server
+        post('/contact-us', JSON.stringify(serializable), (req, res) => {
+            // ... handle `req`/`res`
+        }, (err) => console.error(err));
+
+        // Else (using validation on server - send data to some process, io or other etc.)
+    }</code></pre><h2>Api:</h2><h3><code>validateInputFilter(inputFilter, incomingData)</code></h3><h3><code>validateIOInputFilter(inputFilter, incomingData, ioErrorHandler)</code></h3><h3><code>validateInput(inputObj, value)</code></h3><h3><code>validateIOInput(inputObj, value, ioErrorHandler)</code></h3><h3><code>toInputFilter(inputsObj, breakOnFailure {Boolean}, out = {})</code></h3><h3><code>toInputFilterResult(resultObj, out = {})</code></h3><h3><code>toInputValidationResult(resultObj)</code></h3><h3><code>toInput(inputOptions, out = {})</code></h3><h4>Constructors</h4><h3><code>Input(options)</code></h3><h4>Methods</h4><ul>
+<li><strong><code>validate(data) : InputValidationResult</code></strong></li>
+<li><strong><code>validateIO(data) : Promise.&lt;InputValidationResult&gt;</code></strong></li>
+</ul>
+<h3><code>InputFilter(inputsObj, breakOnFailure {Boolean})</code></h3><h4>Methods</h4><ul>
+<li><strong><code>validate(data) : InputFilterResult</code></strong></li>
+<li><strong><code>validateIO(data) : Promise.&lt;InputFilterResult&gt;</code></strong></li>
+</ul>
+<h2>Virtual Types</h2><h3>InputValidationResult</h3><h3>InputFilterResult</h3><h2>External Virtual Types</h2><p><strong>See:</strong> fjl-validator repo/module</p>
+<h3>ValidationResult</h3><h3>ValidatorOptions</h3><h2>Resources</h2><h3>Inspiration</h3><ul>
+<li>fjl-validator: https://github.com/functional-jslib/fjl-validator</li>
+<li>fjl-filter (WIP): https://github.com/functional-jslib/fjl-filter</li>
+<li>Zend/InputFilter: https://docs.zendframework.com/zend-inputfilter/intro/</li>
+</ul>
+<h2>Development</h2><ul>
+<li>See <code>package.json - scripts property</code></li>
+<li>Develop in './src'</li>
+<li>Write tests in './tests'</li>
+<li>Follow conventions.</li>
+</ul>
+<h2>Test</h2><p><code>npm test</code></p>
+<h2>License</h2><p>BSD 3.0+</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fjlInputFilter.html">fjlInputFilter</a></li></ul><h3>Classes</h3><ul><li><a href="fjlInputFilter.Input.html">Input</a></li><li><a href="InputFilter.html">InputFilter</a></li></ul><h3>Interfaces</h3><ul><li><a href="fjlInputFilter.InputFilterResult.html">InputFilterResult</a></li><li><a href="fjlInputFilter.InputOptions.html">InputOptions</a></li><li><a href="fjlInputFilter.InputValidationResult.html">InputValidationResult</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Jan 20 2018 16:32:56 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

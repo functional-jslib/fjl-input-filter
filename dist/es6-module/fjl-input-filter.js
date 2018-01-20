@@ -3,12 +3,43 @@ import { apply, assign, compose, concat, foldl, isString, keys, map, partition }
 import { notEmptyValidator, toValidationOptions, toValidationResult } from 'fjl-validator';
 
 /**
- * Created by Ely on 7/24/2014.
- * This is a crude implementation
- * @todo review if we really want to have fallback value
- *      functionality for javascript
+ * @module Utils
  */
-const defaultErrorCallback = console.log.bind(console);
+
+const defaultErrorHandler = console.error.bind(console);
+
+/**
+ * Created by Ely on 7/24/2014.
+ * @module Input
+ */
+/*---------------------------------------------------*/
+/* VIRTUAL TYPES AND INTERFACES */
+/*---------------------------------------------------*/
+/**
+ * @interface InputValidationResult
+ * @memberOf module:fjlInputFilter
+ * @property {String} name - `#Input` this result was generated with.
+ * @property {Boolean} result - Result of validation.
+ * @property {Array} messages - Any error messages if `result` is `false`.
+ * @property {*} value=null - Value tested against (if `filters` exist on given `#Input` object the `value` is what is returned from the results of running filters on value).
+ * @property {*} rawValue=null - Raw value tested against.
+ * @property {*} obscuredValue=null - Obscured value if validation `result` is `true`.
+ * @property {*} filteredValue=null - Filtered result if validation `result` is `true`.
+ */
+
+/**
+ * @interface InputOptions
+ * @memberOf module:fjlInputFilter
+ * @desc Contains rules for validating and/or filtering an input.
+ * @property {String} name='' - Input's name.
+ * @property {Boolean} required=false - Whether input is required or not.
+ * @property {Array} filters=[] - Any filter functions to apply to value.
+ * @property {Array} validators=[] - Any validators to validate against for given value (to validator).
+ * @property {Boolean} breakOnFailure=false - Whether or not to 'break' on a validation failure result or not.
+ * @property {Boolean} valueObscured=false - Whether to obscure the value being tested against (to the assigned places) or not).
+ * @property {Function} valueObscurator=((x) => x) - Obscurator used for obscuring a value given to validation.
+ */
+
 const validateInput = (input, value) => {
         const {validators, filters, breakOnFailure,
                 valueObscured, valueObscurator, name} = input,
@@ -61,7 +92,7 @@ const runValidators = (validators, breakOnFailure, value) => {
         }
         return toValidationResult({result, messages: concat(messageResults)});
     };
-const runIOValidators = (validators, breakOnFailure, value, errorCallback = defaultErrorCallback) => {
+const runIOValidators = (validators, breakOnFailure, value, errorCallback = defaultErrorHandler) => {
         if (!validators || !validators.length) {
             return Promise.resolve(toValidationResult({result: true}));
         }
@@ -104,7 +135,7 @@ const runIOValidators = (validators, breakOnFailure, value, errorCallback = defa
     };
 const runFilters = (filters, value) => filters && filters.length ?
         apply(compose, filters)(value) : value;
-const runIOFilters = (filters, value, errorCallback = defaultErrorCallback) =>
+const runIOFilters = (filters, value, errorCallback = defaultErrorHandler) =>
         runFilters(filters ? filters.map(filter => x => x.then(filter)) : null,
             Promise.resolve(value).catch(errorCallback));
 const toInput = (inputObj, out = {}) => {
@@ -140,6 +171,11 @@ const toInputValidationResult = resultObj => {
         return assign(_result, resultObj);
     };
 
+/**
+ * @memberOf module:fjlInputFilter
+ * @class Input
+ * @extends InputOptions
+ */
 class Input {
     constructor (inputObj) {
         toInput(inputObj, this);
@@ -155,7 +191,15 @@ class Input {
     }
 }
 
-const defaultErrorHandler = console.error.bind(console);
+/**
+ * @module InputFilter
+ */
+/**
+ * @interface InputFilter {Object.<String, (Input|InputOptions)>}
+ * @memberOf fjlInputFilter
+ * Contains input objects to validate against (key-value pair object).
+ */
+
 const toArrayMap = obj => keys(obj).map(key => [key, obj[key]]);
 const fromArrayMap = arrayMap => foldl((agg, [key, value]) => {
             agg[key] = value;
@@ -262,5 +306,9 @@ class InputFilter {
     }
 }
 
-export { defaultErrorCallback, validateInput, validateIOInput, runValidators, runIOValidators, runFilters, runIOFilters, toInput, toInputValidationResult, Input, defaultErrorHandler, toArrayMap, fromArrayMap, validateInputFilter, validateIOInputFilter, validateIOInputWithName, toInputFilter, toInputFilterResult, InputFilter };
+/**
+ * @module fjlInputFilter
+ */
+
+export { validateInput, validateIOInput, runValidators, runIOValidators, runFilters, runIOFilters, toInput, toInputValidationResult, Input, toArrayMap, fromArrayMap, validateInputFilter, validateIOInputFilter, validateIOInputWithName, toInputFilter, toInputFilterResult, InputFilter };
 //# sourceMappingURL=fjl-input-filter.js.map

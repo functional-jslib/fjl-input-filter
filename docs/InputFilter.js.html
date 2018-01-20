@@ -1,10 +1,38 @@
-import {partition, foldl, map, assign, keys} from 'fjl';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: InputFilter.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: InputFilter.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {partition, foldl, map, assign, keys} from 'fjl';
 import {validateInput, validateIOInput, toInput} from './Input';
 import {defineEnumProps$} from 'fjl-mutable';
 import {defaultErrorHandler} from './Utils';
 
 /**
- * @interface InputFilter {Object.<String, (Input|InputOptions)>}
+ * @interface InputFilter {Object.&lt;String, (Input|InputOptions)>}
  * @desc Contains input objects to validate against (key-value pair object).
  */
 
@@ -12,11 +40,11 @@ import {defaultErrorHandler} from './Utils';
  * @interface InputFilterResult
  * @memberOf fjlInputFilter
  * @property {Boolean} result - Result of validation.
- * @property {Object.<String,InputValidationResult>} validInputs - Valid input results object.
- * @property {Object.<String,InputValidationResult>} invalidInputs - Invalid input results object.
- * @property {Array.<String,InputValidationResult>} validResults - Valid input results associative array.
- * @property {Array.<String,InputValidationResult>} invalidResults - Invalid input results associative array.
- * @property {Object.<String,Array.<String>>} messages - Error messages (if any) mapped to input names.
+ * @property {Object.&lt;String,InputValidationResult>} validInputs - Valid input results object.
+ * @property {Object.&lt;String,InputValidationResult>} invalidInputs - Invalid input results object.
+ * @property {Array.&lt;String,InputValidationResult>} validResults - Valid input results associative array.
+ * @property {Array.&lt;String,InputValidationResult>} invalidResults - Invalid input results associative array.
+ * @property {Object.&lt;String,Array.&lt;String>>} messages - Error messages (if any) mapped to input names.
  */
 
 export const
@@ -25,15 +53,15 @@ export const
      * Returns an associative list from an object.
      * @function module:fjlInputFilter.toArrayMap
      * @param obj {Object}
-     * @returns {Array.<Array<String,Object>>} - Associative list.
+     * @returns {Array.&lt;Array&lt;String,Object>>} - Associative list.
      */
     toArrayMap = obj => keys(obj).map(key => [key, obj[key]]),
 
     /**
      * Returns an object from an associative list.
      * @function module:fjlInputFilter.fromArrayMap
-     * @param arrayMap {Array.<Array<String,Object>>}
-     * @returns {Object.<String,Object>}
+     * @param arrayMap {Array.&lt;Array&lt;String,Object>>}
+     * @returns {Object.&lt;String,Object>}
      */
     fromArrayMap = arrayMap => foldl((agg, [key, value]) => {
             agg[key] = value;
@@ -43,7 +71,7 @@ export const
     /**
      * @function module:fjlInputFilter.validateInputFilter
      * @param inputsObj {InputFilter}
-     * @param valuesObj {Object.<String,*>}
+     * @param valuesObj {Object.&lt;String,*>}
      * @returns {InputFilterResult}
      */
     validateInputFilter = (inputsObj, valuesObj) => {
@@ -77,9 +105,9 @@ export const
     /**
      * @function module:fjlInputFilter.validateIOInputFilter
      * @param inputsObj {InputFilter}
-     * @param valuesObj {Object.<String, *>}
+     * @param valuesObj {Object.&lt;String, *>}
      * @param errorHandler {Function}
-     * @returns {Promise.<InputFilterResult>}
+     * @returns {Promise.&lt;InputFilterResult>}
      */
     validateIOInputFilter = (inputsObj, valuesObj, errorHandler = defaultErrorHandler) => {
         if (!inputsObj || !valuesObj) {
@@ -119,7 +147,7 @@ export const
      * @param name {String}
      * @param value {*}
      * @param errorHandler {Function}
-     * @returns {Promise.<Array.<String,InputValidationResult>>}
+     * @returns {Promise.&lt;Array.&lt;String,InputValidationResult>>}
      */
     validateIOInputWithName = (input, name, value, errorHandler = defaultErrorHandler) =>
         validateIOInput(input, value)
@@ -127,7 +155,7 @@ export const
 
     /**
      * @function module:fjlInputFilter.toInputFilter
-     * @param inObj {Object.<String, Object>}
+     * @param inObj {Object.&lt;String, Object>}
      * @param breakOnFailure {Boolean}
      * @param outObj {Object|*}
      * @returns {InputFilter}
@@ -196,3 +224,26 @@ export default {
     toArrayMap,
     fromArrayMap
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fjlInputFilter.html">fjlInputFilter</a></li></ul><h3>Classes</h3><ul><li><a href="fjlInputFilter.Input.html">Input</a></li><li><a href="InputFilter.html">InputFilter</a></li></ul><h3>Interfaces</h3><ul><li><a href="fjlInputFilter.InputFilterResult.html">InputFilterResult</a></li><li><a href="fjlInputFilter.InputOptions.html">InputOptions</a></li><li><a href="fjlInputFilter.InputValidationResult.html">InputValidationResult</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Jan 20 2018 16:32:56 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

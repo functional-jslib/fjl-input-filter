@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Input.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Input.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Created by Ely on 7/24/2014.
  */
 import {defineEnumProps$} from 'fjl-mutable';
@@ -48,7 +76,7 @@ export const
                 valueObscured, valueObscurator, name} = input,
             vResult = runValidators(validators, breakOnFailure, value),
             fResult = runFilters(filters, value),
-            oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
+            oResult = valueObscured &amp;&amp; valueObscurator ? valueObscurator(fResult) : fResult;
         return toInputValidationResult(assign(vResult, {
             name: name || '',
             rawValue: value,
@@ -64,12 +92,12 @@ export const
      * @function module:fjlInputFilter.validateIOInput
      * @param input {Input|InputOptions}
      * @param value {*}
-     * @returns {Promise.<InputValidationResult>}
+     * @returns {Promise.&lt;InputValidationResult>}
      */
     validateIOInput = (input, value) => {
         const {validators, filters, breakOnFailure,
                 valueObscured, valueObscurator} = input,
-            pendingValidation = validators && validators.length ?
+            pendingValidation = validators &amp;&amp; validators.length ?
                 runIOValidators(validators, breakOnFailure, value, input) :
                     Promise.resolve({result: true})
         ;
@@ -79,7 +107,7 @@ export const
                     result.rawValue = value;
                     result.value = result.filteredValue = filteredValue;
                     result.obscuredValue =
-                        valueObscured && valueObscurator ?
+                        valueObscured &amp;&amp; valueObscurator ?
                             valueObscurator(filteredValue) : filteredValue;
                     return toInputValidationResult(result);
                 })
@@ -89,7 +117,7 @@ export const
     /**
      * Runs validator against given `value`.
      * @function module:fjlInputFilter.runValidators
-     * @param validators {Array.<Function>}
+     * @param validators {Array.&lt;Function>}
      * @param breakOnFailure {Boolean}
      * @param value {*}
      * @returns {*}
@@ -102,7 +130,7 @@ export const
             return toValidationResult({result});
         }
         const limit = validators.length;
-        for (; i < limit; i++) {
+        for (; i &lt; limit; i++) {
             const vResult = validators[i](value);
             if (!vResult.result) {
                 messageResults.push(vResult.messages);
@@ -118,7 +146,7 @@ export const
     /**
      * Runs (possibly) IOValidators against given `value`.
      * @function module:fjlInputFilter.runIOValidators
-     * @param validators {Array.<Function>}
+     * @param validators {Array.&lt;Function>}
      * @param breakOnFailure {Boolean}
      * @param value {*}
      * @param [errorCallback=console.error] {Function}
@@ -132,7 +160,7 @@ export const
             pendingResults = [];
         let i = 0,
             result = true;
-        for (; i < limit; i++) {
+        for (; i &lt; limit; i++) {
             const validator = validators[i],
                 vResult = validator(value);
             if (vResult instanceof Promise) {
@@ -169,20 +197,20 @@ export const
     /**
      * Runs filters on value (successively).
      * @function module:fjlInputFilter.runFilters
-     * @param filters {Array.<Function>}
+     * @param filters {Array.&lt;Function>}
      * @param value {*}
      * @returns {*}
      */
-    runFilters = (filters, value) => filters && filters.length ?
+    runFilters = (filters, value) => filters &amp;&amp; filters.length ?
         apply(compose, filters)(value) : value,
 
     /**
      * Runs filters on value (successively) and returns result wrapped in a promise.
      * @function module:fjlInputFilter.runIOFilters
-     * @param filters {Array.<Function>}
+     * @param filters {Array.&lt;Function>}
      * @param value {*}
      * @param [errorCallback=console.error] {Function}
-     * @returns {Promise.<*>}
+     * @returns {Promise.&lt;*>}
      */
     runIOFilters = (filters, value, errorCallback = defaultErrorHandler) =>
         runFilters(filters ? filters.map(filter => x => x.then(filter)) : null,
@@ -257,3 +285,26 @@ export class Input {
         return validateIOInput(this, value);
     }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fjlInputFilter.html">fjlInputFilter</a></li></ul><h3>Classes</h3><ul><li><a href="fjlInputFilter.Input.html">Input</a></li><li><a href="InputFilter.html">InputFilter</a></li></ul><h3>Interfaces</h3><ul><li><a href="fjlInputFilter.InputFilterResult.html">InputFilterResult</a></li><li><a href="fjlInputFilter.InputOptions.html">InputOptions</a></li><li><a href="fjlInputFilter.InputValidationResult.html">InputValidationResult</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Jan 20 2018 16:32:56 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

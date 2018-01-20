@@ -8,7 +8,7 @@ const fs = require('fs'),
     path = require('path'),
     crypto = require('crypto'),
     packageJson = require('./package'),
-    rollupConfig = require('./rollup.config'),
+    rollupConfig = packageJson.rollupConfig,
     gulpConfig = packageJson.buildConfig,
 
     /** Gulp Modules (or modules used by gulp) **/
@@ -159,7 +159,7 @@ gulp.task('build-js', ['iife', 'uglify', 'cjs', 'amd', 'umd', 'es6-module']);
 gulp.task('jsdoc', () =>
     deleteFilePaths(['./docs/**/*'])
         .then(_ =>
-            gulp.src(['README.md', srcsGlob, './src-generated/**/*.js'], {read: false})
+            gulp.src(['README.md', srcsGlob], {read: false})
                 .pipe(jsdoc({
                     opts: {
                         'template': 'templates/default',  // same as -t templates/default

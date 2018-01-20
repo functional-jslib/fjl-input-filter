@@ -1,6 +1,12 @@
 var fjlInputFilter = (function (exports,fjlMutable,fjl,fjlValidator) {
 'use strict';
 
+/**
+ * @module Utils
+ */
+
+var defaultErrorHandler = console.error.bind(console);
+
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -91,11 +97,36 @@ var slicedToArray = function () {
 
 /**
  * Created by Ely on 7/24/2014.
- * This is a crude implementation
- * @todo review if we really want to have fallback value
- *      functionality for javascript
+ * @module Input
  */
-var defaultErrorCallback = console.log.bind(console);
+/*---------------------------------------------------*/
+/* VIRTUAL TYPES AND INTERFACES */
+/*---------------------------------------------------*/
+/**
+ * @interface InputValidationResult
+ * @memberOf module:fjlInputFilter
+ * @property {String} name - `#Input` this result was generated with.
+ * @property {Boolean} result - Result of validation.
+ * @property {Array} messages - Any error messages if `result` is `false`.
+ * @property {*} value=null - Value tested against (if `filters` exist on given `#Input` object the `value` is what is returned from the results of running filters on value).
+ * @property {*} rawValue=null - Raw value tested against.
+ * @property {*} obscuredValue=null - Obscured value if validation `result` is `true`.
+ * @property {*} filteredValue=null - Filtered result if validation `result` is `true`.
+ */
+
+/**
+ * @interface InputOptions
+ * @memberOf module:fjlInputFilter
+ * @desc Contains rules for validating and/or filtering an input.
+ * @property {String} name='' - Input's name.
+ * @property {Boolean} required=false - Whether input is required or not.
+ * @property {Array} filters=[] - Any filter functions to apply to value.
+ * @property {Array} validators=[] - Any validators to validate against for given value (to validator).
+ * @property {Boolean} breakOnFailure=false - Whether or not to 'break' on a validation failure result or not.
+ * @property {Boolean} valueObscured=false - Whether to obscure the value being tested against (to the assigned places) or not).
+ * @property {Function} valueObscurator=((x) => x) - Obscurator used for obscuring a value given to validation.
+ */
+
 var validateInput = function validateInput(input, value) {
     var validators = input.validators,
         filters = input.filters,
@@ -153,7 +184,7 @@ var runValidators = function runValidators(validators, breakOnFailure, value) {
     return fjlValidator.toValidationResult({ result: result, messages: fjl.concat(messageResults) });
 };
 var runIOValidators = function runIOValidators(validators, breakOnFailure, value) {
-    var errorCallback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : defaultErrorCallback;
+    var errorCallback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : defaultErrorHandler;
 
     if (!validators || !validators.length) {
         return Promise.resolve(fjlValidator.toValidationResult({ result: true }));
@@ -199,7 +230,7 @@ var runFilters = function runFilters(filters, value) {
     return filters && filters.length ? fjl.apply(fjl.compose, filters)(value) : value;
 };
 var runIOFilters = function runIOFilters(filters, value) {
-    var errorCallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultErrorCallback;
+    var errorCallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultErrorHandler;
     return runFilters(filters ? filters.map(function (filter) {
         return function (x) {
             return x.then(filter);
@@ -230,6 +261,11 @@ var toInputValidationResult = function toInputValidationResult(resultObj) {
     return fjl.assign(_result, resultObj);
 };
 
+/**
+ * @memberOf module:fjlInputFilter
+ * @class Input
+ * @extends InputOptions
+ */
 var Input = function () {
     function Input(inputObj) {
         classCallCheck(this, Input);
@@ -256,7 +292,15 @@ var Input = function () {
     return Input;
 }();
 
-var defaultErrorHandler = console.error.bind(console);
+/**
+ * @module InputFilter
+ */
+/**
+ * @interface InputFilter {Object.<String, (Input|InputOptions)>}
+ * @memberOf fjlInputFilter
+ * Contains input objects to validate against (key-value pair object).
+ */
+
 var toArrayMap = function toArrayMap(obj) {
     return fjl.keys(obj).map(function (key) {
         return [key, obj[key]];
@@ -419,7 +463,10 @@ var InputFilter = function () {
     return InputFilter;
 }();
 
-exports.defaultErrorCallback = defaultErrorCallback;
+/**
+ * @module fjlInputFilter
+ */
+
 exports.validateInput = validateInput;
 exports.validateIOInput = validateIOInput;
 exports.runValidators = runValidators;
@@ -429,7 +476,6 @@ exports.runIOFilters = runIOFilters;
 exports.toInput = toInput;
 exports.toInputValidationResult = toInputValidationResult;
 exports.Input = Input;
-exports.defaultErrorHandler = defaultErrorHandler;
 exports.toArrayMap = toArrayMap;
 exports.fromArrayMap = fromArrayMap;
 exports.validateInputFilter = validateInputFilter;
