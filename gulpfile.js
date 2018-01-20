@@ -8,6 +8,7 @@ const fs = require('fs'),
     path = require('path'),
     crypto = require('crypto'),
     packageJson = require('./package'),
+    rollupConfig = require('./rollup.config'),
     gulpConfig = packageJson.buildConfig,
 
     /** Gulp Modules (or modules used by gulp) **/
@@ -20,7 +21,6 @@ const fs = require('fs'),
     jsdoc =         require('gulp-jsdoc3'),
     lazyPipe =      require('lazypipe'),
     gulpUglifyEs =  require('gulp-uglify-es').default,
-    gulpRollup =    require('gulp-better-rollup'),
     gulpBabel =     require('gulp-babel'),
 
     // Rollup plugins
@@ -101,7 +101,7 @@ gulp.task('iife', ['eslint'], () =>
             rollupResolve(),
             rollupBabel({
                 babelrc: false,
-                presets: [['es2015', {
+                presets: [['env', {
                     modules: false
                 }]],
                 plugins: [
@@ -109,7 +109,8 @@ gulp.task('iife', ['eslint'], () =>
                 ],
                 exclude: 'node_modules/**' // only transpile our source code
             })
-        ]
+        ],
+        external: rollupConfig.external
     })
         .then(bundle => bundle.write({
             file: buildPath(iife, outputFileName),
@@ -118,22 +119,20 @@ gulp.task('iife', ['eslint'], () =>
             sourcemap: true
         })));
 
-gulp.task('es6-module', ['eslint'], () => {
-    return Promise.all([
-        gulp.src(inputFilePath)
-            .pipe(gulpRollup(null, {
-                name: inputModuleName,
-                format: 'es',
-            }))
-            .pipe(concat(buildPath(es6Module, outputFileName)))
-            .pipe(gulp.dest('./'))
-    ])
-        .then(_ =>
-            gulp.src(buildPath(es6Module, outputFileName))
-                .pipe(gulpUglifyEs())
-                .pipe(concat(buildPath(es6Module, outputFileNameMin)))
-                .pipe(gulp.dest('./')));
-});
+gulp.task('es6-module', ['eslint'], () =>
+    rollup.rollup({
+        input: inputFilePath,
+        plugins: [
+            rollupResolve()
+        ],
+        external: rollupConfig.external
+    })
+        .then(bundle => bundle.write({
+            file: buildPath(es6Module, outputFileName),
+            format: 'es',
+            name: inputModuleName,
+            sourcemap: true
+        }), log));
 
 gulp.task('uglify', ['iife'], () => {
     const data = {

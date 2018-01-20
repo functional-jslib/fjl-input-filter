@@ -10,7 +10,7 @@ import {toValidationResult, toValidationOptions, notEmptyValidator} from 'fjl-va
 
 export const
 
-    defaultErrorCallback = console.log.bind(console),
+    defaultErrorCallback = console.error.bind(console),
 
     validateInput = (input, value) => {
         const {validators, filters, breakOnFailure,
@@ -18,14 +18,13 @@ export const
             vResult = runValidators(validators, breakOnFailure, value),
             fResult = runFilters(filters, value),
             oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
-        return toInputValidationResult({
+        return toInputValidationResult(assign(vResult, {
             name: name || '',
-            ... vResult,
             rawValue: value,
             value: fResult,
             filteredValue: fResult,
             obscuredValue: oResult
-        });
+        }));
     },
 
     validateIOInput = (input, value) => {
@@ -149,9 +148,7 @@ export const
             obscuredValue: null,
             filteredValue: null
         });
-        return assign(_result, {
-            ...resultObj
-        });
+        return assign(_result, resultObj);
     }
 ;
 
