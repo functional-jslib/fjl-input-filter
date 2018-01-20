@@ -7,7 +7,6 @@ exports.Input = exports.toInputValidationResult = exports.toInput = exports.runI
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Created by Ely on 7/24/2014.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @module Input
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -26,8 +25,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /*---------------------------------------------------*/
 /**
  * @interface InputValidationResult
- * @memberOf module:fjlInputFilter
- * @property {String} name - `#Input` this result was generated with.
+ * @memberOf fjlInputFilter
+ * @property {String} name - `Input` this result was generated with.
  * @property {Boolean} result - Result of validation.
  * @property {Array} messages - Any error messages if `result` is `false`.
  * @property {*} value=null - Value tested against (if `filters` exist on given `#Input` object the `value` is what is returned from the results of running filters on value).
@@ -38,7 +37,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @interface InputOptions
- * @memberOf module:fjlInputFilter
+ * @memberOf fjlInputFilter
  * @desc Contains rules for validating and/or filtering an input.
  * @property {String} name='' - Input's name.
  * @property {Boolean} required=false - Whether input is required or not.
@@ -53,7 +52,7 @@ var
 
 /**
  * Validates an input object based.
- * @function module:fjlInputFilter
+ * @function module:fjlInputFilter.validateInput
  * @param input {Input|InputOptions}
  * @param value {*}
  * @returns {InputValidationResult}
@@ -82,7 +81,7 @@ validateInput = exports.validateInput = function validateInput(input, value) {
 /**
  * Validates an input object that may have IOValidators.  Returns
  * a validation result wrapped in a promise.
- * @function module:fjlInputFilter
+ * @function module:fjlInputFilter.validateIOInput
  * @param input {Input|InputOptions}
  * @param value {*}
  * @returns {Promise.<InputValidationResult>}
@@ -108,7 +107,7 @@ validateIOInput = exports.validateIOInput = function validateIOInput(input, valu
 
 /**
  * Runs validator against given `value`.
- * @function module:fjlInputFilter
+ * @function module:fjlInputFilter.runValidators
  * @param validators {Array.<Function>}
  * @param breakOnFailure {Boolean}
  * @param value {*}
@@ -262,7 +261,7 @@ toInputValidationResult = exports.toInputValidationResult = function toInputVali
 };
 
 /**
- * @memberOf module:fjlInputFilter
+ * @memberOf fjlInputFilter
  * @class Input
  * @extends InputOptions
  */

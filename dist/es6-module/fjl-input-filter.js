@@ -3,22 +3,23 @@ import { apply, assign, compose, concat, foldl, isString, keys, map, partition }
 import { notEmptyValidator, toValidationOptions, toValidationResult } from 'fjl-validator';
 
 /**
- * @module Utils
+ * Same as `console.error`.  Used by *IO variant methods (methods that work with promises) in fjlInputFilter;
+ * E.g., used as the error catcher on promises returned from IO processes.
+ * @function module:fjlInputFilter.defaultErrorHandler
+ * @returns {void}
  */
-
 const defaultErrorHandler = console.error.bind(console);
 
 /**
  * Created by Ely on 7/24/2014.
- * @module Input
  */
 /*---------------------------------------------------*/
 /* VIRTUAL TYPES AND INTERFACES */
 /*---------------------------------------------------*/
 /**
  * @interface InputValidationResult
- * @memberOf module:fjlInputFilter
- * @property {String} name - `#Input` this result was generated with.
+ * @memberOf fjlInputFilter
+ * @property {String} name - `Input` this result was generated with.
  * @property {Boolean} result - Result of validation.
  * @property {Array} messages - Any error messages if `result` is `false`.
  * @property {*} value=null - Value tested against (if `filters` exist on given `#Input` object the `value` is what is returned from the results of running filters on value).
@@ -29,7 +30,7 @@ const defaultErrorHandler = console.error.bind(console);
 
 /**
  * @interface InputOptions
- * @memberOf module:fjlInputFilter
+ * @memberOf fjlInputFilter
  * @desc Contains rules for validating and/or filtering an input.
  * @property {String} name='' - Input's name.
  * @property {Boolean} required=false - Whether input is required or not.
@@ -172,7 +173,7 @@ const toInputValidationResult = resultObj => {
     };
 
 /**
- * @memberOf module:fjlInputFilter
+ * @memberOf fjlInputFilter
  * @class Input
  * @extends InputOptions
  */
@@ -192,12 +193,19 @@ class Input {
 }
 
 /**
- * @module InputFilter
- */
-/**
  * @interface InputFilter {Object.<String, (Input|InputOptions)>}
+ * @desc Contains input objects to validate against (key-value pair object).
+ */
+
+/**
+ * @interface InputFilterResult
  * @memberOf fjlInputFilter
- * Contains input objects to validate against (key-value pair object).
+ * @property {Boolean} result - Result of validation.
+ * @property {Object.<String,InputValidationResult>} validInputs - Valid input results object.
+ * @property {Object.<String,InputValidationResult>} invalidInputs - Invalid input results object.
+ * @property {Array.<String,InputValidationResult>} validResults - Valid input results associative array.
+ * @property {Array.<String,InputValidationResult>} invalidResults - Invalid input results associative array.
+ * @property {Object.<String,Array.<String>>} messages - Error messages (if any) mapped to input names.
  */
 
 const toArrayMap = obj => keys(obj).map(key => [key, obj[key]]);
@@ -291,6 +299,9 @@ const toInputFilterResult = (inResult, outResult = {}) => {
         return inResult ? assign(_outResult, inResult) : _outResult;
     };
 
+/**
+ * @class InputFilter
+ */
 class InputFilter {
     constructor (inputsObj, breakOnFailure = false) {
         toInputFilter(inputsObj, breakOnFailure, this);

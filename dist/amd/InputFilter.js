@@ -7,10 +7,7 @@ exports.InputFilter = exports.toInputFilterResult = exports.toInputFilter = expo
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          * @module InputFilter
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          */
-
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _fjl = require('fjl');
 
@@ -24,16 +21,42 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @interface InputFilter {Object.<String, (Input|InputOptions)>}
- * @memberOf fjlInputFilter
- * Contains input objects to validate against (key-value pair object).
+ * @desc Contains input objects to validate against (key-value pair object).
  */
 
-var toArrayMap = exports.toArrayMap = function toArrayMap(obj) {
+/**
+ * @interface InputFilterResult
+ * @memberOf fjlInputFilter
+ * @property {Boolean} result - Result of validation.
+ * @property {Object.<String,InputValidationResult>} validInputs - Valid input results object.
+ * @property {Object.<String,InputValidationResult>} invalidInputs - Invalid input results object.
+ * @property {Array.<String,InputValidationResult>} validResults - Valid input results associative array.
+ * @property {Array.<String,InputValidationResult>} invalidResults - Invalid input results associative array.
+ * @property {Object.<String,Array.<String>>} messages - Error messages (if any) mapped to input names.
+ */
+
+var
+
+/**
+ * Returns an associative list from an object.
+ * @function module:fjlInputFilter.toArrayMap
+ * @param obj {Object}
+ * @returns {Array.<Array<String,Object>>} - Associative list.
+ */
+toArrayMap = exports.toArrayMap = function toArrayMap(obj) {
     return (0, _fjl.keys)(obj).map(function (key) {
         return [key, obj[key]];
     });
 },
-    fromArrayMap = exports.fromArrayMap = function fromArrayMap(arrayMap) {
+
+
+/**
+ * Returns an object from an associative list.
+ * @function module:fjlInputFilter.fromArrayMap
+ * @param arrayMap {Array.<Array<String,Object>>}
+ * @returns {Object.<String,Object>}
+ */
+fromArrayMap = exports.fromArrayMap = function fromArrayMap(arrayMap) {
     return (0, _fjl.foldl)(function (agg, _ref) {
         var _ref2 = _slicedToArray(_ref, 2),
             key = _ref2[0],
@@ -43,7 +66,15 @@ var toArrayMap = exports.toArrayMap = function toArrayMap(obj) {
         return agg;
     }, {}, arrayMap);
 },
-    validateInputFilter = exports.validateInputFilter = function validateInputFilter(inputsObj, valuesObj) {
+
+
+/**
+ * @function module:fjlInputFilter.validateInputFilter
+ * @param inputsObj {InputFilter}
+ * @param valuesObj {Object.<String,*>}
+ * @returns {InputFilterResult}
+ */
+validateInputFilter = exports.validateInputFilter = function validateInputFilter(inputsObj, valuesObj) {
     if (!inputsObj || !valuesObj) {
         return toInputFilterResult({ result: false });
     }
@@ -85,7 +116,16 @@ var toArrayMap = exports.toArrayMap = function toArrayMap(obj) {
         messages: messages
     });
 },
-    validateIOInputFilter = exports.validateIOInputFilter = function validateIOInputFilter(inputsObj, valuesObj) {
+
+
+/**
+ * @function module:fjlInputFilter.validateIOInputFilter
+ * @param inputsObj {InputFilter}
+ * @param valuesObj {Object.<String, *>}
+ * @param errorHandler {Function}
+ * @returns {Promise.<InputFilterResult>}
+ */
+validateIOInputFilter = exports.validateIOInputFilter = function validateIOInputFilter(inputsObj, valuesObj) {
     var errorHandler = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _Utils.defaultErrorHandler;
 
     if (!inputsObj || !valuesObj) {
@@ -131,13 +171,32 @@ var toArrayMap = exports.toArrayMap = function toArrayMap(obj) {
         });
     }, errorHandler);
 },
-    validateIOInputWithName = exports.validateIOInputWithName = function validateIOInputWithName(input, name, value) {
+
+
+/**
+ * @function module:fjlInputFilter.validateIOInputWithName
+ * @param input {Input|InputOptions}
+ * @param name {String}
+ * @param value {*}
+ * @param errorHandler {Function}
+ * @returns {Promise.<Array.<String,InputValidationResult>>}
+ */
+validateIOInputWithName = exports.validateIOInputWithName = function validateIOInputWithName(input, name, value) {
     var errorHandler = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _Utils.defaultErrorHandler;
     return (0, _Input.validateIOInput)(input, value).then(function (result) {
         return Promise.resolve([name, result]);
     }, errorHandler);
 },
-    toInputFilter = exports.toInputFilter = function toInputFilter(inObj) {
+
+
+/**
+ * @function module:fjlInputFilter.toInputFilter
+ * @param inObj {Object.<String, Object>}
+ * @param breakOnFailure {Boolean}
+ * @param outObj {Object|*}
+ * @returns {InputFilter}
+ */
+toInputFilter = exports.toInputFilter = function toInputFilter(inObj) {
     var breakOnFailure = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var outObj = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
     return Object.defineProperties(outObj, (0, _fjl.foldl)(function (agg, _ref15) {
@@ -156,12 +215,24 @@ var toArrayMap = exports.toArrayMap = function toArrayMap(obj) {
         return [key, inObj[key]];
     }, (0, _fjl.keys)(inObj))));
 },
-    toInputFilterResult = exports.toInputFilterResult = function toInputFilterResult(inResult) {
+
+
+/**
+ * @function module:fjlInputFilter.toInputFilterResult
+ * @param inResult {Object}
+ * @param outResult {Object|*}
+ * @returns {InputFilterResult}
+ */
+toInputFilterResult = exports.toInputFilterResult = function toInputFilterResult(inResult) {
     var outResult = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     var _outResult = (0, _fjlMutable.defineEnumProps$)([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
     return inResult ? (0, _fjl.assign)(_outResult, inResult) : _outResult;
 };
+
+/**
+ * @class InputFilter
+ */
 
 var InputFilter = exports.InputFilter = function () {
     function InputFilter(inputsObj) {
