@@ -6,6 +6,8 @@ import {defineEnumProps$} from 'fjl-mutable';
 
 export const
 
+    defaultErrorHandler = console.error.bind(console),
+
     toArrayMap = obj => keys(obj).map(key => [key, obj[key]]),
 
     fromArrayMap = arrayMap => foldl((agg, [key, value]) => {
@@ -34,12 +36,48 @@ export const
         return toInputFilterResult({
             result,
             validInputs,
-            validResults,
             invalidInputs,
+            validResults,
             invalidResults,
             messages
         });
     },
+
+    validateIOInputFilter = (inputsObj, valuesObj, errorHandler = defaultErrorHandler) => {
+        if (!inputsObj || !valuesObj) {
+            return Promise.resolve(toInputFilterResult({result: false}));
+        }
+
+        return Promise.all(map(([key, inputObj]) =>
+            validateIOInputWithName(inputObj, key, valuesObj[key]),
+                toArrayMap(inputsObj)
+        )).then(assocList => {
+            const [validResults, invalidResults] =
+                    partition(([key, result]) => result.result, assocList),
+                messages = foldl((agg, [key, result]) => {
+                    agg[key] = result.messages;
+                    return agg;
+                }, {}, invalidResults),
+                validInputs = fromArrayMap(validResults),
+                invalidInputs = fromArrayMap(invalidResults),
+                result = !invalidResults.length
+            ;
+
+            return toInputFilterResult({
+                result,
+                validInputs,
+                invalidInputs,
+                validResults,
+                invalidResults,
+                messages
+            });
+        },
+            errorHandler);
+    },
+
+    validateIOInputWithName = (input, name, value, errorHandler = defaultErrorHandler) =>
+        validateIOInput(input, value)
+            .then(result => Promise.resolve([name, result]), errorHandler),
 
     toInputFilter = (inObj,  outObj = {}) =>
         Object.defineProperties(outObj,
@@ -74,6 +112,9 @@ export class InputFilter {
     }
     static of (options) {
         return new InputFilter(options);
+    }
+    validate (data) {
+        return validateInputFilter(this, data);
     }
 }
 

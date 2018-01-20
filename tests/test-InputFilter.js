@@ -9,7 +9,7 @@ import {runHasPropTypes, log, peek} from "./utils";
 import {toInputFilterResult, toInputFilter, validateInputFilter} from "../src/InputFilter";
 
 describe ('InputFilter', function () {
-    describe ('toInputFilterResult', function () {
+    describe ('#toInputFilterResult', function () {
         // Ensure properties on inputFilter default
        [toInputFilterResult({result: true}), toInputFilterResult()]
            .forEach(inputOptions => !log(inputOptions.result, inputOptions) && runHasPropTypes([
@@ -66,8 +66,7 @@ describe ('InputFilter', function () {
         });
     });
 
-    describe ('validateInputFilter', function () {
-        test ('should have more tests');
+    describe ('#validateInputFilter', function () {
         // Input filter
         // Expected values
         // Incoming values
@@ -84,7 +83,7 @@ describe ('InputFilter', function () {
                             }
                             const atSym = '@',
                                 indexOfAt = x.indexOf(atSym);
-                            if (indexOfAt !== x.lastIndexOf()) {
+                            if (indexOfAt !== x.lastIndexOf(atSym)) {
                                 return {result, messages: ['Invalid email']};
                             }
                             return {result: true, messages: []};
@@ -110,8 +109,8 @@ describe ('InputFilter', function () {
             }, {name: 'Hello World', email: 'hi@hello.com'}]];
 
         test ('should return expected result', function () {
-            incomingValues.forEach(([options, expected]) => {
-                const filtered = validateInputFilter(inputFilter, options),
+            incomingValues.forEach(([data, expected]) => {
+                const filtered = validateInputFilter(inputFilter, data),
                     expectedKeys = keys(expected);
                 expect(expectedKeys.every(key => filtered.validInputs.hasOwnProperty(key))).to.equal(true);
                 // expect(.every(key => filtered.validInputs[key].value === expected[key]))

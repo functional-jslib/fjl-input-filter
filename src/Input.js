@@ -118,14 +118,14 @@ export const
         runFilters(filters ? map(filter => x => x.then(filter), filters) : null,
             Promise.resolve(value).catch(errorCallback)),
 
-    toInputOptions = options => {
+    toInputOptions = (options, out = {}) => {
         const inputOptions = defineEnumProps$([
             [String,    'name', ''],
             [Boolean,   'required', false],
             [Array,     'filters', []],
             [Array,     'validators', []],
             [Boolean,   'breakOnFailure', false]
-        ], toValidationOptions());
+        ], toValidationOptions(out));
         if (isString(options)) {
             inputOptions.name = options;
         }
@@ -154,3 +154,18 @@ export const
         });
     }
 ;
+
+export class Input {
+    constructor (options) {
+        toInputOptions(options, this);
+    }
+    static of (options) {
+        return new Input(options);
+    }
+    validate (value) {
+        return validateInput(this, value);
+    }
+    ioValidate (value) {
+        return validateIOInput(this, value);
+    }
+}
