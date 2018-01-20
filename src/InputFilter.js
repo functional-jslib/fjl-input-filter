@@ -1,4 +1,4 @@
-import {partition, concatMap, foldl, map, assign, keys} from 'fjl';
+import {partition, foldl, map, assign, keys} from 'fjl';
 
 import {validateInput, validateIOInput, toInput} from './Input';
 
@@ -20,7 +20,7 @@ export const
             return toInputFilterResult({result: false});
         }
         const [validResults, invalidResults] =
-            partition(([key, result]) => result.result,
+            partition(([_, result]) => result.result,
                 map(([key, inputObj]) =>
                     [key, validateInput(inputObj, valuesObj[key])],
                     toArrayMap(inputsObj)
@@ -53,7 +53,7 @@ export const
                 toArrayMap(inputsObj)
         )).then(assocList => {
             const [validResults, invalidResults] =
-                    partition(([key, result]) => result.result, assocList),
+                    partition(([_, result]) => result.result, assocList),
                 messages = foldl((agg, [key, result]) => {
                     agg[key] = result.messages;
                     return agg;

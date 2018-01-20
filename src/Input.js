@@ -5,8 +5,8 @@
  *      functionality for javascript
  */
 import {defineEnumProps$} from 'fjl-mutable';
-import {assign, apply, compose, concat, isString, isUndefined, map} from 'fjl';
-import {toValidationResult, toValidationOptions, notEmptyValidator} from "fjl-validator";
+import {assign, apply, compose, concat, isString} from 'fjl';
+import {toValidationResult, toValidationOptions, notEmptyValidator} from 'fjl-validator';
 
 export const
 
@@ -20,7 +20,7 @@ export const
             oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
         return toInputValidationResult({
             name: name || '',
-            ...vResult,
+            ... vResult,
             rawValue: value,
             value: fResult,
             filteredValue: fResult,
@@ -49,13 +49,13 @@ export const
     },
 
     runValidators = (validators, breakOnFailure, value) => {
-        let result = true;
+        let result = true,
+            i = 0,
+            messageResults = [];
         if (!validators || !validators.length) {
             return toValidationResult({result});
         }
-        let i = 0,
-            messageResults = [],
-            limit = validators.length;
+        const limit = validators.length;
         for (; i < limit; i++) {
             const vResult = validators[i](value);
             if (!vResult.result) {
@@ -115,7 +115,7 @@ export const
         apply(compose, filters)(value) : value,
 
     runIOFilters = (filters, value, errorCallback = defaultErrorCallback) =>
-        runFilters(filters ? map(filter => x => x.then(filter), filters) : null,
+        runFilters(filters ? filters.map(filter => x => x.then(filter)) : null,
             Promise.resolve(value).catch(errorCallback)),
 
     toInput = (inputObj, out = {}) => {

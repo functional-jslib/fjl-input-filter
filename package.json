@@ -2,14 +2,16 @@
   "name": "fjl-input-filter",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "scripts": {
     "build": "gulp clean && gulp build && npm run test-builds",
     "docs": "gulp jsdoc",
     "test-builds": "jest --testMatch **/tests/*-test-*.js",
-    "test": "jest --testMatch **/tests/test-*.js"
+    "test": "jest --testMatch **/tests/test-*.js",
+    "eslint": "eslint"
   },
   "dependencies": {
+    "eslint": "^4.16.0",
     "fjl": "0.19.4",
     "fjl-mutable": "^0.16.4",
     "fjl-validator": "0.6.4"
