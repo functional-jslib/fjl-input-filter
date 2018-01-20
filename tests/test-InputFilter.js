@@ -12,12 +12,12 @@ describe ('InputFilter', function () {
     describe ('#toInputFilterResult', function () {
         // Ensure properties on inputFilter default
        [toInputFilterResult({result: true}), toInputFilterResult()]
-           .forEach(inputOptions => !log(inputOptions.result, inputOptions) && runHasPropTypes([
+           .forEach(inputObj => !log(inputObj.result, inputObj) && runHasPropTypes([
                [Boolean, 'result', [false, 99]],
                [Object, 'messages', [{}, 99]],
                [Object, 'validInputs', [{}, 99]],
                [Object, 'invalidInputs', [{}, 99]]
-           ], inputOptions));
+           ], inputObj));
     });
 
     describe ('#toInputFilter', function () {
@@ -44,9 +44,9 @@ describe ('InputFilter', function () {
             const propNames = ['name', 'required', 'filters', 'validators', 'breakOnFailure'];
             expect(
                 case1Keys.every(caseKey => {
-                    const inputOptions = case1[caseKey];
+                    const inputObj = case1[caseKey];
                     return propNames.every(propKey =>
-                        inputOptions.hasOwnProperty(propKey));
+                        inputObj.hasOwnProperty(propKey));
                 })
             )
                 .to.equal(true);

@@ -118,24 +118,24 @@ export const
         runFilters(filters ? map(filter => x => x.then(filter), filters) : null,
             Promise.resolve(value).catch(errorCallback)),
 
-    toInput = (options, out = {}) => {
-        const inputOptions = defineEnumProps$([
+    toInput = (inputObj, out = {}) => {
+        const _inputObj = defineEnumProps$([
             [String,    'name', ''],
             [Boolean,   'required', false],
             [Array,     'filters', []],
             [Array,     'validators', []],
             [Boolean,   'breakOnFailure', false]
         ], toValidationOptions(out));
-        if (isString(options)) {
-            inputOptions.name = options;
+        if (isString(inputObj)) {
+            _inputObj.name = inputObj;
         }
-        else if (options) {
-            assign(inputOptions, options);
+        else if (inputObj) {
+            assign(_inputObj, inputObj);
         }
-        if (inputOptions.required) {
-            inputOptions.validators.push(notEmptyValidator(null));
+        if (_inputObj.required) {
+            _inputObj.validators.push(notEmptyValidator(null));
         }
-        return inputOptions;
+        return _inputObj;
     },
 
     toInputValidationResult = resultObj => {
@@ -156,11 +156,11 @@ export const
 ;
 
 export class Input {
-    constructor (options) {
-        toInput(options, this);
+    constructor (inputObj) {
+        toInput(inputObj, this);
     }
-    static of (options) {
-        return new Input(options);
+    static of (inputObj) {
+        return new Input(inputObj);
     }
     validate (value) {
         return validateInput(this, value);

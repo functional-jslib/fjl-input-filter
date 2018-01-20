@@ -1,20 +1,31 @@
-# fjl-input-filter (ALPHA)
+# fjl-input-filter (Beta)
 Input filter validation functions - These allows you to create input and input-filter objects that can be used (by included utility functions)
 to easily validate a body of input fields quickly and easily (see usage examples further below).
 
-## Basic idea
-**Validators** - Functions that return an object in the form `{result: {Boolean}, message: {Array.<String>}}`.
-  So basically validators are functions that validate the given input and return a result object.
-  
-**Filters** - Filters are functions that take a value and give you a value (value could be transformed by filter or
-can be returned as is).
+## In this readme:
+- Basic idea
+- Usage
+- Api
+- Constructors
+- Virtual Types
+- External Virtual Types
+- License 
 
-**Inputs** - Objects that can contain a list of validators and/or filters to validate against.
-
-**InputFilters** - Collection of input objects that can be validated as a whole.. 
+## Basic idea:
+**Validators** - Functions that validate a given input and return a validation result.
+**Filters** - Functions that take a value and give you a 'possibly' transformed value.
+**Inputs** - Objects that contain rules used for validation (breakOnFailure, a list of validators, a list of filters etc.)
+**InputFilters** - Collection of input objects that can be validated together as a whole.
+(see usage example(s) below): 
 
 ## Usage:
-### Functional approach:
+
+### Importing code:
+Default exports are available via 'cjs' and/or 'es6-module' formats.
+Other formats are available via './dist' folder (iife, es6-module, umd, amd, and cjs) 
+
+### Usage in code:
+#### Functional approach:
 ```
 // Example input filter obj:
 const contactFormFilter = toInputFilter({
@@ -90,14 +101,14 @@ const contactFormFilter = toInputFilter({
 ```
 
 ## Api:
-### validateInputFilter
-### validateIOInputFilter
-### validateInput
-### validateIOInput
-### toInputFilter
-### toInputFilterResult
-### toInputValidationResult
-### toInput
+### `validateInputFilter(inputFilter, incomingData)`
+### `validateIOInputFilter(inputFilter, incomingData, ioErrorHandler)`
+### `validateInput(inputObj, value)`
+### `validateIOInput(inputObj, value, ioErrorHandler)`
+### `toInputFilter(inputsObj, breakOnFailure {Boolean}, out = {})`
+### `toInputFilterResult(resultObj, out = {})`
+### `toInputValidationResult(resultObj)`
+### `toInput(inputOptions, out = {})`
 
 #### Constructors
 ### `Input(options)`
@@ -105,14 +116,34 @@ const contactFormFilter = toInputFilter({
 - **`validate(data) : InputValidationResult`**
 - **`validateIO(data) : Promise.<InputValidationResult>`**
 
-### `InputFilter(inputsObj)`
+### `InputFilter(inputsObj, breakOnFailure {Boolean})`
 #### Methods
 - **`validate(data) : InputFilterResult`**
 - **`validateIO(data) : Promise.<InputFilterResult>`**
 
-#### Virtual types
+## Virtual Types
 ### InputValidationResult
 ### InputFilterResult
+
+## External Virtual Types
+**See:** fjl-validator repo/module
+### ValidationResult
+### ValidatorOptions
+
+## Resources
+### Inspiration
+- fjl-validator: https://github.com/functional-jslib/fjl-validator
+- fjl-filter (WIP): https://github.com/functional-jslib/fjl-filter
+- Zend/InputFilter: https://docs.zendframework.com/zend-inputfilter/intro/
+
+## Development
+- See `package.json - scripts property`
+- Develop in './src'
+- Write tests in './tests'
+- Follow conventions.
+
+## Test
+`npm test`
 
 ## License
 BSD 3.0+

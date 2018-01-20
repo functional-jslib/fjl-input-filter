@@ -20,15 +20,15 @@ describe ('Input', function () {
 
     describe ('#toInput', function () {
         describe ('#Input', function () {
-            // Ensure properties on inputOptions default
+            // Ensure properties on inputObj default
             [toInput(), toInput({})]
-                .forEach(inputOptions => runHasPropTypes([
+                .forEach(inputObj => runHasPropTypes([
                     [String, 'name', ['', 99]],
                     [Boolean, 'required', [true, 99]],
                     [Boolean, 'breakOnFailure', [true, 99]],
                     [Array, 'filters', [[], 99]],
                     [Array, 'validators', [[], 99]]
-                ], inputOptions));
+                ], inputObj));
         });
         test ('should return an instance with the `name` property populated when `options` parameter is a string.', function () {
             let name = 'hello';
@@ -93,7 +93,7 @@ describe ('Input', function () {
                 }
             });
         });
-        test ('it should return `true` if passed in `inputOptions` doesn\'t have any validators', function () {
+        test ('it should return `true` if passed in `inputObj` doesn\'t have any validators', function () {
             expect(runValidators(null, breakOnFailure, 'hello-world').result).to.equal(true);
         });
     });

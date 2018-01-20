@@ -79,19 +79,20 @@ export const
         validateIOInput(input, value)
             .then(result => Promise.resolve([name, result]), errorHandler),
 
-    toInputFilter = (inObj,  outObj = {}) =>
+    toInputFilter = (inObj, breakOnFailure = false, outObj = {}) =>
         Object.defineProperties(outObj,
             foldl((agg, [key, inputOpsObj]) => {
-                    agg[key] = {
-                        value: toInput(assign(inputOpsObj, {name: key})),
-                        enumerable: true
-                    };
-                    return agg;
-                }, {}, map(key =>
-                    [key, inObj[key]],
-                    keys(inObj)
-                )
-            )
+                const inputObj = toInput(assign(inputOpsObj, {name: key}));
+                inputObj.breakOnFailure = breakOnFailure;
+                agg[key] = {
+                    value: inputObj,
+                    enumerable: true
+                };
+                return agg;
+            }, {}, map(key =>
+                [key, inObj[key]],
+                keys(inObj)
+            ))
         ),
 
     toInputFilterResult = (inResult, outResult = {}) => {
@@ -109,11 +110,11 @@ export const
 ;
 
 export class InputFilter {
-    constructor (options) {
-        toInputFilter(options, this);
+    constructor (inputsObj, breakOnFailure = false) {
+        toInputFilter(inputsObj, breakOnFailure, this);
     }
-    static of (options) {
-        return new InputFilter(options);
+    static of (inputsObj, breakOnFailure) {
+        return new InputFilter(inputsObj, breakOnFailure);
     }
     validate (data) {
         return validateInputFilter(this, data);
@@ -123,18 +124,8 @@ export class InputFilter {
     }
 }
 
-export class InputFilterResult {
-    constructor (options) {
-        toInputFilterResult(options, this);
-    }
-    static of (options) {
-        return new InputFilterResult(options);
-    }
-}
-
 export default {
     InputFilter,
-    InputFilterResult,
     toInputFilter,
     toInputFilterResult,
     validateInputFilter,
