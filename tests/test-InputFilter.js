@@ -6,7 +6,7 @@ import {notEmptyValidator, regexValidator, stringLengthValidator,
 import {runValidators, runIOValidators, runFilters, runIOFilters,
     toInputOptions, validateInput, validateIOInput} from '../src/Input';
 import {runHasPropTypes, log, peek} from "./utils";
-import {toInputFilterResult, toInputFilter, validateInputFilter} from "../src/InputFilter";
+import {toInputFilterResult, toInputFilter, validateInputFilter, validateIOInputFilter} from "../src/InputFilter";
 
 describe ('InputFilter', function () {
     describe ('#toInputFilterResult', function () {
@@ -126,5 +126,73 @@ describe ('InputFilter', function () {
             [Object, 'validInputs', [{}, 99]],
             [Object, 'invalidInputs', [{}, 99]]
         ], validateInputFilter(inputFilter, {}));
+    });
+
+    describe ('#validateIOInputFilter', function () {
+        // Input filter
+        // Expected values
+        // Incoming values
+        const inputFilter = toInputFilter({
+                name: {required: true},
+                email: {required: true,
+                    // Cheap email validate
+                    validators: [
+                        stringLengthValidator({min: 3, max: 55}), // string length error messages
+                        x => {                                    // Invalid email error messages
+                            let result = false;
+                            if (!x || typeof x !== 'string') {
+                                return {result, messages: ['`email` should be a non-empty string']}
+                            }
+                            const atSym = '@',
+                                indexOfAt = x.indexOf(atSym);
+                            if (indexOfAt !== x.lastIndexOf(atSym)) {
+                                return {result, messages: ['Invalid email']};
+                            }
+                            return {result: true, messages: []};
+                        }
+                    ],
+                    filters: [x => (x + '').toLowerCase()]},
+                subject: {
+                    validators: [],
+                    filters: []
+                },
+                message: {},
+                zipCode: {},
+                phoneNumber: {}
+            }),
+            // [[inputFilterOptions, expectedValues]]
+            incomingValues = [[{
+                name: 'Hello World',
+                email: 'hI@HeLlO.CoM',
+                subject: '',
+                message: '',
+                zipCode: null,
+                phoneNumber: null
+            }, {name: 'Hello World', email: 'hi@hello.com'}]];
+
+        test ('should return expected result', function () {
+            incomingValues.forEach(([data, expected]) => {
+                validateIOInputFilter(inputFilter, data)
+                    .then(filtered => {
+                        // log(JSON.parse(JSON.stringify(filtered)));
+                        const expectedKeys = keys(expected);
+                        expect(expectedKeys.every(key => filtered.validInputs.hasOwnProperty(key))).to.equal(true);
+                        // expect(.every(key => filtered.validInputs[key].value === expected[key]))
+
+                    })
+            });
+            // log(JSON.stringify(filteredInputFilter));
+        });
+
+        // Should return a valid InputFilterResult
+        validateIOInputFilter(inputFilter, incomingValues[0][0])
+            .then(results =>
+                runHasPropTypes([
+                    [Boolean, 'result', [false, 99]],
+                    [Object, 'messages', [{}, 99]],
+                    [Object, 'validInputs', [{}, 99]],
+                    [Object, 'invalidInputs', [{}, 99]]
+                ], results.map(([key, result]) => result))
+            )
     });
 });

@@ -99,7 +99,9 @@ export const
             [Boolean, 'result', false],
             [Object,  'messages', {}],
             [Object,  'validInputs', {}],
-            [Object,  'invalidInputs', {}]
+            [Object,  'invalidInputs', {}],
+            [Array,   'validResults', []],
+            [Array,   'invalidResults', []]
         ], outResult);
         return inResult ? assign(_outResult, inResult) : _outResult;
     }
@@ -115,6 +117,9 @@ export class InputFilter {
     }
     validate (data) {
         return validateInputFilter(this, data);
+    }
+    validateIO (data) {
+        return validateIOInputFilter(this, data);
     }
 }
 
@@ -133,6 +138,8 @@ export default {
     toInputFilter,
     toInputFilterResult,
     validateInputFilter,
+    validateIOInputFilter,
+    validateIOInputWithName,
     toArrayMap,
     fromArrayMap
 };
