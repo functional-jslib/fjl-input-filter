@@ -37,6 +37,7 @@
     "gulp-fncallback": "^2.0.2",
     "gulp-header": "^1.8.9",
     "gulp-jsdoc3": "^1.0.1",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "gulp-uglify-es": "^0.1.9",
     "jest": "^21.2.1",
@@ -54,7 +55,11 @@
     "testEnvironment": "node"
   },
   "rollupConfig": {
-    "external": ["fjl", "fjl-validator", "fjl-mutable"]
+    "external": [
+      "fjl",
+      "fjl-validator",
+      "fjl-mutable"
+    ]
   },
   "buildConfig": {
     "inputModuleName": "fjlInputFilter",

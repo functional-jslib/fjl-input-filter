@@ -4,8 +4,7 @@
 
 'use strict';
 
-const fs = require('fs'),
-    path = require('path'),
+const path = require('path'),
     crypto = require('crypto'),
     packageJson = require('./package'),
     rollupConfig = packageJson.rollupConfig,
@@ -119,8 +118,13 @@ gulp.task('iife', ['eslint'], () =>
             sourcemap: true
         })));
 
-gulp.task('es6-module', ['eslint'], () =>
-    rollup.rollup({
+gulp.task('es6-module', ['eslint'], () => {
+    const data = {
+        version: packageJson.version,
+        license: packageJson.license,
+        fileHash: ''
+    };
+    return rollup.rollup({
         input: inputFilePath,
         plugins: [
             rollupResolve()
@@ -132,7 +136,21 @@ gulp.task('es6-module', ['eslint'], () =>
             format: 'es',
             name: inputModuleName,
             sourcemap: true
-        }), log));
+        }), log)
+        .then(() => gulp.src(buildPath(es6Module, outputFileName))
+            .pipe(concat(buildPath(es6Module, outputFileNameMin)))
+            .pipe(gulpUglifyEs())
+            .pipe(fncallback((file, enc, cb) => {
+                let hasher = crypto.createHash('md5');
+                hasher.update(file.contents.toString(enc));
+                data.fileHash = hasher.digest('hex');
+                return cb();
+            }))
+            .pipe(header('/**! ' + outputFileNameMin + ' <%= version %> | License: <%= license %> | ' +
+                'md5checksum: <%= fileHash %> | Built-on: <%= (new Date()) %> **/', data))
+            .pipe(gulp.dest('./'))
+        )
+});
 
 gulp.task('uglify', ['iife'], () => {
     const data = {
