@@ -165,7 +165,7 @@ export class Input {
     validate (value) {
         return validateInput(this, value);
     }
-    ioValidate (value) {
+    validateIO (value) {
         return validateIOInput(this, value);
     }
 }
