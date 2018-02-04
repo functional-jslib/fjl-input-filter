@@ -136,6 +136,13 @@ const contactFormFilter = toInputFilter({
 - fjl-filter (WIP): https://github.com/functional-jslib/fjl-filter
 - Zend/InputFilter: https://docs.zendframework.com/zend-inputfilter/intro/
 
+## Pre-Requisites
+### For Node:
+node v6.12+ .
+
+### For Browser:
+Ecmascript 5+ and up.
+
 ## Development
 - See `package.json - scripts property`
 - Develop in './src'
