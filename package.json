@@ -1,6 +1,6 @@
 {
   "name": "fjl-input-filter",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "index.js",
   "license": "BSD-3-Clause",
   "scripts": {
@@ -11,9 +11,9 @@
     "eslint": "eslint"
   },
   "dependencies": {
-    "fjl": "0.19.4",
-    "fjl-mutable": "^0.16.4",
-    "fjl-validator": "0.6.4"
+    "fjl": "^0.21.13",
+    "fjl-mutable": "^0.16.5",
+    "fjl-validator": "^0.6.10"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

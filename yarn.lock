@@ -1714,7 +1714,7 @@ fjl-error-throwing@^0.7.7:
   dependencies:
     fjl "0.19.0"
 
-fjl-mutable@^0.16.0, fjl-mutable@^0.16.4:
+fjl-mutable@^0.16.0, fjl-mutable@^0.16.5:
   version "0.16.5"
   resolved "https://registry.yarnpkg.com/fjl-mutable/-/fjl-mutable-0.16.5.tgz#380ce4e0db705422ef92db831cd61a18ab9e2a21"
   dependencies:
@@ -1725,11 +1725,11 @@ fjl-range@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/fjl-range/-/fjl-range-1.0.4.tgz#f29172ad50690e433ae6f7b45bb9e9b72a0f52c8"
 
-fjl-validator@0.6.4:
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/fjl-validator/-/fjl-validator-0.6.4.tgz#4806fe0cdee1d25b57f34857e36a8d57cda61a98"
+fjl-validator@^0.6.10:
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/fjl-validator/-/fjl-validator-0.6.10.tgz#27daf27fa359338aa8a3a035aaa4f4b7d9ccaf3b"
   dependencies:
-    fjl "^0.17.14"
+    fjl "0.19.4"
     fjl-mutable "^0.16.0"
 
 fjl@0.19.0:
@@ -1740,9 +1740,9 @@ fjl@0.19.4:
   version "0.19.4"
   resolved "https://registry.yarnpkg.com/fjl/-/fjl-0.19.4.tgz#9f05d0524b260d5d32e9c117a1eb24a0370cc791"
 
-fjl@^0.17.14:
-  version "0.17.14"
-  resolved "https://registry.yarnpkg.com/fjl/-/fjl-0.17.14.tgz#dd6a159662afda10eaf35c48962f3ce21146d3de"
+fjl@^0.21.13:
+  version "0.21.13"
+  resolved "https://registry.yarnpkg.com/fjl/-/fjl-0.21.13.tgz#d875cf17091b6f4f676abd45ac6b74d0fef84889"
 
 flagged-respawn@^1.0.0:
   version "1.0.0"
