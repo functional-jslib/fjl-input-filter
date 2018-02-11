@@ -171,70 +171,42 @@ describe ('InputFilter', function () {
     });
 
     describe ('#validateIOInputFilter', function () {
-        // Input filter
-        // Expected values
-        // Incoming values
-        const inputFilter = toInputFilter({
-                name: {required: true},
-                email: {required: true,
-                    // Cheap email validate
-                    validators: [
-                        stringLengthValidator({min: 3, max: 55}), // string length error messages
-                        x => {                                    // Invalid email error messages
-                            let result = false;
-                            if (!x || typeof x !== 'string') {
-                                return {result, messages: ['`email` should be a non-empty string']}
-                            }
-                            const atSym = '@',
-                                indexOfAt = x.indexOf(atSym);
-                            if (indexOfAt !== x.lastIndexOf(atSym)) {
-                                return {result, messages: ['Invalid email']};
-                            }
-                            return {result: true, messages: []};
-                        }
-                    ],
-                    filters: [x => (x + '').toLowerCase()]},
-                subject: {
-                    validators: [],
-                    filters: []
-                },
-                message: {},
-                zipCode: {},
-                phoneNumber: {}
-            }),
-            // [[inputFilterOptions, expectedValues]]
-            incomingValues = [[{
-                name: 'Hello World',
-                email: 'hI@HeLlO.CoM',
-                subject: '',
-                message: '',
-                zipCode: null,
-                phoneNumber: null
-            }, {name: 'Hello World', email: 'hi@hello.com'}]];
+        test ('should return expected result given both data that passes and fails input filter validation', async () => {
+            [truthyCasesForInputFilter1, falsyCasesForInputFilter1].forEach(async casesAssocList => {
+                casesAssocList.forEach(async ([data, expectedInvalidInputs]) => {
+                    const result = await validateIOInputFilter(inputFilter1, data),
+                        foundInvalidFieldKeys = keys(expectedInvalidInputs);
 
-        test ('should return expected result', function () {
-            incomingValues.forEach(([data, expected]) => {
-                validateIOInputFilter(inputFilter, data)
-                    .then(filtered => {
-                        // log(JSON.parse(JSON.stringify(filtered)));
-                        const expectedKeys = keys(expected);
-                        expect(expectedKeys.every(key => filtered.validInputs.hasOwnProperty(key))).to.equal(true);
-                        // expect(.every(key => filtered.validInputs[key].value === expected[key]))
+                    // Truthy cases
+                    if (foundInvalidFieldKeys.length === 0) {
+                        expect(result.result).to.equal(true);
+                        expect(keys(result.messages).length).to.equal(0);
+                        // @todo messages should be null when `result.result` is
+                        //  `true` might be better for the library
+                    }
 
-                    })
+                    // Falsy cases
+                    // Expect found-invalid-field-keys to match required criteria for each..
+                    foundInvalidFieldKeys.forEach(key => {
+                        expect(expectedInvalidInputs.hasOwnProperty(key)).to.equal(true);
+                        expect(result.messages[key].length >= 1).to.equal(true);
+                    });
+                });
             });
-            // log(JSON.stringify(filteredInputFilter));
-        });
+
+        }); // end of `test` case
 
         // Should return a valid InputFilterResult
-        validateIOInputFilter(inputFilter, incomingValues[0][0])
+        validateIOInputFilter(inputFilter1, truthyCasesForInputFilter1[0][0])
             .then(results =>
                 runHasPropTypes([
-                    [Boolean, 'result', [false, 99]],
-                    [Object, 'messages', [{}, 99]],
-                    [Object, 'validInputs', [{}, 99]],
-                    [Object, 'invalidInputs', [{}, 99]]
-                ], results.map(([key, result]) => result))
+                    [Boolean,   'result', [false, 99]],
+                    [Object,    'messages', [{}, 99]],
+                    [Array,     'validResults', [{}, 99]],
+                    [Object,    'validInputs', [{}, 99]],
+                    [Object,    'invalidResults', [{}, 99]],
+                    [Object,    'invalidInputs', [{}, 99]]
+                ], results)
             )
     });
 });
