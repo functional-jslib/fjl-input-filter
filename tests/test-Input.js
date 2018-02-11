@@ -41,7 +41,7 @@ describe ('Input', function () {
                     fallbackValue: 'hello world'
                 },
                 input = toInput(options);
-            log(input);
+            // log(input);
             keys(options).forEach(function (key) {
                 expect(input[key]).to.equal(options[key]);
             });
