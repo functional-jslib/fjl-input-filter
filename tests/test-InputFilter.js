@@ -4,7 +4,16 @@ import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator,
     toValidationResult, toValidationOptions} from 'fjl-validator';
 import {runHasPropTypes, log, peek} from "./utils";
-import {toInputFilterResult, toInputFilter, toArrayMap, fromArrayMap, validateInputFilter, validateIOInputFilter} from "../src/InputFilter";
+import {
+    toInputFilterResult,
+    toInputFilter,
+    toArrayMap,
+    fromArrayMap,
+    validateInputFilter,
+    validateIOInputFilter
+} from "../src/InputFilter";
+
+import {inputFilter1, truthyCasesForInputFilter1, falsyCasesForInputFilter1} from './fixtures/input-filter-1';
 
 describe ('InputFilter', function () {
     describe ('#toInputFilterResult', function () {
@@ -127,57 +136,30 @@ describe ('InputFilter', function () {
     });
 
     describe ('#validateInputFilter', function () {
-        // Input filter
-        // Expected values
-        // Incoming values
-        const inputFilter = toInputFilter({
-                name: {required: true},
-                email: {required: true,
-                    // Cheap email validate
-                    validators: [
-                        stringLengthValidator({min: 3, max: 55}), // string length error messages
-                        x => {                                    // Invalid email error messages
-                            let result = false;
-                            if (!x || typeof x !== 'string') {
-                                return {result, messages: ['`email` should be a non-empty string']}
-                            }
-                            const atSym = '@',
-                                indexOfAt = x.indexOf(atSym);
-                            if (indexOfAt !== x.lastIndexOf(atSym)) {
-                                return {result, messages: ['Invalid email']};
-                            }
-                            return {result: true, messages: []};
-                        }
-                    ],
-                    filters: [x => (x + '').toLowerCase()]},
-                subject: {
-                    validators: [],
-                    filters: []
-                },
-                message: {},
-                zipCode: {},
-                phoneNumber: {}
-            }),
-            // [[inputFilterOptions, expectedValues]]
-            incomingValues = [[{
-                name: 'Hello World',
-                email: 'hI@HeLlO.CoM',
-                subject: '',
-                message: '',
-                zipCode: null,
-                phoneNumber: null
-            }, {name: 'Hello World', email: 'hi@hello.com'}]];
+        test ('should return expected result given both data that passes and fails input filter validation', function () {
+            [truthyCasesForInputFilter1, falsyCasesForInputFilter1].forEach(casesAssocList => {
+                casesAssocList.forEach(([data, expectedInvalidInputs]) => {
+                    const result = validateInputFilter(inputFilter1, data),
+                        foundInvalidFieldKeys = keys(expectedInvalidInputs);
 
-        test ('should return expected result', function () {
-            incomingValues.forEach(([data, expected]) => {
-                const filtered = validateInputFilter(inputFilter, data),
-                    expectedKeys = keys(expected);
-                expect(expectedKeys.every(key => filtered.validInputs.hasOwnProperty(key))).to.equal(true);
-                // expect(.every(key => filtered.validInputs[key].value === expected[key]))
-                //         .to.equal(true);
+                    // Truthy cases
+                    if (foundInvalidFieldKeys.length === 0) {
+                        expect(result.result).to.equal(true);
+                        expect(keys(result.messages).length).to.equal(0);
+                        // @todo messages should be null when `result.result` is
+                        //  `true` might be better for the library
+                    }
+
+                    // Falsy cases
+                    // Expect found-invalid-field-keys to match required criteria for each..
+                    foundInvalidFieldKeys.forEach(key => {
+                        expect(expectedInvalidInputs.hasOwnProperty(key)).to.equal(true);
+                        expect(result.messages[key].length >= 1).to.equal(true);
+                    });
+                });
             });
-            // log(JSON.stringify(filteredInputFilter));
-        });
+
+        }); // end of `test` case
 
         // Should return a valid InputFilterResult
         runHasPropTypes([
@@ -185,7 +167,7 @@ describe ('InputFilter', function () {
             [Object, 'messages', [{}, 99]],
             [Object, 'validInputs', [{}, 99]],
             [Object, 'invalidInputs', [{}, 99]]
-        ], validateInputFilter(inputFilter, {}));
+        ], validateInputFilter(inputFilter1, {}));
     });
 
     describe ('#validateIOInputFilter', function () {

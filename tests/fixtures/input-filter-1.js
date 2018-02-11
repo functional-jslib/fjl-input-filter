@@ -6,7 +6,7 @@ import {toInputFilter} from '../../src/InputFilter';
 import {regexValidator,
     stringLengthValidator as stringLength,
     digitValidator} from 'fjl-validator';
-import {encodeXmlEntities} from './filters/xmlEntitiesFilter';
+import {encodeXmlEntities} from './filters/XmlEntitiesFilter';
 
 export const
 
@@ -26,7 +26,7 @@ export const
             required,
             validators: [
                 regexValidator({
-                    pattern: /^[a-z][a-z\'\s]+$/i,
+                    pattern: /^[a-z][a-z'\s]+$/i,
                     messageTemplates: {
                         DOES_NOT_MATCH_PATTERN: x => `"${x}" does not match the required ` +
                             `\`${TEXT_FIELD}\` pattern.  Only ... are allowed.`
@@ -43,7 +43,7 @@ export const
         [DIGIT_FIELD]: {
             required,
             validators: [
-                digitValidator(),
+                digitValidator({}),
                 stringLength({min: 10, max: 21})
             ]
         },
@@ -60,20 +60,19 @@ export const
             required,
             validators: [
                 regexValidator({ // date validator
-                    pattern: /^\d{4}\-\d{2}\-\d{2}$/,
+                    pattern: /^\d{4}-\d{2}-\d{2}$/,
                     messageTemplates: {
-                        DOES_NOT_MATCH_PATTERN: x => `Date format is incorrect.`
+                        DOES_NOT_MATCH_PATTERN: () => `Date format is incorrect.`
                     }
-                }),
-                stringLength({min: 1, max: 3})
+                })
             ]
         },
         [TIME_FIELD]: {
             validators: [
                 regexValidator({ // time validation
-                    pattern: /^\d{2}\:\d{2}(?:AM|PM)?$/,
+                    pattern: /^\d{2}:\d{2}(?:AM|PM)?$/,
                     messageTemplates: {
-                        DOES_NOT_MATCH_PATTERN: x => `${TIME_FIELD} format is incorrect.`
+                        DOES_NOT_MATCH_PATTERN: () => `${TIME_FIELD} format is incorrect.`
                     }
                 }),
             ]
@@ -82,9 +81,9 @@ export const
             required,
             validators: [
                 regexValidator({
-                    pattern: /^[a-z\d][a-z\d\s.\-,"'\n\t\r]+$/gim,
+                    pattern: /^[a-z\d][a-z\d\s.\-,"'\n\t\r]+$/im,
                     messageTemplates: {
-                        DOES_NOT_MATCH_PATTERN: x =>
+                        DOES_NOT_MATCH_PATTERN: () =>
                             `Locations format is incorrect.  ` +
                             `Only a-z, A-Z, ",", " ", 0-9, "'", """, or "-" are allowed.`
                     }
@@ -127,7 +126,12 @@ export const
             [DATE_FIELD]: '2018-02-10',
             [TIME_FIELD]: undefined,
             [TEXTAREA_FIELD]: 'Hello World! <b>How are you doing?</b>',
-        }, {}]
+        }, {
+            [EMAIL_FIELD]: [],
+            [NUMBER_FIELD]: [],
+            [TIME_FIELD]: []
+
+        }]
     ],
 
     /**
@@ -138,13 +142,13 @@ export const
      */
     falsyCasesForInputFilter1 = [
         [{
-            [TEXT_FIELD]: undefined,        // required (should fail)
+            [TEXT_FIELD]: '',               // required (should fail)
             [EMAIL_FIELD]: 'abc@hello.com',
             [DIGIT_FIELD]: '',              // required (should fail)
             [NUMBER_FIELD]: '999',
             [DATE_FIELD]: '2018-02-10a',    // should fail ('has a letter in it')
             [TIME_FIELD]: '01:00PM',
-            [TEXTAREA_FIELD]: null,         // should fail (required)
+            [TEXTAREA_FIELD]: '',           // should fail (required)
         }, {
             [TEXT_FIELD]: [],
             [DIGIT_FIELD]: [],
@@ -160,6 +164,8 @@ export const
             [TIME_FIELD]: undefined,
             [TEXTAREA_FIELD]: 'Hello World! <b>How are you doing?</b>',
         }, {
-            [DIGIT_FIELD]: []
+            [EMAIL_FIELD]: [],
+            [NUMBER_FIELD]: [],
+            [TIME_FIELD]: []
         }]
     ];
