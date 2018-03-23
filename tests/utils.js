@@ -6,6 +6,8 @@ export const
 
     log = console.log.bind(console),
 
+    error = console.error.bind(console),
+
     peek = x => {
         log(x);
         return x;

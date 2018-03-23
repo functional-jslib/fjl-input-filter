@@ -16,6 +16,7 @@ import {
 import {inputFilter1, truthyCasesForInputFilter1, falsyCasesForInputFilter1} from './fixtures/input-filter-1';
 
 describe ('InputFilter', function () {
+
     describe ('#toInputFilterResult', function () {
         // Ensure properties on inputFilter default
        [toInputFilterResult({result: true}), toInputFilterResult()]
@@ -154,7 +155,7 @@ describe ('InputFilter', function () {
                     // Expect found-invalid-field-keys to match required criteria for each..
                     foundInvalidFieldKeys.forEach(key => {
                         expect(expectedInvalidInputs.hasOwnProperty(key)).to.equal(true);
-                        expect(result.messages[key].length >= 1).to.equal(true);
+                        expect(result.messages[key].length >= 1).to.equal(true); // has one or more messages
                     });
                 });
             });

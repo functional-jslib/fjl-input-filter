@@ -8,7 +8,7 @@ import {notEmptyValidator, regexValidator, stringLengthValidator,
     toValidationResult, toValidationOptions} from 'fjl-validator';
 import {runValidators, runIOValidators, runFilters, runIOFilters,
     toInput, toInputValidationResult, validateInput, validateIOInput} from '../src/Input';
-import {runHasPropTypes, log, peek} from "./utils";
+import {runHasPropTypes, log, error, peek} from "./utils";
 
 describe ('Input', function () {
 
@@ -96,6 +96,13 @@ describe ('Input', function () {
         test ('it should return `true` if passed in `inputObj` doesn\'t have any validators', function () {
             expect(runValidators(null, breakOnFailure, 'hello-world').result).to.equal(true);
         });
+
+        test ('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
+            const rslt = runValidators(toInput().validators, breakOnFailure, ''),
+                {result, messages} = rslt;
+            expect(result).to.equal(true);
+            expect(messages.length).to.equal(0);
+        });
     });
 
     describe ('#runIOValidators', function () {
@@ -145,6 +152,14 @@ describe ('Input', function () {
                     });
                 }, peek);
         });
+
+        test('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
+            runIOValidators(toInput().validators, false, '') // (validators, breakOnFailure, value) => Promise<ValidationResult>
+                .then(({result, messages}) => {
+                    expect(result).to.equal(true);
+                    expect(messages.length).to.equal(0);
+                }, error);
+        });
     });
 
     describe ('#runFilters', function () {
@@ -170,9 +185,10 @@ describe ('Input', function () {
 
     describe ('#validateInput', function () {
         const baseExampleOptions = {
+                required: true,
                 validators: [
                     notEmptyValidator(null),
-                    stringLengthValidator({min: 5})
+                    stringLengthValidator({min: 5, max: 255})
                 ],
                 filters: [toSlug]
             },
@@ -207,10 +223,10 @@ describe ('Input', function () {
             ]
                 .concat(
                     [
-                        ['Hello World', 'hello-world', baseExampleOptions],
-                        ['hello-world', 'hello-world', otherInput],
-                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', otherInput],
-                        ['a9_B99_999 ', 'a9_b99_999', otherInput]
+                        ['Hello World', 'hello-world', toInput(baseExampleOptions)],
+                        ['hello-world', 'hello-world', toInput(otherInput)],
+                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', toInput(otherInput)],
+                        ['a9_B99_999 ', 'a9_b99_999', toInput(otherInput)]
                     ]
                         .map(([value, expectedValue, options]) =>
                             [validateInput(options, value), true, 0, expectedValue])
@@ -247,13 +263,20 @@ describe ('Input', function () {
             expect(messages.length).to.equal(1);
             expect(messages[0].indexOf('Empty')).to.equal(0);
         });
+
+        test ('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
+            const rslt = validateInput(toInput(), ''),
+                {result, messages} = rslt;
+            expect(result).to.equal(true);
+            expect(messages.length).to.equal(0);
+        });
     });
 
     describe ('#validateIOInput', function () {
         const baseExampleOptions = {
+                required: true,
                 validators: [
-                    notEmptyValidator(null),
-                    stringLengthValidator({min: 5})
+                    stringLengthValidator({min: 5, max: 255})
                 ],
                 filters: [toSlug]
             },
@@ -278,7 +301,7 @@ describe ('Input', function () {
                 [validateIOInput(toInput({
                     breakOnFailure: false,
                     ...baseExampleOptions
-                }), ''), false, 2, ''],
+                }), ''), false, 1, ''],
 
                 // less than min stringlength 5
                 [validateIOInput(toInput({
@@ -288,10 +311,10 @@ describe ('Input', function () {
             ]
                 .concat(
                     [
-                        ['Hello World', 'hello-world', baseExampleOptions],
-                        ['hello-world', 'hello-world', otherInput],
-                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', otherInput],
-                        ['a9_B99_999 ', 'a9_b99_999', otherInput]
+                        ['Hello World', 'hello-world', toInput(baseExampleOptions)],
+                        ['hello-world', 'hello-world', toInput(otherInput)],
+                        ['hello-99-WORLD_hoW_Are_yoU_doinG', 'hello-99-world_how_are_you_doing', toInput(otherInput)],
+                        ['a9_B99_999 ', 'a9_b99_999', toInput(otherInput)]
                     ]
                         .map(([value, expectedValue, options]) =>
                             [validateIOInput(options, value), true, 0, expectedValue])
@@ -299,34 +322,36 @@ describe ('Input', function () {
             results = testCases.map(([rslts]) => rslts)
         ;
 
-        test ('should return an input validation result object', function () {
+        test('should return an input validation result object', function () {
             return Promise.all(results)
                 .then(rslts => {
                     return expect(
                         rslts.every(validationResult =>
                             isValidateInputResult(validationResult)
                         )
-                    ).to.equal(true)
+                    ).to.equal(true);
                 });
         });
 
-        test ('should return expected result object for given arguments', async function () {
-            const rslts = await Promise.all(results);
-            rslts.forEach((rslt, ind) => {
-                const {result, messages, value} = rslt,
-                    [_, expectedResultBln, expectedMsgsLen, expectedValue] = testCases[ind];
-                // log('result:', rslt.result, rslt);
-                // log(value, expectedValue, messages);
-                expect(result).to.equal(expectedResultBln);
-                if (messages) {
-                    expect(messages.length).to.equal(expectedMsgsLen);
-                }
-                expect(value).to.equal(expectedValue);
-            });
+        test('should return expected result object for given arguments', function () {
+            return Promise.all(results)
+                .then(rslts =>
+                    rslts.forEach((rslt, ind) => {
+                        const {result, messages, value} = rslt,
+                            [_, expectedResultBln, expectedMsgsLen, expectedValue] = testCases[ind];
+                        // log('result:', rslt.result, rslt);
+                        // log(value, expectedValue, messages);
+                        expect(result).to.equal(expectedResultBln);
+                        if (messages) {
+                            expect(messages.length).to.equal(expectedMsgsLen);
+                        }
+                        expect(value).to.equal(expectedValue);
+                    })
+            );
         });
 
-        test ('when input has `required` set to true a `notEmptyValidator` should be added to `validators`', function () {
-            return validateIOInput(toInput({ required: true }), '')
+        test('when input has `required` set to true a `notEmptyValidator` should be added to `validators`', function () {
+            return validateIOInput(toInput({required: true}), '')
                 .then(({result, messages}) =>
                     Promise.all([
                         expect(result).to.equal(false),
@@ -334,6 +359,14 @@ describe ('Input', function () {
                         expect(messages[0].indexOf('Empty')).to.equal(0)
                     ])
                 );
+        });
+
+        test('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
+            validateIOInput(toInput(), '')
+                .then(({result, messages}) => {
+                    expect(result).to.equal(true);
+                    expect(messages.length).to.equal(0);
+                }, error);
         });
     });
 });

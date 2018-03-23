@@ -126,12 +126,7 @@ export const
             [DATE_FIELD]: '2018-02-10',
             [TIME_FIELD]: undefined,
             [TEXTAREA_FIELD]: 'Hello World! <b>How are you doing?</b>',
-        }, {
-            [EMAIL_FIELD]: [],
-            [NUMBER_FIELD]: [],
-            [TIME_FIELD]: []
-
-        }]
+        }, {}]
     ],
 
     /**
@@ -152,8 +147,7 @@ export const
         }, {
             [TEXT_FIELD]: [],
             [DIGIT_FIELD]: [],
-            [DATE_FIELD]: [],
-            [TEXTAREA_FIELD]: []
+            [DATE_FIELD]: []
         }],
         [{
             [TEXT_FIELD]: `Romulus Von' Bomulus`,
@@ -164,8 +158,6 @@ export const
             [TIME_FIELD]: undefined,
             [TEXTAREA_FIELD]: 'Hello World! <b>How are you doing?</b>',
         }, {
-            [EMAIL_FIELD]: [],
-            [NUMBER_FIELD]: [],
-            [TIME_FIELD]: []
+            [DIGIT_FIELD]: []
         }]
     ];

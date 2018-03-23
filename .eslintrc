@@ -21,7 +21,8 @@
   "env": {
     "node":       true,
     "browser":    true,
-    "es6":        true
+    "es6":        true,
+    "jest":       true
   },
 
   /** ---------------------------------------------------------------------------------------------------------------------
@@ -45,7 +46,7 @@
      * The following rules point out areas where you might have made mistakes.
      * ------------------------------------------------------------------------------------------------------------------- **/
 
-    "comma-dangle":             2,  // - disallow or enforce trailing commas
+    "comma-dangle":             0,  // - disallow or enforce trailing commas
     "no-cond-assign":           2,  // - disallow assignment in conditional expressions
     "no-console":               0,  // - disallow use of console (off by default in the node environment)
     "no-constant-condition":    0,  // - disallow use of constant expressions in conditions
@@ -200,7 +201,7 @@
     "operator-assignment":        0,  // - require assignment operator shorthand where possible or prohibit it entirely (off by default)
     "padded-blocks":              0,  // - enforce padding within blocks (off by default)
     "quote-props":                0,  // - require quotes around object literal property names (off by default)
-    "quotes":                     [2, "single", "avoid-escape"],  // - specify whether double or single quotes should be used
+    "quotes":                     0, //[2, "single", "avoid-escape"],  // - specify whether double or single quotes should be used
     "semi":                       2,  // - require or disallow use of semicolons instead of ASI
     "semi-spacing":               2,  // - enforce spacing before and after semicolons
     "sort-vars":                  0,  // - sort variables within the same declaration block (off by default)
