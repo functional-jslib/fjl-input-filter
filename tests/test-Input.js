@@ -301,7 +301,7 @@ describe ('Input', function () {
                 [validateIOInput(toInput({
                     breakOnFailure: false,
                     ...baseExampleOptions
-                }), ''), false, 1, ''],
+                }), ''), false, 2, ''],
 
                 // less than min stringlength 5
                 [validateIOInput(toInput({
@@ -339,8 +339,6 @@ describe ('Input', function () {
                     rslts.forEach((rslt, ind) => {
                         const {result, messages, value} = rslt,
                             [_, expectedResultBln, expectedMsgsLen, expectedValue] = testCases[ind];
-                        // log('result:', rslt.result, rslt);
-                        // log(value, expectedValue, messages);
                         expect(result).to.equal(expectedResultBln);
                         if (messages) {
                             expect(messages.length).to.equal(expectedMsgsLen);

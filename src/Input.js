@@ -111,6 +111,7 @@ export const
             runIOValidators(validators, breakOnFailure, value, input) :
             Promise.resolve({result: true})
         ;
+
         return pendingValidation.then(result =>
             runIOFilters(filters, value)
                 .then(filteredValue => {
@@ -191,10 +192,8 @@ export const
                 const failedResults = results.filter(rslt => !rslt.result),
                     interimResult = {
                         result,
-                        messages: failedResults.reduce((agg, item) => {
-                            agg = agg.concat(item.messages);
-                            return agg;
-                        }, [])
+                        messages: failedResults.reduce((agg, item) =>
+                            agg.concat(item.messages), [])
                     };
                 if (failedResults.length) {
                     interimResult.result = false;
@@ -249,6 +248,7 @@ export const
             assign(_inputObj, inputObj);
         }
         if (_inputObj.required) {
+            _inputObj.validators = _inputObj.validators.slice(0);
             _inputObj.validators.push(notEmptyValidator(null));
         }
         return _inputObj;
