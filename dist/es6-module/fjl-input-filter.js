@@ -1,5 +1,5 @@
 import { defineEnumProps$ } from 'fjl-mutable';
-import { apply, assign, compose, concat, foldl, isString, keys, map, partition } from 'fjl';
+import { apply, assign, compose, concat, foldl, isArray, isString, isset, keys, map, partition } from 'fjl';
 import { notEmptyValidator, toValidationOptions, toValidationResult } from 'fjl-validator';
 
 /**
@@ -41,12 +41,34 @@ const defaultErrorHandler = console.error.bind(console);
  * @property {Function} valueObscurator=((x) => x) - Obscurator used for obscuring a value given to validation.
  */
 
+const noValidationRequired = (input, value) =>
+        !input.required && (
+            !isset(value) || (
+                (isString(value) || isArray(value)) &&
+                !value.length
+            )
+        );
 const validateInput = (input, value) => {
         const {validators, filters, breakOnFailure,
-                valueObscured, valueObscurator, name} = input,
-            vResult = runValidators(validators, breakOnFailure, value),
+                valueObscured, valueObscurator, name} = input;
+
+        // If value is not required and is `null` or `undefined`
+        if (noValidationRequired(input, value)) {
+            return toInputValidationResult({
+                result: true,
+                name: name || '',
+                rawValue: value,
+                value,
+                filteredValue: value,
+                obscuredValue: value
+            });
+        }
+
+        // Run validation and filtering
+        let vResult = runValidators(validators, breakOnFailure, value),
             fResult = runFilters(filters, value),
             oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
+
         return toInputValidationResult(assign(vResult, {
             name: name || '',
             rawValue: value,
@@ -57,10 +79,26 @@ const validateInput = (input, value) => {
     };
 const validateIOInput = (input, value) => {
         const {validators, filters, breakOnFailure,
-                valueObscured, valueObscurator} = input,
-            pendingValidation = validators && validators.length ?
-                runIOValidators(validators, breakOnFailure, value, input) :
-                    Promise.resolve({result: true});
+                valueObscured, valueObscurator} = input;
+
+        // If not required and value is `null` or `undefined` return truthy result
+        if (noValidationRequired(input, value)) {
+            return Promise.resolve(
+                toInputValidationResult({
+                    result: true,
+                    name: input.name || '',
+                    rawValue: value,
+                    value,
+                    filteredValue: value,
+                    obscuredValue: value
+                })
+            );
+        }
+
+        let pendingValidation = validators && validators.length ?
+            runIOValidators(validators, breakOnFailure, value, input) :
+            Promise.resolve({result: true});
+
         return pendingValidation.then(result =>
             runIOFilters(filters, value)
                 .then(filteredValue => {
@@ -71,7 +109,7 @@ const validateIOInput = (input, value) => {
                             valueObscurator(filteredValue) : filteredValue;
                     return toInputValidationResult(result);
                 })
-        );
+            );
     };
 const runValidators = (validators, breakOnFailure, value) => {
         let result = true,
@@ -122,10 +160,8 @@ const runIOValidators = (validators, breakOnFailure, value, errorCallback = defa
                 const failedResults = results.filter(rslt => !rslt.result),
                     interimResult = {
                         result,
-                        messages: failedResults.reduce((agg, item) => {
-                            agg = agg.concat(item.messages);
-                            return agg;
-                        }, [])
+                        messages: failedResults.reduce((agg, item) =>
+                            agg.concat(item.messages), [])
                     };
                 if (failedResults.length) {
                     interimResult.result = false;
@@ -154,6 +190,7 @@ const toInput = (inputObj, out = {}) => {
             assign(_inputObj, inputObj);
         }
         if (_inputObj.required) {
+            _inputObj.validators = _inputObj.validators.slice(0);
             _inputObj.validators.push(notEmptyValidator(null));
         }
         return _inputObj;
@@ -321,5 +358,5 @@ class InputFilter {
  * @module fjlInputFilter
  */
 
-export { validateInput, validateIOInput, runValidators, runIOValidators, runFilters, runIOFilters, toInput, toInputValidationResult, Input, toArrayMap, fromArrayMap, validateInputFilter, validateIOInputFilter, validateIOInputWithName, toInputFilter, toInputFilterResult, InputFilter };
+export { noValidationRequired, validateInput, validateIOInput, runValidators, runIOValidators, runFilters, runIOFilters, toInput, toInputValidationResult, Input, toArrayMap, fromArrayMap, validateInputFilter, validateIOInputFilter, validateIOInputWithName, toInputFilter, toInputFilterResult, InputFilter };
 //# sourceMappingURL=fjl-input-filter.js.map

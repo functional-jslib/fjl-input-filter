@@ -128,14 +128,32 @@ var slicedToArray = function () {
  * @property {Function} valueObscurator=((x) => x) - Obscurator used for obscuring a value given to validation.
  */
 
+var noValidationRequired = function noValidationRequired(input, value) {
+    return !input.required && (!fjl.isset(value) || (fjl.isString(value) || fjl.isArray(value)) && !value.length);
+};
 var validateInput = function validateInput(input, value) {
     var validators = input.validators,
         filters = input.filters,
         breakOnFailure = input.breakOnFailure,
         valueObscured = input.valueObscured,
         valueObscurator = input.valueObscurator,
-        name = input.name,
-        vResult = runValidators(validators, breakOnFailure, value),
+        name = input.name;
+
+    // If value is not required and is `null` or `undefined`
+
+    if (noValidationRequired(input, value)) {
+        return toInputValidationResult({
+            result: true,
+            name: name || '',
+            rawValue: value,
+            value: value,
+            filteredValue: value,
+            obscuredValue: value
+        });
+    }
+
+    // Run validation and filtering
+    var vResult = runValidators(validators, breakOnFailure, value),
         fResult = runFilters(filters, value),
         oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
 
@@ -152,8 +170,22 @@ var validateIOInput = function validateIOInput(input, value) {
         filters = input.filters,
         breakOnFailure = input.breakOnFailure,
         valueObscured = input.valueObscured,
-        valueObscurator = input.valueObscurator,
-        pendingValidation = validators && validators.length ? runIOValidators(validators, breakOnFailure, value, input) : Promise.resolve({ result: true });
+        valueObscurator = input.valueObscurator;
+
+    // If not required and value is `null` or `undefined` return truthy result
+
+    if (noValidationRequired(input, value)) {
+        return Promise.resolve(toInputValidationResult({
+            result: true,
+            name: input.name || '',
+            rawValue: value,
+            value: value,
+            filteredValue: value,
+            obscuredValue: value
+        }));
+    }
+
+    var pendingValidation = validators && validators.length ? runIOValidators(validators, breakOnFailure, value, input) : Promise.resolve({ result: true });
 
     return pendingValidation.then(function (result) {
         return runIOFilters(filters, value).then(function (filteredValue) {
@@ -217,8 +249,7 @@ var runIOValidators = function runIOValidators(validators, breakOnFailure, value
             interimResult = {
             result: result,
             messages: failedResults.reduce(function (agg, item) {
-                agg = agg.concat(item.messages);
-                return agg;
+                return agg.concat(item.messages);
             }, [])
         };
         if (failedResults.length) {
@@ -248,6 +279,7 @@ var toInput = function toInput(inputObj) {
         fjl.assign(_inputObj, inputObj);
     }
     if (_inputObj.required) {
+        _inputObj.validators = _inputObj.validators.slice(0);
         _inputObj.validators.push(fjlValidator.notEmptyValidator(null));
     }
     return _inputObj;
@@ -478,6 +510,7 @@ var InputFilter = function () {
  * @module fjlInputFilter
  */
 
+exports.noValidationRequired = noValidationRequired;
 exports.validateInput = validateInput;
 exports.validateIOInput = validateIOInput;
 exports.runValidators = runValidators;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Input = exports.toInputValidationResult = exports.toInput = exports.runIOFilters = exports.runFilters = exports.runIOValidators = exports.runValidators = exports.validateIOInput = exports.validateInput = undefined;
+exports.Input = exports.toInputValidationResult = exports.toInput = exports.runIOFilters = exports.runFilters = exports.runIOValidators = exports.runValidators = exports.validateIOInput = exports.validateInput = exports.noValidationRequired = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Created by Ely on 7/24/2014.
@@ -48,7 +48,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @property {Function} valueObscurator=((x) => x) - Obscurator used for obscuring a value given to validation.
  */
 
-var
+var noValidationRequired = exports.noValidationRequired = function noValidationRequired(input, value) {
+    return !input.required && (!(0, _fjl.isset)(value) || ((0, _fjl.isString)(value) || (0, _fjl.isArray)(value)) && !value.length);
+},
+
 
 /**
  * Validates an input object based.
@@ -63,8 +66,23 @@ validateInput = exports.validateInput = function validateInput(input, value) {
         breakOnFailure = input.breakOnFailure,
         valueObscured = input.valueObscured,
         valueObscurator = input.valueObscurator,
-        name = input.name,
-        vResult = runValidators(validators, breakOnFailure, value),
+        name = input.name;
+
+    // If value is not required and is `null` or `undefined`
+
+    if (noValidationRequired(input, value)) {
+        return toInputValidationResult({
+            result: true,
+            name: name || '',
+            rawValue: value,
+            value: value,
+            filteredValue: value,
+            obscuredValue: value
+        });
+    }
+
+    // Run validation and filtering
+    var vResult = runValidators(validators, breakOnFailure, value),
         fResult = runFilters(filters, value),
         oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
 
@@ -91,8 +109,22 @@ validateIOInput = exports.validateIOInput = function validateIOInput(input, valu
         filters = input.filters,
         breakOnFailure = input.breakOnFailure,
         valueObscured = input.valueObscured,
-        valueObscurator = input.valueObscurator,
-        pendingValidation = validators && validators.length ? runIOValidators(validators, breakOnFailure, value, input) : Promise.resolve({ result: true });
+        valueObscurator = input.valueObscurator;
+
+    // If not required and value is `null` or `undefined` return truthy result
+
+    if (noValidationRequired(input, value)) {
+        return Promise.resolve(toInputValidationResult({
+            result: true,
+            name: input.name || '',
+            rawValue: value,
+            value: value,
+            filteredValue: value,
+            obscuredValue: value
+        }));
+    }
+
+    var pendingValidation = validators && validators.length ? runIOValidators(validators, breakOnFailure, value, input) : Promise.resolve({ result: true });
 
     return pendingValidation.then(function (result) {
         return runIOFilters(filters, value).then(function (filteredValue) {
@@ -177,8 +209,7 @@ runIOValidators = exports.runIOValidators = function runIOValidators(validators,
             interimResult = {
             result: result,
             messages: failedResults.reduce(function (agg, item) {
-                agg = agg.concat(item.messages);
-                return agg;
+                return agg.concat(item.messages);
             }, [])
         };
         if (failedResults.length) {
@@ -237,6 +268,7 @@ toInput = exports.toInput = function toInput(inputObj) {
         (0, _fjl.assign)(_inputObj, inputObj);
     }
     if (_inputObj.required) {
+        _inputObj.validators = _inputObj.validators.slice(0);
         _inputObj.validators.push((0, _fjlValidator.notEmptyValidator)(null));
     }
     return _inputObj;
