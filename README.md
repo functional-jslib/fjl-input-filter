@@ -3,13 +3,13 @@ Input filter validation functions - These allows you to create input and input-f
 to easily validate a body of input fields quickly and easily (see usage examples further below).
 
 ## In this readme:
-- Basic idea
-- Usage
-- Api
-- Constructors
-- Virtual Types
-- External Virtual Types
-- License 
+- [Basic idea](#basic-idea)
+- [Usage](#usage)
+- [Api](#api)
+- [Constructors](#constructors)
+- [Virtual Types](#virtual-types)
+- [External Virtual Types](#external-virtual-types)
+- [License](#license)
 
 ## Basic idea:
 **Validators** - Functions that validate a given input and return a validation result.
@@ -147,7 +147,6 @@ Ecmascript 5+ and up.
 - See `package.json - scripts property`
 - Develop in './src'
 - Write tests in './tests'
-- Follow conventions.
 
 ## Test
 `npm test`

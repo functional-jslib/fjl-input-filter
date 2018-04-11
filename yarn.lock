@@ -1740,9 +1740,9 @@ fjl@0.19.4:
   version "0.19.4"
   resolved "https://registry.yarnpkg.com/fjl/-/fjl-0.19.4.tgz#9f05d0524b260d5d32e9c117a1eb24a0370cc791"
 
-fjl@^0.21.13:
-  version "0.21.13"
-  resolved "https://registry.yarnpkg.com/fjl/-/fjl-0.21.13.tgz#d875cf17091b6f4f676abd45ac6b74d0fef84889"
+fjl@0.23.1:
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/fjl/-/fjl-0.23.1.tgz#28e0563f02d29508e237fa0fcf4e8898b1f63806"
 
 flagged-respawn@^1.0.0:
   version "1.0.0"

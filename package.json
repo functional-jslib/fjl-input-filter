@@ -12,7 +12,7 @@
     "eslint": "eslint"
   },
   "dependencies": {
-    "fjl": "^0.21.13",
+    "fjl": "0.23.1",
     "fjl-mutable": "^0.16.5",
     "fjl-validator": "^0.6.10"
   },
