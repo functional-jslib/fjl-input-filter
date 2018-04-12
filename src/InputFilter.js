@@ -1,4 +1,4 @@
-import {partition, foldl, map, assign, keys} from 'fjl';
+import {partition, foldl, map, assign, keys, toArrayMap, fromArrayMap} from 'fjl';
 import {validateInput, validateIOInput, toInput} from './Input';
 import {defineEnumProps$} from 'fjl-mutable';
 import {defaultErrorHandler} from './Utils';
@@ -20,25 +20,6 @@ import {defaultErrorHandler} from './Utils';
  */
 
 export const
-
-    /**
-     * Returns an associative list from an object.
-     * @function module:fjlInputFilter.toArrayMap
-     * @param obj {Object}
-     * @returns {Array.<Array<String,Object>>} - Associative list.
-     */
-    toArrayMap = obj => keys(obj).map(key => [key, obj[key]]),
-
-    /**
-     * Returns an object from an associative list.
-     * @function module:fjlInputFilter.fromArrayMap
-     * @param arrayMap {Array.<Array<String,Object>>}
-     * @returns {Object.<String,Object>}
-     */
-    fromArrayMap = arrayMap => foldl((agg, [key, value]) => {
-            agg[key] = value;
-            return agg;
-        }, {}, arrayMap),
 
     /**
      * @function module:fjlInputFilter.validateInputFilter
@@ -192,7 +173,5 @@ export default {
     toInputFilterResult,
     validateInputFilter,
     validateIOInputFilter,
-    validateIOInputWithName,
-    toArrayMap,
-    fromArrayMap
+    validateIOInputWithName
 };

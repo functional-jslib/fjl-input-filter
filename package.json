@@ -1,6 +1,6 @@
 {
   "name": "fjl-input-filter",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "main": "./dist/cjs/fjlInputFilter.js",
   "module": "./dist/es6-module/fjl-input-filter.js",
   "license": "BSD-3-Clause",

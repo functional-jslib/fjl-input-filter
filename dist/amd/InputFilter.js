@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.InputFilter = exports.toInputFilterResult = exports.toInputFilter = exports.validateIOInputWithName = exports.validateIOInputFilter = exports.validateInputFilter = exports.fromArrayMap = exports.toArrayMap = undefined;
+exports.InputFilter = exports.toInputFilterResult = exports.toInputFilter = exports.validateIOInputWithName = exports.validateIOInputFilter = exports.validateInputFilter = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -38,37 +38,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var
 
 /**
- * Returns an associative list from an object.
- * @function module:fjlInputFilter.toArrayMap
- * @param obj {Object}
- * @returns {Array.<Array<String,Object>>} - Associative list.
- */
-toArrayMap = exports.toArrayMap = function toArrayMap(obj) {
-    return (0, _fjl.keys)(obj).map(function (key) {
-        return [key, obj[key]];
-    });
-},
-
-
-/**
- * Returns an object from an associative list.
- * @function module:fjlInputFilter.fromArrayMap
- * @param arrayMap {Array.<Array<String,Object>>}
- * @returns {Object.<String,Object>}
- */
-fromArrayMap = exports.fromArrayMap = function fromArrayMap(arrayMap) {
-    return (0, _fjl.foldl)(function (agg, _ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            key = _ref2[0],
-            value = _ref2[1];
-
-        agg[key] = value;
-        return agg;
-    }, {}, arrayMap);
-},
-
-
-/**
  * @function module:fjlInputFilter.validateInputFilter
  * @param inputsObj {InputFilter}
  * @param valuesObj {Object.<String,*>}
@@ -79,32 +48,32 @@ validateInputFilter = exports.validateInputFilter = function validateInputFilter
         return toInputFilterResult({ result: false });
     }
 
-    var _partition = (0, _fjl.partition)(function (_ref3) {
-        var _ref4 = _slicedToArray(_ref3, 2),
-            _ = _ref4[0],
-            result = _ref4[1];
+    var _partition = (0, _fjl.partition)(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            _ = _ref2[0],
+            result = _ref2[1];
 
         return result.result;
-    }, (0, _fjl.map)(function (_ref5) {
-        var _ref6 = _slicedToArray(_ref5, 2),
-            key = _ref6[0],
-            inputObj = _ref6[1];
+    }, (0, _fjl.map)(function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            key = _ref4[0],
+            inputObj = _ref4[1];
 
         return [key, (0, _Input.validateInput)(inputObj, valuesObj[key])];
-    }, toArrayMap(inputsObj))),
+    }, (0, _fjl.toArrayMap)(inputsObj))),
         _partition2 = _slicedToArray(_partition, 2),
         validResults = _partition2[0],
         invalidResults = _partition2[1],
-        messages = (0, _fjl.foldl)(function (agg, _ref7) {
-        var _ref8 = _slicedToArray(_ref7, 2),
-            key = _ref8[0],
-            result = _ref8[1];
+        messages = (0, _fjl.foldl)(function (agg, _ref5) {
+        var _ref6 = _slicedToArray(_ref5, 2),
+            key = _ref6[0],
+            result = _ref6[1];
 
         agg[key] = result.messages;
         return agg;
     }, {}, invalidResults),
-        validInputs = fromArrayMap(validResults),
-        invalidInputs = fromArrayMap(invalidResults),
+        validInputs = (0, _fjl.fromArrayMap)(validResults),
+        invalidInputs = (0, _fjl.fromArrayMap)(invalidResults),
         result = !invalidResults.length;
 
     return toInputFilterResult({
@@ -132,33 +101,33 @@ validateIOInputFilter = exports.validateIOInputFilter = function validateIOInput
         return Promise.resolve(toInputFilterResult({ result: false }));
     }
 
-    return Promise.all((0, _fjl.map)(function (_ref9) {
-        var _ref10 = _slicedToArray(_ref9, 2),
-            key = _ref10[0],
-            inputObj = _ref10[1];
+    return Promise.all((0, _fjl.map)(function (_ref7) {
+        var _ref8 = _slicedToArray(_ref7, 2),
+            key = _ref8[0],
+            inputObj = _ref8[1];
 
         return validateIOInputWithName(inputObj, key, valuesObj[key]);
-    }, toArrayMap(inputsObj))).then(function (assocList) {
-        var _partition3 = (0, _fjl.partition)(function (_ref11) {
-            var _ref12 = _slicedToArray(_ref11, 2),
-                _ = _ref12[0],
-                result = _ref12[1];
+    }, (0, _fjl.toArrayMap)(inputsObj))).then(function (assocList) {
+        var _partition3 = (0, _fjl.partition)(function (_ref9) {
+            var _ref10 = _slicedToArray(_ref9, 2),
+                _ = _ref10[0],
+                result = _ref10[1];
 
             return result.result;
         }, assocList),
             _partition4 = _slicedToArray(_partition3, 2),
             validResults = _partition4[0],
             invalidResults = _partition4[1],
-            messages = (0, _fjl.foldl)(function (agg, _ref13) {
-            var _ref14 = _slicedToArray(_ref13, 2),
-                key = _ref14[0],
-                result = _ref14[1];
+            messages = (0, _fjl.foldl)(function (agg, _ref11) {
+            var _ref12 = _slicedToArray(_ref11, 2),
+                key = _ref12[0],
+                result = _ref12[1];
 
             agg[key] = result.messages;
             return agg;
         }, {}, invalidResults),
-            validInputs = fromArrayMap(validResults),
-            invalidInputs = fromArrayMap(invalidResults),
+            validInputs = (0, _fjl.fromArrayMap)(validResults),
+            invalidInputs = (0, _fjl.fromArrayMap)(invalidResults),
             result = !invalidResults.length;
 
         return toInputFilterResult({
@@ -199,10 +168,10 @@ validateIOInputWithName = exports.validateIOInputWithName = function validateIOI
 toInputFilter = exports.toInputFilter = function toInputFilter(inObj) {
     var breakOnFailure = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var outObj = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    return Object.defineProperties(outObj, (0, _fjl.foldl)(function (agg, _ref15) {
-        var _ref16 = _slicedToArray(_ref15, 2),
-            key = _ref16[0],
-            inputOpsObj = _ref16[1];
+    return Object.defineProperties(outObj, (0, _fjl.foldl)(function (agg, _ref13) {
+        var _ref14 = _slicedToArray(_ref13, 2),
+            key = _ref14[0],
+            inputOpsObj = _ref14[1];
 
         var inputObj = (0, _Input.toInput)((0, _fjl.assign)(inputOpsObj, { name: key }));
         inputObj.breakOnFailure = breakOnFailure;
@@ -269,7 +238,5 @@ exports.default = {
     toInputFilterResult: toInputFilterResult,
     validateInputFilter: validateInputFilter,
     validateIOInputFilter: validateIOInputFilter,
-    validateIOInputWithName: validateIOInputWithName,
-    toArrayMap: toArrayMap,
-    fromArrayMap: fromArrayMap
+    validateIOInputWithName: validateIOInputWithName
 };

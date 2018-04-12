@@ -341,52 +341,37 @@ var Input = function () {
  * @property {Object.<String,Array.<String>>} messages - Error messages (if any) mapped to input names.
  */
 
-var toArrayMap = function toArrayMap(obj) {
-    return fjl.keys(obj).map(function (key) {
-        return [key, obj[key]];
-    });
-};
-var fromArrayMap = function fromArrayMap(arrayMap) {
-    return fjl.foldl(function (agg, _ref) {
-        var _ref2 = slicedToArray(_ref, 2),
-            key = _ref2[0],
-            value = _ref2[1];
-
-        agg[key] = value;
-        return agg;
-    }, {}, arrayMap);
-};
 var validateInputFilter = function validateInputFilter(inputsObj, valuesObj) {
     if (!inputsObj || !valuesObj) {
         return toInputFilterResult({ result: false });
     }
 
-    var _partition = fjl.partition(function (_ref3) {
-        var _ref4 = slicedToArray(_ref3, 2),
-            _ = _ref4[0],
-            result = _ref4[1];
+    var _partition = fjl.partition(function (_ref) {
+        var _ref2 = slicedToArray(_ref, 2),
+            _ = _ref2[0],
+            result = _ref2[1];
 
         return result.result;
-    }, fjl.map(function (_ref5) {
-        var _ref6 = slicedToArray(_ref5, 2),
-            key = _ref6[0],
-            inputObj = _ref6[1];
+    }, fjl.map(function (_ref3) {
+        var _ref4 = slicedToArray(_ref3, 2),
+            key = _ref4[0],
+            inputObj = _ref4[1];
 
         return [key, validateInput(inputObj, valuesObj[key])];
-    }, toArrayMap(inputsObj))),
+    }, fjl.toArrayMap(inputsObj))),
         _partition2 = slicedToArray(_partition, 2),
         validResults = _partition2[0],
         invalidResults = _partition2[1],
-        messages = fjl.foldl(function (agg, _ref7) {
-        var _ref8 = slicedToArray(_ref7, 2),
-            key = _ref8[0],
-            result = _ref8[1];
+        messages = fjl.foldl(function (agg, _ref5) {
+        var _ref6 = slicedToArray(_ref5, 2),
+            key = _ref6[0],
+            result = _ref6[1];
 
         agg[key] = result.messages;
         return agg;
     }, {}, invalidResults),
-        validInputs = fromArrayMap(validResults),
-        invalidInputs = fromArrayMap(invalidResults),
+        validInputs = fjl.fromArrayMap(validResults),
+        invalidInputs = fjl.fromArrayMap(invalidResults),
         result = !invalidResults.length;
 
     return toInputFilterResult({
@@ -405,33 +390,33 @@ var validateIOInputFilter = function validateIOInputFilter(inputsObj, valuesObj)
         return Promise.resolve(toInputFilterResult({ result: false }));
     }
 
-    return Promise.all(fjl.map(function (_ref9) {
-        var _ref10 = slicedToArray(_ref9, 2),
-            key = _ref10[0],
-            inputObj = _ref10[1];
+    return Promise.all(fjl.map(function (_ref7) {
+        var _ref8 = slicedToArray(_ref7, 2),
+            key = _ref8[0],
+            inputObj = _ref8[1];
 
         return validateIOInputWithName(inputObj, key, valuesObj[key]);
-    }, toArrayMap(inputsObj))).then(function (assocList) {
-        var _partition3 = fjl.partition(function (_ref11) {
-            var _ref12 = slicedToArray(_ref11, 2),
-                _ = _ref12[0],
-                result = _ref12[1];
+    }, fjl.toArrayMap(inputsObj))).then(function (assocList) {
+        var _partition3 = fjl.partition(function (_ref9) {
+            var _ref10 = slicedToArray(_ref9, 2),
+                _ = _ref10[0],
+                result = _ref10[1];
 
             return result.result;
         }, assocList),
             _partition4 = slicedToArray(_partition3, 2),
             validResults = _partition4[0],
             invalidResults = _partition4[1],
-            messages = fjl.foldl(function (agg, _ref13) {
-            var _ref14 = slicedToArray(_ref13, 2),
-                key = _ref14[0],
-                result = _ref14[1];
+            messages = fjl.foldl(function (agg, _ref11) {
+            var _ref12 = slicedToArray(_ref11, 2),
+                key = _ref12[0],
+                result = _ref12[1];
 
             agg[key] = result.messages;
             return agg;
         }, {}, invalidResults),
-            validInputs = fromArrayMap(validResults),
-            invalidInputs = fromArrayMap(invalidResults),
+            validInputs = fjl.fromArrayMap(validResults),
+            invalidInputs = fjl.fromArrayMap(invalidResults),
             result = !invalidResults.length;
 
         return toInputFilterResult({
@@ -453,10 +438,10 @@ var validateIOInputWithName = function validateIOInputWithName(input, name, valu
 var toInputFilter = function toInputFilter(inObj) {
     var breakOnFailure = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     var outObj = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    return Object.defineProperties(outObj, fjl.foldl(function (agg, _ref15) {
-        var _ref16 = slicedToArray(_ref15, 2),
-            key = _ref16[0],
-            inputOpsObj = _ref16[1];
+    return Object.defineProperties(outObj, fjl.foldl(function (agg, _ref13) {
+        var _ref14 = slicedToArray(_ref13, 2),
+            key = _ref14[0],
+            inputOpsObj = _ref14[1];
 
         var inputObj = toInput(fjl.assign(inputOpsObj, { name: key }));
         inputObj.breakOnFailure = breakOnFailure;
@@ -520,8 +505,6 @@ exports.runIOFilters = runIOFilters;
 exports.toInput = toInput;
 exports.toInputValidationResult = toInputValidationResult;
 exports.Input = Input;
-exports.toArrayMap = toArrayMap;
-exports.fromArrayMap = fromArrayMap;
 exports.validateInputFilter = validateInputFilter;
 exports.validateIOInputFilter = validateIOInputFilter;
 exports.validateIOInputWithName = validateIOInputWithName;

@@ -1,5 +1,5 @@
 import { defineEnumProps$ } from 'fjl-mutable';
-import { apply, assign, compose, concat, foldl, isArray, isString, isset, keys, map, partition } from 'fjl';
+import { apply, assign, compose, concat, foldl, fromArrayMap, isArray, isString, isset, keys, map, partition, toArrayMap } from 'fjl';
 import { notEmptyValidator, toValidationOptions, toValidationResult } from 'fjl-validator';
 
 /**
@@ -245,11 +245,6 @@ class Input {
  * @property {Object.<String,Array.<String>>} messages - Error messages (if any) mapped to input names.
  */
 
-const toArrayMap = obj => keys(obj).map(key => [key, obj[key]]);
-const fromArrayMap = arrayMap => foldl((agg, [key, value]) => {
-            agg[key] = value;
-            return agg;
-        }, {}, arrayMap);
 const validateInputFilter = (inputsObj, valuesObj) => {
         if (!inputsObj || !valuesObj) {
             return toInputFilterResult({result: false});
@@ -358,5 +353,5 @@ class InputFilter {
  * @module fjlInputFilter
  */
 
-export { noValidationRequired, validateInput, validateIOInput, runValidators, runIOValidators, runFilters, runIOFilters, toInput, toInputValidationResult, Input, toArrayMap, fromArrayMap, validateInputFilter, validateIOInputFilter, validateIOInputWithName, toInputFilter, toInputFilterResult, InputFilter };
+export { noValidationRequired, validateInput, validateIOInput, runValidators, runIOValidators, runFilters, runIOFilters, toInput, toInputValidationResult, Input, validateInputFilter, validateIOInputFilter, validateIOInputWithName, toInputFilter, toInputFilterResult, InputFilter };
 //# sourceMappingURL=fjl-input-filter.js.map

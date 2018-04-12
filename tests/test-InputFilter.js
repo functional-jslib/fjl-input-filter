@@ -1,14 +1,12 @@
 import {typeOf, keys, map, isType, flip, subsequences, repeat, curry,
-    all, isEmpty, isObject, isArray, isBoolean, unfoldr} from 'fjl';
+    all, isEmpty, isObject, isArray, isBoolean, unfoldr, toArrayMap, fromArrayMap} from 'fjl';
 import {expect, assert} from 'chai';
 import {notEmptyValidator, regexValidator, stringLengthValidator,
     toValidationResult, toValidationOptions} from 'fjl-validator';
-import {runHasPropTypes, log, peek} from "./utils";
+import {runHasPropTypes} from "./utils";
 import {
     toInputFilterResult,
     toInputFilter,
-    toArrayMap,
-    fromArrayMap,
     validateInputFilter,
     validateIOInputFilter
 } from "../src/InputFilter";
@@ -72,68 +70,6 @@ describe ('InputFilter', function () {
             )
                 .to.be.instanceOf(Array);
         });
-    });
-
-    describe ('Utility functions', function () {
-        const charCodeToCharArrayMap = unfoldr(
-            (charCode, ind) => ind === 26 ? undefined :
-                [[charCode, String.fromCharCode(charCode)], ++charCode]
-            ,
-            'a'.charCodeAt(0)
-            ),
-            charCodeToCharMap = charCodeToCharArrayMap.reduce((agg, [charCode, char]) => {
-                agg[charCode] = char;
-                return agg;
-            }, {});
-
-        // log (charCodeToCharArrayMap, charCodeToCharMap);
-
-        describe ('#toArrayMap', function () {
-            test ('should convert an object to an array map', () => {
-                // Ensure map was converted to array map properly
-                expect(all(([charCode, char], ind) => {
-                        const [charCode1, char1] = charCodeToCharArrayMap[ind];
-                        return `${charCode1}` === charCode && char1 === char;
-                    }, toArrayMap(charCodeToCharMap)
-                ))
-                    .to.equal(true);
-            });
-            test ('should return an empty an array when receiving an empty object', () => {
-                const result = toArrayMap({});
-                expect(result).to.be.instanceOf(Array);
-                expect(result.length).to.equal(0);
-            });
-            test ('Should throw an error when receiving `undefined` or `null`', () => {
-                assert.throws(toArrayMap, Error);
-                assert.throws(() => toArrayMap(null), Error);
-            });
-        });
-
-        describe ('#fromArrayMap', function () {
-            test ('should return an object from an array map', () => {
-                const result = fromArrayMap(charCodeToCharArrayMap);
-                expect(isObject(result)).to.equal(true);
-                expect(
-                    all(([charCode, char]) =>
-                        result[charCode] === char,
-                        charCodeToCharArrayMap
-                    )
-                )
-                    .to.equal(true);
-            });
-
-            test ('should return an empty object when receiving an empty array', () => {
-                const result = fromArrayMap([]);
-                expect(isObject(result)).to.equal(true);
-                expect(keys(result).length).to.equal(0);
-            });
-
-            test ('should throw an error when receiving `null` and/or `undefined', () => {
-                assert.throws(fromArrayMap, Error);
-                assert.throws(() => fromArrayMap(null), Error);
-            });
-        });
-
     });
 
     describe ('#validateInputFilter', function () {
