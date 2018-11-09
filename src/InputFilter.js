@@ -1,6 +1,6 @@
-import {partition, foldl, map, assign, keys, toArrayMap, fromArrayMap} from 'fjl';
+import {partition, foldl, map, assign, keys, toAssocList, fromAssocList} from 'fjl';
 import {validateInput, validateIOInput, toInput} from './Input';
-import {defineEnumProps$} from 'fjl-mutable';
+import {defineEnumProps} from 'fjl-mutable';
 import {defaultErrorHandler} from './Utils';
 
 /**
@@ -35,14 +35,14 @@ export const
             partition(([_, result]) => result.result,
                 map(([key, inputObj]) =>
                     [key, validateInput(inputObj, valuesObj[key])],
-                    toArrayMap(inputsObj)
+                    toAssocList(inputsObj)
                 )),
             messages = foldl((agg, [key, result]) => {
                 agg[key] = result.messages;
                 return agg;
             }, {}, invalidResults),
-            validInputs = fromArrayMap(validResults),
-            invalidInputs = fromArrayMap(invalidResults),
+            validInputs = fromAssocList(validResults),
+            invalidInputs = fromAssocList(invalidResults),
             result = !invalidResults.length
         ;
         return toInputFilterResult({
@@ -69,7 +69,7 @@ export const
 
         return Promise.all(map(([key, inputObj]) =>
             validateIOInputWithName(inputObj, key, valuesObj[key]),
-                toArrayMap(inputsObj)
+                toAssocList(inputsObj)
         )).then(assocList => {
             const [validResults, invalidResults] =
                     partition(([_, result]) => result.result, assocList),
@@ -77,8 +77,8 @@ export const
                     agg[key] = result.messages;
                     return agg;
                 }, {}, invalidResults),
-                validInputs = fromArrayMap(validResults),
-                invalidInputs = fromArrayMap(invalidResults),
+                validInputs = fromAssocList(validResults),
+                invalidInputs = fromAssocList(invalidResults),
                 result = !invalidResults.length
             ;
 
@@ -136,7 +136,7 @@ export const
      * @returns {InputFilterResult}
      */
     toInputFilterResult = (inResult, outResult = {}) => {
-        const _outResult = defineEnumProps$([
+        const _outResult = defineEnumProps([
             [Boolean, 'result', false],
             [Object,  'messages', {}],
             [Object,  'validInputs', {}],

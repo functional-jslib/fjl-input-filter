@@ -1,4 +1,4 @@
-# fjl-input-filter (Beta)
+# fjl-input-filter
 Input filter validation functions - These allows you to create input and input-filter objects that can be used (by included utility functions)
 to easily validate a body of input fields quickly and easily (see usage examples further below).
 

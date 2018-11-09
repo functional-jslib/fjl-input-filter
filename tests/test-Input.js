@@ -1,14 +1,13 @@
 /**
  * Created by Ely on 3/26/2016.
  */
-import {typeOf, keys, isType, flip, subsequences, repeat, curry,
-    isEmpty, isArray, isBoolean} from 'fjl';
+import {keys, subsequences, repeat, curry,
+    isEmpty, isArray, isBoolean, error} from 'fjl';
 import {expect, assert} from 'chai';
-import {notEmptyValidator, regexValidator, stringLengthValidator,
-    toValidationResult, toValidationOptions} from 'fjl-validator';
+import {notEmptyValidator, regexValidator, stringLengthValidator} from 'fjl-validator';
 import {runValidators, runIOValidators, runFilters, runIOFilters,
     toInput, toInputValidationResult, validateInput, validateIOInput} from '../src/Input';
-import {runHasPropTypes, log, error, peek} from "./utils";
+import {runHasPropTypes, peek} from "./utils";
 
 describe ('Input', function () {
 

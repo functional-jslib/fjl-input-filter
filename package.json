@@ -12,9 +12,9 @@
     "eslint": "eslint"
   },
   "dependencies": {
-    "fjl": "0.23.3",
-    "fjl-mutable": "^0.16.5",
-    "fjl-validator": "0.6.17"
+    "fjl": "^1.5.2",
+    "fjl-mutable": "^0.18.2",
+    "fjl-validator": "^0.7.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
