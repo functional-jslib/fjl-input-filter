@@ -166,12 +166,3 @@ export class InputFilter {
         return validateIOInputFilter(this, data);
     }
 }
-
-export default {
-    InputFilter,
-    toInputFilter,
-    toInputFilterResult,
-    validateInputFilter,
-    validateIOInputFilter,
-    validateIOInputWithName
-};

@@ -1,24 +1,46 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: InputFilter.js</title>
+    <title>Source: InputFilter.js | Source: InputFilter.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
 </head>
-
 <body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="width: 144px; height: 55px">
+        
+            <a href="https://github.com/functional-jslib/fjl-input-filter" rel="noopener noreferrer" target="_blank">
+                <img src="http://elycruz.com/fjl-logo-v2.svg" width="100%" height="100%">
+            </a>
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">Source: InputFilter.js</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-fjlInputFilter.html">fjlInputFilter</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:fjlInputFilter_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-fjlInputFilter.html#.defaultErrorHandler">defaultErrorHandler</a></li><li><a href="module-fjlInputFilter.html#.runFilters">runFilters</a></li><li><a href="module-fjlInputFilter.html#.runIOFilters">runIOFilters</a></li><li><a href="module-fjlInputFilter.html#.runIOValidators">runIOValidators</a></li><li><a href="module-fjlInputFilter.html#.runValidators">runValidators</a></li><li><a href="module-fjlInputFilter.html#.toInput">toInput</a></li><li><a href="module-fjlInputFilter.html#.toInputFilter">toInputFilter</a></li><li><a href="module-fjlInputFilter.html#.toInputFilterResult">toInputFilterResult</a></li><li><a href="module-fjlInputFilter.html#.toInputValidationResult">toInputValidationResult</a></li><li><a href="module-fjlInputFilter.html#.validateInput">validateInput</a></li><li><a href="module-fjlInputFilter.html#.validateInputFilter">validateInputFilter</a></li><li><a href="module-fjlInputFilter.html#.validateIOInput">validateIOInput</a></li><li><a href="module-fjlInputFilter.html#.validateIOInputFilter">validateIOInputFilter</a></li><li><a href="module-fjlInputFilter.html#.validateIOInputWithName">validateIOInputWithName</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="fjlInputFilter.Input.html">Input</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.Input_sub"></div></li><li><a href="InputFilter.html">InputFilter</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="InputFilter_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Interfaces</h3><ul><li><a href="fjlInputFilter.InputFilterResult.html">InputFilterResult</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.InputFilterResult_sub"></div></li><li><a href="fjlInputFilter.InputOptions.html">InputOptions</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.InputOptions_sub"></div></li><li><a href="fjlInputFilter.InputValidationResult.html">InputValidationResult</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.InputValidationResult_sub"></div></li></ul></div>
+</nav>
+<div id="resizer"></div>
 
-<div id="main">
-
-    <h1 class="page-title">Source: InputFilter.js</h1>
-
+<div class="main" id="main">
     
 
 
@@ -26,9 +48,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {partition, foldl, map, assign, keys, toArrayMap, fromArrayMap} from 'fjl';
+            <pre class="prettyprint source linenums"><code>import {partition, foldl, map, assign, keys, toAssocList, fromAssocList} from 'fjl';
 import {validateInput, validateIOInput, toInput} from './Input';
-import {defineEnumProps$} from 'fjl-mutable';
+import {defineEnumProps} from 'fjl-mutable';
 import {defaultErrorHandler} from './Utils';
 
 /**
@@ -63,14 +85,14 @@ export const
             partition(([_, result]) => result.result,
                 map(([key, inputObj]) =>
                     [key, validateInput(inputObj, valuesObj[key])],
-                    toArrayMap(inputsObj)
+                    toAssocList(inputsObj)
                 )),
             messages = foldl((agg, [key, result]) => {
                 agg[key] = result.messages;
                 return agg;
             }, {}, invalidResults),
-            validInputs = fromArrayMap(validResults),
-            invalidInputs = fromArrayMap(invalidResults),
+            validInputs = fromAssocList(validResults),
+            invalidInputs = fromAssocList(invalidResults),
             result = !invalidResults.length
         ;
         return toInputFilterResult({
@@ -97,7 +119,7 @@ export const
 
         return Promise.all(map(([key, inputObj]) =>
             validateIOInputWithName(inputObj, key, valuesObj[key]),
-                toArrayMap(inputsObj)
+                toAssocList(inputsObj)
         )).then(assocList => {
             const [validResults, invalidResults] =
                     partition(([_, result]) => result.result, assocList),
@@ -105,8 +127,8 @@ export const
                     agg[key] = result.messages;
                     return agg;
                 }, {}, invalidResults),
-                validInputs = fromArrayMap(validResults),
-                invalidInputs = fromArrayMap(invalidResults),
+                validInputs = fromAssocList(validResults),
+                invalidInputs = fromAssocList(invalidResults),
                 result = !invalidResults.length
             ;
 
@@ -164,7 +186,7 @@ export const
      * @returns {InputFilterResult}
      */
     toInputFilterResult = (inResult, outResult = {}) => {
-        const _outResult = defineEnumProps$([
+        const _outResult = defineEnumProps([
             [Boolean, 'result', false],
             [Object,  'messages', {}],
             [Object,  'validInputs', {}],
@@ -194,15 +216,6 @@ export class InputFilter {
         return validateIOInputFilter(this, data);
     }
 }
-
-export default {
-    InputFilter,
-    toInputFilter,
-    toInputFilterResult,
-    validateInputFilter,
-    validateIOInputFilter,
-    validateIOInputWithName
-};
 </code></pre>
         </article>
     </section>
@@ -212,17 +225,24 @@ export default {
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fjlInputFilter.html">fjlInputFilter</a></li></ul><h3>Classes</h3><ul><li><a href="fjlInputFilter.Input.html">Input</a></li><li><a href="InputFilter.html">InputFilter</a></li></ul><h3>Interfaces</h3><ul><li><a href="fjlInputFilter.InputFilterResult.html">InputFilterResult</a></li><li><a href="fjlInputFilter.InputOptions.html">InputOptions</a></li><li><a href="fjlInputFilter.InputValidationResult.html">InputValidationResult</a></li></ul>
-</nav>
-
-<br class="clear">
-
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 12 2018 16:46:47 GMT-0400 (Eastern Daylight Time)
+    <img class="logo" src="http://elycruz.com/fjl-logo-v2.svg" style="width: 144px; height: 55px">
+    <div class="footer-text">fjl-input-filter library - BSD 3.0 License - JsDoc Template -> tui-jsdoc-template - by NHN Entertainment - Frontend Development Lab</div>
 </footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+    <script>
+        var id = '_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
 </body>
 </html>
