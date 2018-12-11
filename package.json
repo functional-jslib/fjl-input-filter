@@ -13,9 +13,8 @@
     "docs": "gulp docs"
   },
   "dependencies": {
-    "fjl": "^1.6.2",
-    "fjl-mutable": "^0.18.3",
-    "fjl-validator": "^0.7.0"
+    "fjl": "^1.10.1",
+    "fjl-validator": "^0.7.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

@@ -1,6 +1,5 @@
-import {partition, foldl, map, assign, keys, toAssocList, fromAssocList} from 'fjl';
+import {partition, foldl, map, assign, keys, toAssocList, fromAssocList, defineEnumProps} from 'fjl';
 import {validateInput, validateIOInput, toInput} from './Input';
-import {defineEnumProps} from 'fjl-mutable';
 import {defaultErrorHandler} from './Utils';
 
 /**

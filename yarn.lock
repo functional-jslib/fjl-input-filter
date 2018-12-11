@@ -2621,32 +2621,17 @@ fined@^1.0.1:
     object.pick "^1.2.0"
     parse-filepath "^1.0.1"
 
-fjl-mutable@^0.18.2:
-  version "0.18.2"
-  resolved "https://registry.yarnpkg.com/fjl-mutable/-/fjl-mutable-0.18.2.tgz#28df5859520b4a3c3749ae7121979bdfa80fab93"
-  integrity sha512-UYvn4sTChDVhzEzFfiRzy/+QqBPMQNd4WbjMpO+7EzRGhKql0kmjlmOMzHABDW1KfnWlq2WlCNhvpSRYcLf+tA==
+fjl-validator@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/fjl-validator/-/fjl-validator-0.7.1.tgz#37a41397afa594410346491c40dee985dd7dbf83"
+  integrity sha512-itLJ4KEAw1fcJ1fG2fFaX0GynK9qQy9Kbvb5mWC1fy5YwvF1PUpB2oFQ3fyKUVWT6FxqfS894V129gFDsc9OfA==
   dependencies:
-    fjl "^1.6.2"
+    fjl "^1.10.1"
 
-fjl-mutable@^0.18.3:
-  version "0.18.3"
-  resolved "https://registry.yarnpkg.com/fjl-mutable/-/fjl-mutable-0.18.3.tgz#4034d6cff55d4f9d827ef2bc1b49e7e16cfe0161"
-  integrity sha512-KPSN0dx9PpqpPHMIdtIeCfV2R8aPBw5mgNOp2sCWVHRGqTwh93CKf6ZFe5JWkvZWHqfhvO1bHkoLYX4ztEkMUg==
-  dependencies:
-    fjl "^1.6.2"
-
-fjl-validator@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/fjl-validator/-/fjl-validator-0.7.0.tgz#277ddb090435cd9a48da10649bee9d4f41e17c8c"
-  integrity sha512-sLVIlA0t/ilmSwJ0h2TpHpa4lzTfQKjQzrJU9xmsGudemf3AftbwGKB5/lJB7eGQ8PiJWvv9Hfyqt/r3zF39Cg==
-  dependencies:
-    fjl "^1.6.2"
-    fjl-mutable "^0.18.2"
-
-fjl@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/fjl/-/fjl-1.6.2.tgz#8dc1b58422441f015bc1bef347c2ee4f2dc37c40"
-  integrity sha512-0gGlVY4BSEhGUzfKucXXZKNjOapC4Kyq4p+WBSYSYcTUTQGRJRQbZPpAcOaOXxgPU8wxNVPfzXBJh5QtjKpPVQ==
+fjl@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/fjl/-/fjl-1.10.1.tgz#21464f8dc5452948b10d1fdc5324e4eb66daf14e"
+  integrity sha512-IJWf2otfKsePt9zoRBMavqdZRHpOq+ZUn8my2fRpEOhF5Ug9S/74gwrKYIOwEy99sby4oIfl5DypZIZqRllP6A==
 
 flagged-respawn@^1.0.0:
   version "1.0.0"

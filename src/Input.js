@@ -1,8 +1,7 @@
 /**
  * Created by Ely on 7/24/2014.
  */
-import {defineEnumProps} from 'fjl-mutable';
-import {assign, apply, compose, concat, isString, isArray, isset} from 'fjl';
+import {assign, apply, compose, concat, isString, isArray, isset, defineEnumProps} from 'fjl';
 import {toValidationResult, toValidationOptions, notEmptyValidator} from 'fjl-validator';
 import {defaultErrorHandler} from './Utils';
 
