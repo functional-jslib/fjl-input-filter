@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Input = exports.toInputValidationResult = exports.toInput = exports.runIOFilters = exports.runFilters = exports.runIOValidators = exports.runValidators = exports.validateIOInput = exports.validateInput = exports.noValidationRequired = void 0;
 
-var _fjlMutable = require("fjl-mutable");
-
 var _fjl = require("fjl");
 
 var _fjlValidator = require("fjl-validator");
@@ -272,7 +270,7 @@ runIOFilters = function runIOFilters(filters, value) {
 toInput = function toInput(inputObj) {
   var out = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  var _inputObj = (0, _fjlMutable.defineEnumProps)([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], (0, _fjlValidator.toValidationOptions)(out));
+  var _inputObj = (0, _fjl.defineEnumProps)([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], (0, _fjlValidator.toValidationOptions)(out));
 
   if ((0, _fjl.isString)(inputObj)) {
     _inputObj.name = inputObj;
@@ -297,7 +295,7 @@ toInput = function toInput(inputObj) {
  * @returns {InputValidationResult}
  */
 toInputValidationResult = function toInputValidationResult(resultObj) {
-  var _result = (0, _fjlMutable.defineEnumProps)([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
+  var _result = (0, _fjl.defineEnumProps)([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
     value: null,
     rawValue: null,
     obscuredValue: null,

@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "fjl", "./Input", "fjl-mutable", "./Utils"], factory);
+    define(["exports", "fjl", "./Input", "./Utils"], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require("fjl"), require("./Input"), require("fjl-mutable"), require("./Utils"));
+    factory(exports, require("fjl"), require("./Input"), require("./Utils"));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.fjl, global.Input, global.fjlMutable, global.Utils);
+    factory(mod.exports, global.fjl, global.Input, global.Utils);
     global.InputFilter = mod.exports;
   }
-})(this, function (_exports, _fjl, _Input, _fjlMutable, _Utils) {
+})(this, function (_exports, _fjl, _Input, _Utils) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -208,7 +208,7 @@
   toInputFilterResult = function toInputFilterResult(inResult) {
     var outResult = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var _outResult = (0, _fjlMutable.defineEnumProps)([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
+    var _outResult = (0, _fjl.defineEnumProps)([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
 
     return inResult ? (0, _fjl.assign)(_outResult, inResult) : _outResult;
   };

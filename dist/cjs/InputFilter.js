@@ -9,8 +9,6 @@ var _fjl = require("fjl");
 
 var _Input = require("./Input");
 
-var _fjlMutable = require("fjl-mutable");
-
 var _Utils = require("./Utils");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -203,7 +201,7 @@ toInputFilter = function toInputFilter(inObj) {
 toInputFilterResult = function toInputFilterResult(inResult) {
   var outResult = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-  var _outResult = (0, _fjlMutable.defineEnumProps)([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
+  var _outResult = (0, _fjl.defineEnumProps)([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
 
   return inResult ? (0, _fjl.assign)(_outResult, inResult) : _outResult;
 };

@@ -1,4 +1,4 @@
-var fjlInputFilter = (function (exports,fjlMutable,fjl,fjlValidator) {
+var fjlInputFilter = (function (exports,fjl,fjlValidator) {
   'use strict';
 
   function _classCallCheck(instance, Constructor) {
@@ -323,7 +323,7 @@ var fjlInputFilter = (function (exports,fjlMutable,fjl,fjlValidator) {
   toInput = function toInput(inputObj) {
     var out = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var _inputObj = fjlMutable.defineEnumProps([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], fjlValidator.toValidationOptions(out));
+    var _inputObj = fjl.defineEnumProps([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], fjlValidator.toValidationOptions(out));
 
     if (fjl.isString(inputObj)) {
       _inputObj.name = inputObj;
@@ -348,7 +348,7 @@ var fjlInputFilter = (function (exports,fjlMutable,fjl,fjlValidator) {
    * @returns {InputValidationResult}
    */
   toInputValidationResult = function toInputValidationResult(resultObj) {
-    var _result = fjlMutable.defineEnumProps([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
+    var _result = fjl.defineEnumProps([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
       value: null,
       rawValue: null,
       obscuredValue: null,
@@ -569,7 +569,7 @@ var fjlInputFilter = (function (exports,fjlMutable,fjl,fjlValidator) {
   toInputFilterResult = function toInputFilterResult(inResult) {
     var outResult = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var _outResult = fjlMutable.defineEnumProps([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
+    var _outResult = fjl.defineEnumProps([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
 
     return inResult ? fjl.assign(_outResult, inResult) : _outResult;
   };
@@ -631,5 +631,5 @@ var fjlInputFilter = (function (exports,fjlMutable,fjl,fjlValidator) {
 
   return exports;
 
-}({},fjlMutable,fjl,fjlValidator));
+}({},fjl,fjlValidator));
 //# sourceMappingURL=fjl-input-filter.js.map

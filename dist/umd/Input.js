@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "fjl-mutable", "fjl", "fjl-validator", "./Utils"], factory);
+    define(["exports", "fjl", "fjl-validator", "./Utils"], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require("fjl-mutable"), require("fjl"), require("fjl-validator"), require("./Utils"));
+    factory(exports, require("fjl"), require("fjl-validator"), require("./Utils"));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.fjlMutable, global.fjl, global.fjlValidator, global.Utils);
+    factory(mod.exports, global.fjl, global.fjlValidator, global.Utils);
     global.Input = mod.exports;
   }
-})(this, function (_exports, _fjlMutable, _fjl, _fjlValidator, _Utils) {
+})(this, function (_exports, _fjl, _fjlValidator, _Utils) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -277,7 +277,7 @@
   toInput = function toInput(inputObj) {
     var out = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var _inputObj = (0, _fjlMutable.defineEnumProps)([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], (0, _fjlValidator.toValidationOptions)(out));
+    var _inputObj = (0, _fjl.defineEnumProps)([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], (0, _fjlValidator.toValidationOptions)(out));
 
     if ((0, _fjl.isString)(inputObj)) {
       _inputObj.name = inputObj;
@@ -302,7 +302,7 @@
    * @returns {InputValidationResult}
    */
   toInputValidationResult = function toInputValidationResult(resultObj) {
-    var _result = (0, _fjlMutable.defineEnumProps)([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
+    var _result = (0, _fjl.defineEnumProps)([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
       value: null,
       rawValue: null,
       obscuredValue: null,

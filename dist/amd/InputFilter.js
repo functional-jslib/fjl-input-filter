@@ -1,4 +1,4 @@
-define(["exports", "fjl", "./Input", "fjl-mutable", "./Utils"], function (_exports, _fjl, _Input, _fjlMutable, _Utils) {
+define(["exports", "fjl", "./Input", "./Utils"], function (_exports, _fjl, _Input, _Utils) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -196,7 +196,7 @@ define(["exports", "fjl", "./Input", "fjl-mutable", "./Utils"], function (_expor
   toInputFilterResult = function toInputFilterResult(inResult) {
     var outResult = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var _outResult = (0, _fjlMutable.defineEnumProps)([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
+    var _outResult = (0, _fjl.defineEnumProps)([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
 
     return inResult ? (0, _fjl.assign)(_outResult, inResult) : _outResult;
   };
