@@ -1,14 +1,12 @@
 /**
  * Created by Ely on 3/26/2016.
  */
-import {typeOf, keys, isType, flip, subsequences, repeat, curry,
-    isEmpty, isArray, isBoolean} from 'fjl';
-import {expect, assert} from 'chai';
-import {notEmptyValidator, regexValidator, stringLengthValidator,
-    toValidationResult, toValidationOptions} from 'fjl-validator';
+import {keys, subsequences, repeat, curry,
+    isEmpty, isArray, isBoolean, error, peek} from 'fjl';
+import {notEmptyValidator, regexValidator, stringLengthValidator} from 'fjl-validator';
 import {runValidators, runIOValidators, runFilters, runIOFilters,
     toInput, toInputValidationResult, validateInput, validateIOInput} from '../src/Input';
-import {runHasPropTypes, log, error, peek} from "./utils";
+import {runHasPropTypes} from "./utils";
 
 describe ('Input', function () {
 
@@ -32,7 +30,7 @@ describe ('Input', function () {
         });
         test ('should return an instance with the `name` property populated when `options` parameter is a string.', function () {
             let name = 'hello';
-            expect((toInput(name)).name).to.equal(name);
+            expect((toInput(name)).name).toEqual(name);
         });
         test ('should populate all properties passed in via hash object.', function () {
             let options = {
@@ -43,7 +41,7 @@ describe ('Input', function () {
                 input = toInput(options);
             // log(input);
             keys(options).forEach(function (key) {
-                expect(input[key]).to.equal(options[key]);
+                expect(input[key]).toEqual(options[key]);
             });
         });
     });
@@ -87,21 +85,21 @@ describe ('Input', function () {
             )
             .forEach(([rsltObj, expectedResult, expectedMsgsLen]) => {
                 const {result, messages} = rsltObj;
-                expect(result).to.equal(expectedResult);
+                expect(result).toEqual(expectedResult);
                 if (messages) {
-                    expect(messages.length).to.equal(expectedMsgsLen);
+                    expect(messages.length).toEqual(expectedMsgsLen);
                 }
             });
         });
         test ('it should return `true` if passed in `inputObj` doesn\'t have any validators', function () {
-            expect(runValidators(null, breakOnFailure, 'hello-world').result).to.equal(true);
+            expect(runValidators(null, breakOnFailure, 'hello-world').result).toEqual(true);
         });
 
         test ('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
             const rslt = runValidators(toInput().validators, breakOnFailure, ''),
                 {result, messages} = rslt;
-            expect(result).to.equal(true);
-            expect(messages.length).to.equal(0);
+            expect(result).toEqual(true);
+            expect(messages.length).toEqual(0);
         });
     });
 
@@ -125,7 +123,7 @@ describe ('Input', function () {
                         someIOValidateNotEmpty,
                         someIOValidateLength({min: 3, max: 21})
                     ], defaulBreakOnFailure, '').catch(peek);
-            expect(expectedPromise).to.be.instanceOf(Promise);
+            expect(expectedPromise).toBeInstanceOf(Promise);
         });
 
         test ('the retured promise should resolve to a validation result object ' +
@@ -142,13 +140,13 @@ describe ('Input', function () {
                 ])
                 .then(results => {
                     const [falsyResult, truthyResult] = results;
-                    expect(falsyResult.result).to.equal(false);
-                    expect(truthyResult.result).to.equal(true);
-                    expect(falsyResult.messages.length).to.equal(2);
-                    expect(truthyResult.messages.length).to.equal(0);
+                    expect(falsyResult.result).toEqual(false);
+                    expect(truthyResult.result).toEqual(true);
+                    expect(falsyResult.messages.length).toEqual(2);
+                    expect(truthyResult.messages.length).toEqual(0);
                     results.forEach(rslt => {
-                        expect(isArray(rslt.messages)).to.equal(true);
-                        expect(isBoolean(rslt.result)).to.equal(true);
+                        expect(isArray(rslt.messages)).toEqual(true);
+                        expect(isBoolean(rslt.result)).toEqual(true);
                     });
                 }, peek);
         });
@@ -156,8 +154,8 @@ describe ('Input', function () {
         test('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
             runIOValidators(toInput().validators, false, '') // (validators, breakOnFailure, value) => Promise<ValidationResult>
                 .then(({result, messages}) => {
-                    expect(result).to.equal(true);
-                    expect(messages.length).to.equal(0);
+                    expect(result).toEqual(true);
+                    expect(messages.length).toEqual(0);
                 }, error);
         });
     });
@@ -168,7 +166,7 @@ describe ('Input', function () {
                 x => (x + '').trim(),
                 x => (x + '').toLowerCase(),
                 x => (x + '').replace(/[^a-z\d\-_\s]+/gim, '')
-            ], '  Hello#-#World ')).to.equal('hello-world');
+            ], '  Hello#-#World ')).toEqual('hello-world');
         });
     });
 
@@ -179,7 +177,7 @@ describe ('Input', function () {
                 x => Promise.resolve((x + '').toLowerCase()),
                 x => (x + '').replace(/[^a-z\d\-_\s]+/gim, '')
             ], '  Hello#-#World ')
-                .then(x => expect(x).to.equal('hello-world'));
+                .then(x => expect(x).toEqual('hello-world'));
         });
     });
 
@@ -238,37 +236,37 @@ describe ('Input', function () {
                 results.every(([validationResult]) =>
                     isValidateInputResult(validationResult)
                 )
-            ).to.equal(true);
+            ).toEqual(true);
         });
 
         test ('should return expected result object for given arguments', function () {
             results.forEach(([validationResult, expectedResultBln,
                                  expectedMsgsLen, expectedValue]) => {
                 const {result, messages, value} = validationResult;
-                expect(result).to.equal(expectedResultBln);
+                expect(result).toEqual(expectedResultBln);
                 if (!result) {
                     return;
                 }
                 if (messages) {
-                    expect(messages.length).to.equal(expectedMsgsLen);
+                    expect(messages.length).toEqual(expectedMsgsLen);
                 }
-                expect(value).to.equal(expectedValue);
+                expect(value).toEqual(expectedValue);
             });
         });
 
         test ('when input has `required` set to true a `notEmptyValidator` should be added to `validators`', function () {
             const rslt = validateInput(toInput({ required: true }), ''),
                 {result, messages} = rslt;
-            expect(result).to.equal(false);
-            expect(messages.length).to.equal(1);
-            expect(messages[0].indexOf('Empty')).to.equal(0);
+            expect(result).toEqual(false);
+            expect(messages.length).toEqual(1);
+            expect(messages[0].indexOf('Empty')).toEqual(0);
         });
 
         test ('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
             const rslt = validateInput(toInput(), ''),
                 {result, messages} = rslt;
-            expect(result).to.equal(true);
-            expect(messages.length).to.equal(0);
+            expect(result).toEqual(true);
+            expect(messages.length).toEqual(0);
         });
     });
 
@@ -329,7 +327,7 @@ describe ('Input', function () {
                         rslts.every(validationResult =>
                             isValidateInputResult(validationResult)
                         )
-                    ).to.equal(true);
+                    ).toEqual(true);
                 });
         });
 
@@ -339,11 +337,11 @@ describe ('Input', function () {
                     rslts.forEach((rslt, ind) => {
                         const {result, messages, value} = rslt,
                             [_, expectedResultBln, expectedMsgsLen, expectedValue] = testCases[ind];
-                        expect(result).to.equal(expectedResultBln);
+                        expect(result).toEqual(expectedResultBln);
                         if (messages) {
-                            expect(messages.length).to.equal(expectedMsgsLen);
+                            expect(messages.length).toEqual(expectedMsgsLen);
                         }
-                        expect(value).to.equal(expectedValue);
+                        expect(value).toEqual(expectedValue);
                     })
             );
         });
@@ -352,9 +350,9 @@ describe ('Input', function () {
             return validateIOInput(toInput({required: true}), '')
                 .then(({result, messages}) =>
                     Promise.all([
-                        expect(result).to.equal(false),
-                        expect(messages.length).to.equal(1),
-                        expect(messages[0].indexOf('Empty')).to.equal(0)
+                        expect(result).toEqual(false),
+                        expect(messages.length).toEqual(1),
+                        expect(messages[0].indexOf('Empty')).toEqual(0)
                     ])
                 );
         });
@@ -362,8 +360,8 @@ describe ('Input', function () {
         test('when input doesn\'t have `required` set to `true` should return truthy `result` for validation result.', () => {
             validateIOInput(toInput(), '')
                 .then(({result, messages}) => {
-                    expect(result).to.equal(true);
-                    expect(messages.length).to.equal(0);
+                    expect(result).toEqual(true);
+                    expect(messages.length).toEqual(0);
                 }, error);
         });
     });

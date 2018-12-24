@@ -2,23 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: fjlInputFilter</title>
+    <title>Module: fjlInputFilter | Module: fjlInputFilter</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-jsdoc.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/tui-doc.css">
+
+    
 </head>
-
 <body>
+<nav class="lnb" id="lnb">
+    <div class="logo" style="width: 144px; height: 55px">
+        
+            <a href="https://github.com/functional-jslib/fjl-input-filter" rel="noopener noreferrer" target="_blank">
+                <img src="http://elycruz.com/fjl-logo-v2.svg" width="100%" height="100%">
+            </a>
+        
+    </div>
+    <div class="title">
+        <h1><a href="index.html" class="link">Module: fjlInputFilter</a></h1>
+        
+    </div>
+    <div class="search-container" id="search-container">
+        <input type="text" placeholder="Search">
+        <ul></ul>
+    </div>
+    
+    <div class="lnb-api hidden"><h3>Modules</h3><ul><li><a href="module-fjlInputFilter.html">fjlInputFilter</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="module:fjlInputFilter_sub"><div class="member-type">Methods</div><ul class="inner"><li><a href="module-fjlInputFilter.html#.defaultErrorHandler">defaultErrorHandler</a></li><li><a href="module-fjlInputFilter.html#.runFilters">runFilters</a></li><li><a href="module-fjlInputFilter.html#.runIOFilters">runIOFilters</a></li><li><a href="module-fjlInputFilter.html#.runIOValidators">runIOValidators</a></li><li><a href="module-fjlInputFilter.html#.runValidators">runValidators</a></li><li><a href="module-fjlInputFilter.html#.toInput">toInput</a></li><li><a href="module-fjlInputFilter.html#.toInputFilter">toInputFilter</a></li><li><a href="module-fjlInputFilter.html#.toInputFilterResult">toInputFilterResult</a></li><li><a href="module-fjlInputFilter.html#.toInputValidationResult">toInputValidationResult</a></li><li><a href="module-fjlInputFilter.html#.validateInput">validateInput</a></li><li><a href="module-fjlInputFilter.html#.validateInputFilter">validateInputFilter</a></li><li><a href="module-fjlInputFilter.html#.validateIOInput">validateIOInput</a></li><li><a href="module-fjlInputFilter.html#.validateIOInputFilter">validateIOInputFilter</a></li><li><a href="module-fjlInputFilter.html#.validateIOInputWithName">validateIOInputWithName</a></li></ul></div></li></ul></div><div class="lnb-api hidden"><h3>Classes</h3><ul><li><a href="fjlInputFilter.Input.html">Input</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.Input_sub"></div></li><li><a href="InputFilter.html">InputFilter</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="InputFilter_sub"></div></li></ul></div><div class="lnb-api hidden"><h3>Interfaces</h3><ul><li><a href="fjlInputFilter.InputFilterResult.html">InputFilterResult</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.InputFilterResult_sub"></div></li><li><a href="fjlInputFilter.InputOptions.html">InputOptions</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.InputOptions_sub"></div></li><li><a href="fjlInputFilter.InputValidationResult.html">InputValidationResult</a><button type="button" class="hidden toggle-subnav btn btn-link">  <span class="glyphicon glyphicon-plus"></span></button><div class="hidden" id="fjlInputFilter.InputValidationResult_sub"></div></li></ul></div>
+</nav>
+<div id="resizer"></div>
 
-<div id="main">
-
-    <h1 class="page-title">Module: fjlInputFilter</h1>
-
+<div class="main" id="main">
     
 
 
@@ -28,18 +48,21 @@
 
 <header>
     
+        <h2>fjlInputFilter</h2>
         
     
 </header>
 
 <article>
-    <div class="container-overview">
     
+        <div class="container-overview">
         
+            
 
+            
         
+        </div>
     
-    </div>
 
     
 
@@ -58,138 +81,152 @@
     
         <h3 class="subsection-title">Methods</h3>
 
-        
+        <dl>
+                
+
+<dt>
+    
+        <h4 class="name" id=".defaultErrorHandler">
             
-
-    
-
-    
-    <h4 class="name" id=".defaultErrorHandler"><span class="type-signature">(static) </span>defaultErrorHandler<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Same as `console.error`.  Used by *IO variant methods (methods that work with promises) in fjlInputFilter;E.g., used as the error catcher on promises returned from IO processes.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utils.js.html">Utils.js</a>, <a href="Utils.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
+                <span class="type-signature"><span class="icon green">static</span> </span>defaultErrorHandler<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Utils.js.html">Utils.js</a></code>,
+                <code><a href="Utils.js.html#line1">line 1</a></code>
+            </div>
+            
+        </h4>
 
         
+    
+</dt>
+<dd>
 
+    
+    <div class="description">
+        Same as `console.error`.  Used by *IO variant methods (methods that work with promises) in fjlInputFilter;E.g., used as the error catcher on promises returned from IO processes.
+    </div>
+    
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
         
+                
+
+
+
 <span class="param-type">void</span>
 
 
-    </dd>
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
+
     
 
+</dd>
 
+            
+                
 
-
+<dt>
+    
+        <h4 class="name" id=".runFilters">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>runFilters<span class="signature">(filters, value)</span><span class="type-signature"> &rarr; {*}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line206">line 206</a></code>
+            </div>
+            
+        </h4>
 
         
-            
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Runs filters on value (successively).
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".runFilters"><span class="type-signature">(static) </span>runFilters<span class="signature">(filters, value)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Runs filters on value (successively).
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -258,9 +295,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">*</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -290,13 +359,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line206">line 206</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -304,68 +366,48 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".runIOFilters">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>runIOFilters<span class="signature">(filters, value, errorCallback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line216">line 216</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Runs filters on value (successively) and returns result wrapped in a promise.
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".runIOFilters"><span class="type-signature">(static) </span>runIOFilters<span class="signature">(filters, value, errorCallback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Runs filters on value (successively) and returns result wrapped in a promise.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -501,13 +543,7 @@
     </tbody>
 </table>
 
-
-
-
-
-
-<dl class="details">
-
+    </div>
     
 
     
@@ -521,94 +557,105 @@
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line216">line 216</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
+    <div class="container-returns">
+        <h5>Returns:</h5>
         
+                
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
+
 <span class="param-type">Promise.&lt;*></span>
 
 
-    </dd>
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
+
     
 
+</dd>
 
+            
+                
 
-
+<dt>
+    
+        <h4 class="name" id=".runIOValidators">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>runIOValidators<span class="signature">(validators, breakOnFailure, value, errorCallback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {*}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line157">line 157</a></code>
+            </div>
+            
+        </h4>
 
         
-            
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Runs (possibly) IOValidators against given `value`.
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".runIOValidators"><span class="type-signature">(static) </span>runIOValidators<span class="signature">(validators, breakOnFailure, value, errorCallback<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Runs (possibly) IOValidators against given `value`.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -779,9 +826,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">*</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -811,13 +890,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line157">line 157</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -825,68 +897,48 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".runValidators">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>runValidators<span class="signature">(validators, breakOnFailure, value)</span><span class="type-signature"> &rarr; {*}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line128">line 128</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Runs validator against given `value`.
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".runValidators"><span class="type-signature">(static) </span>runValidators<span class="signature">(validators, breakOnFailure, value)</span><span class="type-signature"> &rarr; {*}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Runs validator against given `value`.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -978,9 +1030,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">*</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -1010,13 +1094,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line128">line 128</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1024,68 +1101,48 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".toInput">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>toInput<span class="signature">(inputObj, out =<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {InputOptions}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line228">line 228</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Returns an `InputOptions` object from given object and optionally turns the `out` object intosaid `InputOptions` with firstParam assigned on top of it.
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".toInput"><span class="type-signature">(static) </span>toInput<span class="signature">(inputObj, out =<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {InputOptions}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Returns an `InputOptions` object from given object and optionally turns the `out` object intosaid `InputOptions` with firstParam assigned on top of it.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1172,9 +1229,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">InputOptions</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -1204,13 +1293,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line228">line 228</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1218,64 +1300,44 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">InputOptions</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".toInputFilter">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>toInputFilter<span class="signature">(inObj, breakOnFailure, outObj)</span><span class="type-signature"> &rarr; {<a href="InputFilter.html">InputFilter</a>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="InputFilter.js.html">InputFilter.js</a></code>,
+                <code><a href="InputFilter.js.html#line109">line 109</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
 
     
 
     
-    <h4 class="name" id=".toInputFilter"><span class="type-signature">(static) </span>toInputFilter<span class="signature">(inObj, breakOnFailure, outObj)</span><span class="type-signature"> &rarr; {<a href="InputFilter.html">InputFilter</a>}</span></h4>
-    
 
     
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1370,9 +1432,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type"><a href="InputFilter.html">InputFilter</a></span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -1402,13 +1496,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InputFilter.js.html">InputFilter.js</a>, <a href="InputFilter.js.html#line109">line 109</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1416,64 +1503,44 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="InputFilter.html">InputFilter</a></span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".toInputFilterResult">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>toInputFilterResult<span class="signature">(inResult, outResult)</span><span class="type-signature"> &rarr; {InputFilterResult}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="InputFilter.js.html">InputFilter.js</a></code>,
+                <code><a href="InputFilter.js.html#line132">line 132</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
 
     
 
     
-    <h4 class="name" id=".toInputFilterResult"><span class="type-signature">(static) </span>toInputFilterResult<span class="signature">(inResult, outResult)</span><span class="type-signature"> &rarr; {InputFilterResult}</span></h4>
-    
 
     
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1545,9 +1612,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">InputFilterResult</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -1577,13 +1676,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InputFilter.js.html">InputFilter.js</a>, <a href="InputFilter.js.html#line132">line 132</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1591,68 +1683,48 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">InputFilterResult</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".toInputValidationResult">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>toInputValidationResult<span class="signature">(resultObj)</span><span class="type-signature"> &rarr; {InputValidationResult}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line257">line 257</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Returns an input validation result object with values of given objectapplied/assigned to it.
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".toInputValidationResult"><span class="type-signature">(static) </span>toInputValidationResult<span class="signature">(resultObj)</span><span class="type-signature"> &rarr; {InputValidationResult}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Returns an input validation result object with values of given objectapplied/assigned to it.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1701,9 +1773,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">InputValidationResult</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -1733,13 +1837,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line257">line 257</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1747,68 +1844,48 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">InputValidationResult</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".validateInput">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>validateInput<span class="signature">(input, value)</span><span class="type-signature"> &rarr; {InputValidationResult}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line47">line 47</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Validates an input object based.
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".validateInput"><span class="type-signature">(static) </span>validateInput<span class="signature">(input, value)</span><span class="type-signature"> &rarr; {InputValidationResult}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Validates an input object based.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -1880,9 +1957,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">InputValidationResult</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -1912,13 +2021,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line47">line 47</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -1926,64 +2028,44 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">InputValidationResult</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".validateInputFilter">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>validateInputFilter<span class="signature">(inputsObj, valuesObj)</span><span class="type-signature"> &rarr; {InputFilterResult}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="InputFilter.js.html">InputFilter.js</a></code>,
+                <code><a href="InputFilter.js.html#line24">line 24</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
 
     
 
     
-    <h4 class="name" id=".validateInputFilter"><span class="type-signature">(static) </span>validateInputFilter<span class="signature">(inputsObj, valuesObj)</span><span class="type-signature"> &rarr; {InputFilterResult}</span></h4>
-    
 
     
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2052,9 +2134,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">InputFilterResult</span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -2084,13 +2198,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InputFilter.js.html">InputFilter.js</a>, <a href="InputFilter.js.html#line24">line 24</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -2098,68 +2205,48 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">InputFilterResult</span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".validateIOInput">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>validateIOInput<span class="signature">(input, value)</span><span class="type-signature"> &rarr; {Promise.&lt;InputValidationResult>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="Input.js.html">Input.js</a></code>,
+                <code><a href="Input.js.html#line84">line 84</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Validates an input object that may have IOValidators.  Returnsa validation result wrapped in a promise.
+    </div>
+    
+
+    
 
     
 
     
-    <h4 class="name" id=".validateIOInput"><span class="type-signature">(static) </span>validateIOInput<span class="signature">(input, value)</span><span class="type-signature"> &rarr; {Promise.&lt;InputValidationResult>}</span></h4>
-    
 
     
-
-
-
-<div class="description">
-    Validates an input object that may have IOValidators.  Returnsa validation result wrapped in a promise.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2231,9 +2318,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">Promise.&lt;InputValidationResult></span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -2263,13 +2382,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Input.js.html">Input.js</a>, <a href="Input.js.html#line84">line 84</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -2277,64 +2389,44 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;InputValidationResult></span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".validateIOInputFilter">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>validateIOInputFilter<span class="signature">(inputsObj, valuesObj, errorHandler)</span><span class="type-signature"> &rarr; {Promise.&lt;InputFilterResult>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="InputFilter.js.html">InputFilter.js</a></code>,
+                <code><a href="InputFilter.js.html#line58">line 58</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
 
     
 
     
-    <h4 class="name" id=".validateIOInputFilter"><span class="type-signature">(static) </span>validateIOInputFilter<span class="signature">(inputsObj, valuesObj, errorHandler)</span><span class="type-signature"> &rarr; {Promise.&lt;InputFilterResult>}</span></h4>
-    
 
     
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2426,9 +2518,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">Promise.&lt;InputFilterResult></span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -2458,13 +2582,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InputFilter.js.html">InputFilter.js</a>, <a href="InputFilter.js.html#line58">line 58</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -2472,64 +2589,44 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;InputFilterResult></span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
             
+                
+
+<dt>
+    
+        <h4 class="name" id=".validateIOInputWithName">
+            
+                <span class="type-signature"><span class="icon green">static</span> </span>validateIOInputWithName<span class="signature">(input, name, value, errorHandler)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;String, InputValidationResult>>}</span>
+                
+            
+            <div class="container-source members">
+                <code><a href="InputFilter.js.html">InputFilter.js</a></code>,
+                <code><a href="InputFilter.js.html#line97">line 97</a></code>
+            </div>
+            
+        </h4>
+
+        
+    
+</dt>
+<dd>
 
     
 
     
-    <h4 class="name" id=".validateIOInputWithName"><span class="type-signature">(static) </span>validateIOInputWithName<span class="signature">(input, name, value, errorHandler)</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;String, InputValidationResult>>}</span></h4>
-    
 
     
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
+    
+    <div class="container-params">
+        <h5>Parameters:</h5>
+        
 <table class="params">
     <thead>
     <tr>
@@ -2647,9 +2744,41 @@
     </tbody>
 </table>
 
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <div class="container-returns">
+        <h5>Returns:</h5>
+        
+                
 
 
 
+<span class="param-type">Promise.&lt;Array.&lt;String, InputValidationResult>></span>
+
+
+
+
+
+
+
+
+            
+    </div>
+    
+
+    
 
 
 <dl class="details">
@@ -2679,13 +2808,6 @@
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="InputFilter.js.html">InputFilter.js</a>, <a href="InputFilter.js.html#line97">line 97</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -2693,41 +2815,11 @@
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Array.&lt;String, InputValidationResult>></span>
-
-
-    </dd>
-</dl>
-
     
 
+</dd>
 
-
-
-
-        
+            </dl>
     
 
     
@@ -2742,17 +2834,24 @@
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-fjlInputFilter.html">fjlInputFilter</a></li></ul><h3>Classes</h3><ul><li><a href="fjlInputFilter.Input.html">Input</a></li><li><a href="InputFilter.html">InputFilter</a></li></ul><h3>Interfaces</h3><ul><li><a href="fjlInputFilter.InputFilterResult.html">InputFilterResult</a></li><li><a href="fjlInputFilter.InputOptions.html">InputOptions</a></li><li><a href="fjlInputFilter.InputValidationResult.html">InputValidationResult</a></li></ul>
-</nav>
-
-<br class="clear">
-
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Apr 12 2018 16:46:47 GMT-0400 (Eastern Daylight Time)
+    <img class="logo" src="http://elycruz.com/fjl-logo-v2.svg" style="width: 144px; height: 55px">
+    <div class="footer-text">fjl-input-filter library - BSD 3.0 License - JsDoc Template -> tui-jsdoc-template - by NHN Entertainment - Frontend Development Lab</div>
 </footer>
+<script>prettyPrint();</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/tui-doc.js"></script>
+<script src="scripts/linenumber.js"></script>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+    <script>
+        var id = 'module:fjlInputFilter_sub'.replace(/"/g, '_');
+        var selectedApi = document.getElementById(id); // do not use jquery selector
+        var $selectedApi = $(selectedApi);
+
+        $selectedApi.removeClass('hidden');
+        $selectedApi.parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+        showLnbApi();
+    </script>
+
 </body>
 </html>

@@ -1,8 +1,7 @@
 /**
  * Created by Ely on 7/24/2014.
  */
-import {defineEnumProps$} from 'fjl-mutable';
-import {assign, apply, compose, concat, isString, isArray, isset} from 'fjl';
+import {assign, apply, compose, concat, isString, isArray, isset, defineEnumProps} from 'fjl';
 import {toValidationResult, toValidationOptions, notEmptyValidator} from 'fjl-validator';
 import {defaultErrorHandler} from './Utils';
 
@@ -234,7 +233,7 @@ export const
      * @returns {InputOptions}
      */
     toInput = (inputObj, out = {}) => {
-        const _inputObj = defineEnumProps$([
+        const _inputObj = defineEnumProps([
             [String,    'name', ''],
             [Boolean,   'required', false],
             [Array,     'filters', []],
@@ -262,7 +261,7 @@ export const
      * @returns {InputValidationResult}
      */
     toInputValidationResult = resultObj => {
-        const _result = defineEnumProps$([
+        const _result = defineEnumProps([
             [String, 'name', ''],
             [Boolean, 'result', false],
             [Array, 'messages', []]

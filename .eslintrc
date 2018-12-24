@@ -11,18 +11,15 @@
 {
 
   "parserOptions": {
-    "sourceType": "module",
-    "ecmaVersion": 6,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
+    "sourceType": "module"
   },
 
   "env": {
     "node":       true,
     "browser":    true,
     "es6":        true,
-    "jest":       true
+    "jest":       true,
+    "jasmine":    true
   },
 
   /** ---------------------------------------------------------------------------------------------------------------------
@@ -30,7 +27,9 @@
    * --------------------------------------------------------------------------------------------------------------------- **/
 
   "globals": {
-    "fjl":       true
+    "fjl":      true,
+    "it":       true,
+    "describe": true
   },
 
   /** --------------------------------------------------------------------------------------------------------------------
@@ -118,11 +117,11 @@
     "no-return-assign":       2,  // - disallow use of assignment in return statement
     "no-script-url":          0,  // - disallow use of javascript: urls.
     "no-self-compare":        2,  // - disallow comparisons where both sides are exactly the same (off by default)
-    "no-sequences":           2,  // - disallow use of comma operator
+    "no-sequences":           0,  // - disallow use of comma operator
     "no-throw-literal":       2,  // - restrict what can be thrown as an exception (off by default)
     "no-unused-expressions":  0,  // - disallow usage of expressions in statement position ** Note ** Chai's functional style triggers this error.  Off for now.
     "no-void":                2,  // - disallow use of void operator (off by default)
-    "no-warning-comments":    0,  // - disallow usage of configurable warning terms in comments - e.g. TODO or FIXME (off by default)
+    "no-warning-comments":    0,  // - disallow usage of configurable warning terms in comments.
     "no-with":                2,  // - disallow use of the with statement
     "radix":                  2,  // - require use of the second argument for parseInt() (off by default)
     "vars-on-top":            0,  // - requires to declare all vars on top of their containing scope (off by default)
@@ -197,11 +196,11 @@
     "no-ternary":                 0,  // - disallow the use of ternary operators (off by default)
     "no-trailing-spaces":         0,  // - disallow trailing whitespace at the end of lines
     "no-underscore-dangle":       0,  // - disallow dangling underscores in identifiers
-    "one-var":                    1,  // - allow just one var statement per function (off by default)
+    "one-var":                    0,  // - allow just one var statement per function (off by default)
     "operator-assignment":        0,  // - require assignment operator shorthand where possible or prohibit it entirely (off by default)
     "padded-blocks":              0,  // - enforce padding within blocks (off by default)
     "quote-props":                0,  // - require quotes around object literal property names (off by default)
-    "quotes":                     0, //[2, "single", "avoid-escape"],  // - specify whether double or single quotes should be used
+    "quotes":                     [2, "single", "avoid-escape"],  // - specify whether double or single quotes should be used
     "semi":                       2,  // - require or disallow use of semicolons instead of ASI
     "semi-spacing":               2,  // - enforce spacing before and after semicolons
     "sort-vars":                  0,  // - sort variables within the same declaration block (off by default)

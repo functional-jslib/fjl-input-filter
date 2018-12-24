@@ -1,8 +1,4 @@
-import {typeOf, keys, map, isType, flip, subsequences, repeat, curry,
-    all, isEmpty, isObject, isArray, isBoolean, unfoldr, toArrayMap, fromArrayMap} from 'fjl';
-import {expect, assert} from 'chai';
-import {notEmptyValidator, regexValidator, stringLengthValidator,
-    toValidationResult, toValidationOptions} from 'fjl-validator';
+import {keys} from 'fjl';
 import {runHasPropTypes} from "./utils";
 import {
     toInputFilterResult,
@@ -36,15 +32,15 @@ describe ('InputFilter', function () {
             case1 = toInputFilter(case1Options),
             case1Keys = keys(case1);
         test ('should return an object with all keys from passed in options', function () {
-            expect(case1Keys.every((key, ind) => case1Options.hasOwnProperty(key)))
-                .to.equal(true);
+            expect(case1Keys.every(key => case1Options.hasOwnProperty(key)))
+                .toEqual(true);
         });
         test ('should return an object with properties which are un-writable', function () {
-            case1Keys.map(key => assert.throws(() => case1[key] = 99, Error));
+            case1Keys.map(key => expect(() => case1[key] = 99).toThrow(Error));
         });
         test ('should return an object with enumerable properties', function () {
             expect(case1Keys.every(key =>
-                Object.getOwnPropertyDescriptor(case1, key).enumerable)).to.equal(true);
+                Object.getOwnPropertyDescriptor(case1, key).enumerable)).toEqual(true);
         });
         test ('should return an object that contains input-options objects for all objects set on passed in options object', function () {
             const propNames = ['name', 'required', 'filters', 'validators', 'breakOnFailure'];
@@ -55,20 +51,20 @@ describe ('InputFilter', function () {
                         inputObj.hasOwnProperty(propKey));
                 })
             )
-                .to.equal(true);
+                .toEqual(true);
         });
         test ('inputs should obey property types when converting from options to inputFilter', function () {
             // should throw error becase validators can only be of type array
-            assert.throws(() => toInputFilter(({
+            expect(() => toInputFilter(({
                 name: {required: true, validators: {}}
-            })), Error);
+            }))).toThrow(Error);
 
             // When types are okay shouldn't throw error
             expect(
                 toInputFilter({name: {required: true, validators: []}})
                     .name.validators
             )
-                .to.be.instanceOf(Array);
+                .toBeInstanceOf(Array);
         });
     });
 
@@ -81,8 +77,8 @@ describe ('InputFilter', function () {
 
                     // Truthy cases
                     if (foundInvalidFieldKeys.length === 0) {
-                        expect(result.result).to.equal(true);
-                        expect(keys(result.messages).length).to.equal(0);
+                        expect(result.result).toEqual(true);
+                        expect(keys(result.messages).length).toEqual(0);
                         // @todo messages should be null when `result.result` is
                         //  `true` might be better for the library
                     }
@@ -90,8 +86,8 @@ describe ('InputFilter', function () {
                     // Falsy cases
                     // Expect found-invalid-field-keys to match required criteria for each..
                     foundInvalidFieldKeys.forEach(key => {
-                        expect(expectedInvalidInputs.hasOwnProperty(key)).to.equal(true);
-                        expect(result.messages[key].length >= 1).to.equal(true); // has one or more messages
+                        expect(expectedInvalidInputs.hasOwnProperty(key)).toEqual(true);
+                        expect(result.messages[key].length >= 1).toEqual(true); // has one or more messages
                     });
                 });
             });
@@ -116,8 +112,8 @@ describe ('InputFilter', function () {
 
                     // Truthy cases
                     if (foundInvalidFieldKeys.length === 0) {
-                        expect(result.result).to.equal(true);
-                        expect(keys(result.messages).length).to.equal(0);
+                        expect(result.result).toEqual(true);
+                        expect(keys(result.messages).length).toEqual(0);
                         // @todo messages should be null when `result.result` is
                         //  `true` might be better for the library
                     }
@@ -125,8 +121,8 @@ describe ('InputFilter', function () {
                     // Falsy cases
                     // Expect found-invalid-field-keys to match required criteria for each..
                     foundInvalidFieldKeys.forEach(key => {
-                        expect(expectedInvalidInputs.hasOwnProperty(key)).to.equal(true);
-                        expect(result.messages[key].length >= 1).to.equal(true);
+                        expect(expectedInvalidInputs.hasOwnProperty(key)).toEqual(true);
+                        expect(result.messages[key].length >= 1).toEqual(true);
                     });
                 });
             });
