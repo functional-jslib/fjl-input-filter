@@ -2633,6 +2633,11 @@ fjl@^1.10.1:
   resolved "https://registry.yarnpkg.com/fjl/-/fjl-1.10.1.tgz#21464f8dc5452948b10d1fdc5324e4eb66daf14e"
   integrity sha512-IJWf2otfKsePt9zoRBMavqdZRHpOq+ZUn8my2fRpEOhF5Ug9S/74gwrKYIOwEy99sby4oIfl5DypZIZqRllP6A==
 
+fjl@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/fjl/-/fjl-1.11.0.tgz#ebce8d0faaab246dafab5fedc033c67af79ea12f"
+  integrity sha512-VfeMFphKGg/SIHkZQKmvy7Og84PTnyx9Ajhfi3jyf+b0raJpPs9stSUpnhFKvLV4dKWhnqXj7I0w43gHmi7a6g==
+
 flagged-respawn@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/flagged-respawn/-/flagged-respawn-1.0.0.tgz#4e79ae9b2eb38bf86b3bb56bf3e0a56aa5fcabd7"
