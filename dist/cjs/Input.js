@@ -197,7 +197,7 @@ runIOValidators = function runIOValidators(validators, breakOnFailure, value) {
         vResult = validator(value);
 
     if (vResult instanceof Promise) {
-      pendingResults.push(vResult.catch(errorCallback));
+      pendingResults.push(vResult["catch"](errorCallback));
       continue;
     }
 
@@ -228,7 +228,7 @@ runIOValidators = function runIOValidators(validators, breakOnFailure, value) {
     }
 
     return (0, _fjlValidator.toValidationResult)(interimResult);
-  }).catch(errorCallback);
+  })["catch"](errorCallback);
 },
 
 /**
@@ -256,7 +256,7 @@ runIOFilters = function runIOFilters(filters, value) {
     return function (x) {
       return x.then(filter);
     };
-  }) : null, Promise.resolve(value).catch(errorCallback));
+  }) : null, Promise.resolve(value)["catch"](errorCallback));
 },
 
 /**

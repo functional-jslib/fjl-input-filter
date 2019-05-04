@@ -1,5 +1,65 @@
-import { assign, apply, compose, concat, isString, isArray, isset, defineEnumProps, partition, foldl, map, keys, toAssocList, fromAssocList } from 'fjl';
+import { isset, isString, isArray, assign, apply, compose, concat, defineEnumProps, partition, map, toAssocList, foldl, fromAssocList, keys } from 'fjl';
 import { toValidationResult, toValidationOptions, notEmptyValidator } from 'fjl-validator';
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArrayLimit(arr, i) {
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+}
 
 /**
  * Same as `console.error`.  Used by *IO variant methods (methods that work with promises) in fjlInputFilter;
@@ -7,11 +67,8 @@ import { toValidationResult, toValidationOptions, notEmptyValidator } from 'fjl-
  * @function module:fjlInputFilter.defaultErrorHandler
  * @returns {void}
  */
-const defaultErrorHandler = console.error.bind(console);
+var defaultErrorHandler = console.error.bind(console);
 
-/**
- * Created by Ely on 7/24/2014.
- */
 /*---------------------------------------------------*/
 
 /* VIRTUAL TYPES AND INTERFACES */
@@ -43,7 +100,9 @@ const defaultErrorHandler = console.error.bind(console);
  * @property {Function} valueObscurator=((x) => x) - Obscurator used for obscuring a value given to validation.
  */
 
-const noValidationRequired = (input, value) => !input.required && (!isset(value) || (isString(value) || isArray(value)) && !value.length),
+var noValidationRequired = function noValidationRequired(input, value) {
+  return !input.required && (!isset(value) || (isString(value) || isArray(value)) && !value.length);
+},
 
 /**
  * Validates an input object based.
@@ -52,29 +111,27 @@ const noValidationRequired = (input, value) => !input.required && (!isset(value)
  * @param value {*}
  * @returns {InputValidationResult}
  */
-validateInput = (input, value) => {
-  const {
-    validators,
-    filters,
-    breakOnFailure,
-    valueObscured,
-    valueObscurator,
-    name
-  } = input; // If value is not required and is `null` or `undefined`
+validateInput = function validateInput(input, value) {
+  var validators = input.validators,
+      filters = input.filters,
+      breakOnFailure = input.breakOnFailure,
+      valueObscured = input.valueObscured,
+      valueObscurator = input.valueObscurator,
+      name = input.name; // If value is not required and is `null` or `undefined`
 
   if (noValidationRequired(input, value)) {
     return toInputValidationResult({
       result: true,
       name: name || '',
       rawValue: value,
-      value,
+      value: value,
       filteredValue: value,
       obscuredValue: value
     });
   } // Run validation and filtering
 
 
-  let vResult = runValidators(validators, breakOnFailure, value),
+  var vResult = runValidators(validators, breakOnFailure, value),
       fResult = runFilters(filters, value),
       oResult = valueObscured && valueObscurator ? valueObscurator(fResult) : fResult;
   return toInputValidationResult(assign(vResult, {
@@ -94,35 +151,35 @@ validateInput = (input, value) => {
  * @param value {*}
  * @returns {Promise.<InputValidationResult>}
  */
-validateIOInput = (input, value) => {
-  const {
-    validators,
-    filters,
-    breakOnFailure,
-    valueObscured,
-    valueObscurator
-  } = input; // If not required and value is `null` or `undefined` return truthy result
+validateIOInput = function validateIOInput(input, value) {
+  var validators = input.validators,
+      filters = input.filters,
+      breakOnFailure = input.breakOnFailure,
+      valueObscured = input.valueObscured,
+      valueObscurator = input.valueObscurator; // If not required and value is `null` or `undefined` return truthy result
 
   if (noValidationRequired(input, value)) {
     return Promise.resolve(toInputValidationResult({
       result: true,
       name: input.name || '',
       rawValue: value,
-      value,
+      value: value,
       filteredValue: value,
       obscuredValue: value
     }));
   }
 
-  let pendingValidation = validators && validators.length ? runIOValidators(validators, breakOnFailure, value, input) : Promise.resolve({
+  var pendingValidation = validators && validators.length ? runIOValidators(validators, breakOnFailure, value, input) : Promise.resolve({
     result: true
   });
-  return pendingValidation.then(result => runIOFilters(filters, value).then(filteredValue => {
-    result.rawValue = value;
-    result.value = result.filteredValue = filteredValue;
-    result.obscuredValue = valueObscured && valueObscurator ? valueObscurator(filteredValue) : filteredValue;
-    return toInputValidationResult(result);
-  }));
+  return pendingValidation.then(function (result) {
+    return runIOFilters(filters, value).then(function (filteredValue) {
+      result.rawValue = value;
+      result.value = result.filteredValue = filteredValue;
+      result.obscuredValue = valueObscured && valueObscurator ? valueObscurator(filteredValue) : filteredValue;
+      return toInputValidationResult(result);
+    });
+  });
 },
 
 /**
@@ -133,21 +190,21 @@ validateIOInput = (input, value) => {
  * @param value {*}
  * @returns {*}
  */
-runValidators = (validators, breakOnFailure, value) => {
-  let result = true,
+runValidators = function runValidators(validators, breakOnFailure, value) {
+  var result = true,
       i = 0,
       messageResults = [];
 
   if (!validators || !validators.length) {
     return toValidationResult({
-      result
+      result: result
     });
   }
 
-  const limit = validators.length;
+  var limit = validators.length;
 
   for (; i < limit; i++) {
-    const vResult = validators[i](value);
+    var vResult = validators[i](value);
 
     if (!vResult.result) {
       messageResults.push(vResult.messages);
@@ -160,7 +217,7 @@ runValidators = (validators, breakOnFailure, value) => {
   }
 
   return toValidationResult({
-    result,
+    result: result,
     messages: concat(messageResults)
   });
 },
@@ -174,24 +231,26 @@ runValidators = (validators, breakOnFailure, value) => {
  * @param [errorCallback=console.error] {Function}
  * @returns {*}
  */
-runIOValidators = (validators, breakOnFailure, value, errorCallback = defaultErrorHandler) => {
+runIOValidators = function runIOValidators(validators, breakOnFailure, value) {
+  var errorCallback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : defaultErrorHandler;
+
   if (!validators || !validators.length) {
     return Promise.resolve(toValidationResult({
       result: true
     }));
   }
 
-  const limit = validators.length,
-        pendingResults = [];
-  let i = 0,
+  var limit = validators.length,
+      pendingResults = [];
+  var i = 0,
       result = true;
 
   for (; i < limit; i++) {
-    const validator = validators[i],
-          vResult = validator(value);
+    var validator = validators[i],
+        vResult = validator(value);
 
     if (vResult instanceof Promise) {
-      pendingResults.push(vResult.catch(errorCallback));
+      pendingResults.push(vResult["catch"](errorCallback));
       continue;
     }
 
@@ -206,11 +265,15 @@ runIOValidators = (validators, breakOnFailure, value, errorCallback = defaultErr
     }
   }
 
-  return Promise.all(pendingResults).then(results => {
-    const failedResults = results.filter(rslt => !rslt.result),
-          interimResult = {
-      result,
-      messages: failedResults.reduce((agg, item) => agg.concat(item.messages), [])
+  return Promise.all(pendingResults).then(function (results) {
+    var failedResults = results.filter(function (rslt) {
+      return !rslt.result;
+    }),
+        interimResult = {
+      result: result,
+      messages: failedResults.reduce(function (agg, item) {
+        return agg.concat(item.messages);
+      }, [])
     };
 
     if (failedResults.length) {
@@ -218,7 +281,7 @@ runIOValidators = (validators, breakOnFailure, value, errorCallback = defaultErr
     }
 
     return toValidationResult(interimResult);
-  }).catch(errorCallback);
+  })["catch"](errorCallback);
 },
 
 /**
@@ -228,7 +291,9 @@ runIOValidators = (validators, breakOnFailure, value, errorCallback = defaultErr
  * @param value {*}
  * @returns {*}
  */
-runFilters = (filters, value) => filters && filters.length ? apply(compose, filters)(value) : value,
+runFilters = function runFilters(filters, value) {
+  return filters && filters.length ? apply(compose, filters)(value) : value;
+},
 
 /**
  * Runs filters on value (successively) and returns result wrapped in a promise.
@@ -238,7 +303,14 @@ runFilters = (filters, value) => filters && filters.length ? apply(compose, filt
  * @param [errorCallback=console.error] {Function}
  * @returns {Promise.<*>}
  */
-runIOFilters = (filters, value, errorCallback = defaultErrorHandler) => runFilters(filters ? filters.map(filter => x => x.then(filter)) : null, Promise.resolve(value).catch(errorCallback)),
+runIOFilters = function runIOFilters(filters, value) {
+  var errorCallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultErrorHandler;
+  return runFilters(filters ? filters.map(function (filter) {
+    return function (x) {
+      return x.then(filter);
+    };
+  }) : null, Promise.resolve(value)["catch"](errorCallback));
+},
 
 /**
  * Returns an `InputOptions` object from given object and optionally turns the `out` object into
@@ -248,8 +320,10 @@ runIOFilters = (filters, value, errorCallback = defaultErrorHandler) => runFilte
  * @param [out = {}] {Object|*}
  * @returns {InputOptions}
  */
-toInput = (inputObj, out = {}) => {
-  const _inputObj = defineEnumProps([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], toValidationOptions(out));
+toInput = function toInput(inputObj) {
+  var out = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  var _inputObj = defineEnumProps([[String, 'name', ''], [Boolean, 'required', false], [Array, 'filters', []], [Array, 'validators', []], [Boolean, 'breakOnFailure', false]], toValidationOptions(out));
 
   if (isString(inputObj)) {
     _inputObj.name = inputObj;
@@ -273,8 +347,8 @@ toInput = (inputObj, out = {}) => {
  * @param resultObj {Object|*}
  * @returns {InputValidationResult}
  */
-toInputValidationResult = resultObj => {
-  const _result = defineEnumProps([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
+toInputValidationResult = function toInputValidationResult(resultObj) {
+  var _result = defineEnumProps([[String, 'name', ''], [Boolean, 'result', false], [Array, 'messages', []]], {
     value: null,
     rawValue: null,
     obscuredValue: null,
@@ -289,24 +363,34 @@ toInputValidationResult = resultObj => {
  * @extends InputOptions
  */
 
-class Input {
-  constructor(inputObj) {
+var Input =
+/*#__PURE__*/
+function () {
+  function Input(inputObj) {
+    _classCallCheck(this, Input);
+
     toInput(inputObj, this);
   }
 
-  static of(inputObj) {
-    return new Input(inputObj);
-  }
+  _createClass(Input, [{
+    key: "validate",
+    value: function validate(value) {
+      return validateInput(this, value);
+    }
+  }, {
+    key: "validateIO",
+    value: function validateIO(value) {
+      return validateIOInput(this, value);
+    }
+  }], [{
+    key: "of",
+    value: function of(inputObj) {
+      return new Input(inputObj);
+    }
+  }]);
 
-  validate(value) {
-    return validateInput(this, value);
-  }
-
-  validateIO(value) {
-    return validateIOInput(this, value);
-  }
-
-}
+  return Input;
+}();
 
 /**
  * @interface InputFilter {Object.<String, (Input|InputOptions)>}
@@ -324,35 +408,55 @@ class Input {
  * @property {Object.<String,Array.<String>>} messages - Error messages (if any) mapped to input names.
  */
 
-const 
+var 
 /**
  * @function module:fjlInputFilter.validateInputFilter
  * @param inputsObj {InputFilter}
  * @param valuesObj {Object.<String,*>}
  * @returns {InputFilterResult}
  */
-validateInputFilter = (inputsObj, valuesObj) => {
+validateInputFilter = function validateInputFilter(inputsObj, valuesObj) {
   if (!inputsObj || !valuesObj) {
     return toInputFilterResult({
       result: false
     });
   }
 
-  const [validResults, invalidResults] = partition(([_, result]) => result.result, map(([key, inputObj]) => [key, validateInput(inputObj, valuesObj[key])], toAssocList(inputsObj))),
-        messages = foldl((agg, [key, result]) => {
+  var _partition = partition(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        _ = _ref2[0],
+        result = _ref2[1];
+
+    return result.result;
+  }, map(function (_ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2),
+        key = _ref4[0],
+        inputObj = _ref4[1];
+
+    return [key, validateInput(inputObj, valuesObj[key])];
+  }, toAssocList(inputsObj))),
+      _partition2 = _slicedToArray(_partition, 2),
+      validResults = _partition2[0],
+      invalidResults = _partition2[1],
+      messages = foldl(function (agg, _ref5) {
+    var _ref6 = _slicedToArray(_ref5, 2),
+        key = _ref6[0],
+        result = _ref6[1];
+
     agg[key] = result.messages;
     return agg;
   }, {}, invalidResults),
-        validInputs = fromAssocList(validResults),
-        invalidInputs = fromAssocList(invalidResults),
-        result = !invalidResults.length;
+      validInputs = fromAssocList(validResults),
+      invalidInputs = fromAssocList(invalidResults),
+      result = !invalidResults.length;
+
   return toInputFilterResult({
-    result,
-    validInputs,
-    invalidInputs,
-    validResults,
-    invalidResults,
-    messages
+    result: result,
+    validInputs: validInputs,
+    invalidInputs: invalidInputs,
+    validResults: validResults,
+    invalidResults: invalidResults,
+    messages: messages
   });
 },
 
@@ -363,29 +467,51 @@ validateInputFilter = (inputsObj, valuesObj) => {
  * @param errorHandler {Function}
  * @returns {Promise.<InputFilterResult>}
  */
-validateIOInputFilter = (inputsObj, valuesObj, errorHandler = defaultErrorHandler) => {
+validateIOInputFilter = function validateIOInputFilter(inputsObj, valuesObj) {
+  var errorHandler = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : defaultErrorHandler;
+
   if (!inputsObj || !valuesObj) {
     return Promise.resolve(toInputFilterResult({
       result: false
     }));
   }
 
-  return Promise.all(map(([key, inputObj]) => validateIOInputWithName(inputObj, key, valuesObj[key]), toAssocList(inputsObj))).then(assocList => {
-    const [validResults, invalidResults] = partition(([_, result]) => result.result, assocList),
-          messages = foldl((agg, [key, result]) => {
+  return Promise.all(map(function (_ref7) {
+    var _ref8 = _slicedToArray(_ref7, 2),
+        key = _ref8[0],
+        inputObj = _ref8[1];
+
+    return validateIOInputWithName(inputObj, key, valuesObj[key]);
+  }, toAssocList(inputsObj))).then(function (assocList) {
+    var _partition3 = partition(function (_ref9) {
+      var _ref10 = _slicedToArray(_ref9, 2),
+          _ = _ref10[0],
+          result = _ref10[1];
+
+      return result.result;
+    }, assocList),
+        _partition4 = _slicedToArray(_partition3, 2),
+        validResults = _partition4[0],
+        invalidResults = _partition4[1],
+        messages = foldl(function (agg, _ref11) {
+      var _ref12 = _slicedToArray(_ref11, 2),
+          key = _ref12[0],
+          result = _ref12[1];
+
       agg[key] = result.messages;
       return agg;
     }, {}, invalidResults),
-          validInputs = fromAssocList(validResults),
-          invalidInputs = fromAssocList(invalidResults),
-          result = !invalidResults.length;
+        validInputs = fromAssocList(validResults),
+        invalidInputs = fromAssocList(invalidResults),
+        result = !invalidResults.length;
+
     return toInputFilterResult({
-      result,
-      validInputs,
-      invalidInputs,
-      validResults,
-      invalidResults,
-      messages
+      result: result,
+      validInputs: validInputs,
+      invalidInputs: invalidInputs,
+      validResults: validResults,
+      invalidResults: invalidResults,
+      messages: messages
     });
   }, errorHandler);
 },
@@ -398,7 +524,12 @@ validateIOInputFilter = (inputsObj, valuesObj, errorHandler = defaultErrorHandle
  * @param errorHandler {Function}
  * @returns {Promise.<Array.<String,InputValidationResult>>}
  */
-validateIOInputWithName = (input, name, value, errorHandler = defaultErrorHandler) => validateIOInput(input, value).then(result => Promise.resolve([name, result]), errorHandler),
+validateIOInputWithName = function validateIOInputWithName(input, name, value) {
+  var errorHandler = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : defaultErrorHandler;
+  return validateIOInput(input, value).then(function (result) {
+    return Promise.resolve([name, result]);
+  }, errorHandler);
+},
 
 /**
  * @function module:fjlInputFilter.toInputFilter
@@ -407,17 +538,27 @@ validateIOInputWithName = (input, name, value, errorHandler = defaultErrorHandle
  * @param outObj {Object|*}
  * @returns {InputFilter}
  */
-toInputFilter = (inObj, breakOnFailure = false, outObj = {}) => Object.defineProperties(outObj, foldl((agg, [key, inputOpsObj]) => {
-  const inputObj = toInput(assign(inputOpsObj, {
-    name: key
-  }));
-  inputObj.breakOnFailure = breakOnFailure;
-  agg[key] = {
-    value: inputObj,
-    enumerable: true
-  };
-  return agg;
-}, {}, map(key => [key, inObj[key]], keys(inObj)))),
+toInputFilter = function toInputFilter(inObj) {
+  var breakOnFailure = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var outObj = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  return Object.defineProperties(outObj, foldl(function (agg, _ref13) {
+    var _ref14 = _slicedToArray(_ref13, 2),
+        key = _ref14[0],
+        inputOpsObj = _ref14[1];
+
+    var inputObj = toInput(assign(inputOpsObj, {
+      name: key
+    }));
+    inputObj.breakOnFailure = breakOnFailure;
+    agg[key] = {
+      value: inputObj,
+      enumerable: true
+    };
+    return agg;
+  }, {}, map(function (key) {
+    return [key, inObj[key]];
+  }, keys(inObj))));
+},
 
 /**
  * @function module:fjlInputFilter.toInputFilterResult
@@ -425,8 +566,10 @@ toInputFilter = (inObj, breakOnFailure = false, outObj = {}) => Object.definePro
  * @param outResult {Object|*}
  * @returns {InputFilterResult}
  */
-toInputFilterResult = (inResult, outResult = {}) => {
-  const _outResult = defineEnumProps([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
+toInputFilterResult = function toInputFilterResult(inResult) {
+  var outResult = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  var _outResult = defineEnumProps([[Boolean, 'result', false], [Object, 'messages', {}], [Object, 'validInputs', {}], [Object, 'invalidInputs', {}], [Array, 'validResults', []], [Array, 'invalidResults', []]], outResult);
 
   return inResult ? assign(_outResult, inResult) : _outResult;
 };
@@ -434,28 +577,40 @@ toInputFilterResult = (inResult, outResult = {}) => {
  * @class InputFilter
  */
 
-class InputFilter {
-  constructor(inputsObj, breakOnFailure = false) {
+var InputFilter =
+/*#__PURE__*/
+function () {
+  function InputFilter(inputsObj) {
+    var breakOnFailure = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+    _classCallCheck(this, InputFilter);
+
     toInputFilter(inputsObj, breakOnFailure, this);
   }
 
-  static of(inputsObj, breakOnFailure) {
-    return new InputFilter(inputsObj, breakOnFailure);
-  }
+  _createClass(InputFilter, [{
+    key: "validate",
+    value: function validate(data) {
+      return validateInputFilter(this, data);
+    }
+  }, {
+    key: "validateIO",
+    value: function validateIO(data) {
+      return validateIOInputFilter(this, data);
+    }
+  }], [{
+    key: "of",
+    value: function of(inputsObj, breakOnFailure) {
+      return new InputFilter(inputsObj, breakOnFailure);
+    }
+  }]);
 
-  validate(data) {
-    return validateInputFilter(this, data);
-  }
-
-  validateIO(data) {
-    return validateIOInputFilter(this, data);
-  }
-
-}
+  return InputFilter;
+}();
 
 /**
  * @module fjlInputFilter
  */
 
-export { noValidationRequired, validateInput, validateIOInput, runValidators, runIOValidators, runFilters, runIOFilters, toInput, toInputValidationResult, Input, validateInputFilter, validateIOInputFilter, validateIOInputWithName, toInputFilter, toInputFilterResult, InputFilter };
+export { Input, InputFilter, noValidationRequired, runFilters, runIOFilters, runIOValidators, runValidators, toInput, toInputFilter, toInputFilterResult, toInputValidationResult, validateIOInput, validateIOInputFilter, validateIOInputWithName, validateInput, validateInputFilter };
 //# sourceMappingURL=fjl-input-filter.mjs.map

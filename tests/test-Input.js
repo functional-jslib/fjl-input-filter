@@ -161,7 +161,7 @@ describe ('Input', function () {
     });
 
     describe ('#runFilters', function () {
-        it ('should run all filters in compositional order', function () {
+        test ('should run all filters in compositional order', function () {
             expect(runFilters([
                 x => (x + '').trim(),
                 x => (x + '').toLowerCase(),

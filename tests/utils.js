@@ -12,16 +12,23 @@ export const
             .reduce(str => str + genRanChar(min, max), ''),
 
     runHasPropOfType = (Type, propName, [correctValue, incorrectValue], x) => {
-        test (`it should have the a \`${propName}\` property`, function () {
+        test (`it should have an \`${propName}\` property`, () => {
             expect(x.hasOwnProperty(propName)).toEqual(true);
         });
-        test (`it should throw an error when setting \`${propName}\` to ${incorrectValue}`, function () {
+        test (`it should throw an error when setting \`${propName}\` to ${incorrectValue}`, () => {
             expect(() => { x[propName] = incorrectValue; }).toThrow(Error);
         });
-        test (`it should set value correctly for \`${propName}\` when value is of correct type`, function () {
-            expect(x[propName] = correctValue).toEqual(correctValue);
+        test (`it should set value correctly for \`${propName}\` when value is of correct type`, () => {
+            x[propName] = correctValue;
+            expect(x[propName]).toEqual(correctValue);
         });
-        // log(Type, propName, correctValue, incorrectValue, x);
+    },
+
+    runHasPropOfTypeUnWrapped = (Type, propName, [correctValue, incorrectValue], x) => {
+        expect(x.hasOwnProperty(propName)).toEqual(true);
+        expect(() => { x[propName] = incorrectValue; }).toThrow(Error);
+        x[propName] = correctValue;
+        expect(x[propName]).toEqual(correctValue);
     },
 
     runHasPropTypes = (propTypeArgsList, x) =>
@@ -29,6 +36,13 @@ export const
             const _args = args.slice(0);
             _args.push(x);
             apply(runHasPropOfType, _args);
+        }),
+
+    runHasPropTypesUnWrapped = (propTypeArgsList, x) =>
+        propTypeArgsList.forEach(args => {
+            const _args = args.slice(0);
+            _args.push(x);
+            apply(runHasPropOfTypeUnWrapped, _args);
         })
 
 ;

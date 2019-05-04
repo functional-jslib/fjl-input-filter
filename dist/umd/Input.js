@@ -204,7 +204,7 @@
           vResult = validator(value);
 
       if (vResult instanceof Promise) {
-        pendingResults.push(vResult.catch(errorCallback));
+        pendingResults.push(vResult["catch"](errorCallback));
         continue;
       }
 
@@ -235,7 +235,7 @@
       }
 
       return (0, _fjlValidator.toValidationResult)(interimResult);
-    }).catch(errorCallback);
+    })["catch"](errorCallback);
   },
 
   /**
@@ -263,7 +263,7 @@
       return function (x) {
         return x.then(filter);
       };
-    }) : null, Promise.resolve(value).catch(errorCallback));
+    }) : null, Promise.resolve(value)["catch"](errorCallback));
   },
 
   /**

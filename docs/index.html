@@ -129,7 +129,11 @@ toInputFilter, toInputFilterResult, InputFilter</code></pre><p>In-line summary d
 <li>fjl-validator: https://github.com/functional-jslib/fjl-validator</li>
 <li>fjl-filter (WIP): https://github.com/functional-jslib/fjl-filter</li>
 </ul>
-<h2>Change log</h2><h3>0.18.0</h3><h4>Breaking changes</h4><ul>
+<h2>Change log</h2><h3>1.2.5</h3><ul>
+<li>Dependencies and dev-dependencies updated to latest.</li>
+<li>Tests updated to reflect updated dev-dependencies (jest complained about nested 'describe' blocks and nested 'test' blocks (primarily issue had to do with async and non-async tests)).</li>
+</ul>
+<h3>0.18.0</h3><h4>Breaking changes</h4><ul>
 <li>Removed uncurried methods (methods ending with <code>$</code>) (use curried methods instead).
 <em>Removed</em>:</li>
 <li><code>errorIfNotTypeOnTarget$</code> - ('fjl' provides this now)</li>

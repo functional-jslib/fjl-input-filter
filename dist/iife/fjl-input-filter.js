@@ -1,4 +1,4 @@
-var fjlInputFilter = (function (exports,fjl,fjlValidator) {
+var fjlInputFilter = (function (exports, fjl, fjlValidator) {
   'use strict';
 
   function _classCallCheck(instance, Constructor) {
@@ -250,7 +250,7 @@ var fjlInputFilter = (function (exports,fjl,fjlValidator) {
           vResult = validator(value);
 
       if (vResult instanceof Promise) {
-        pendingResults.push(vResult.catch(errorCallback));
+        pendingResults.push(vResult["catch"](errorCallback));
         continue;
       }
 
@@ -281,7 +281,7 @@ var fjlInputFilter = (function (exports,fjl,fjlValidator) {
       }
 
       return fjlValidator.toValidationResult(interimResult);
-    }).catch(errorCallback);
+    })["catch"](errorCallback);
   },
 
   /**
@@ -309,7 +309,7 @@ var fjlInputFilter = (function (exports,fjl,fjlValidator) {
       return function (x) {
         return x.then(filter);
       };
-    }) : null, Promise.resolve(value).catch(errorCallback));
+    }) : null, Promise.resolve(value)["catch"](errorCallback));
   },
 
   /**
@@ -612,24 +612,24 @@ var fjlInputFilter = (function (exports,fjl,fjlValidator) {
    * @module fjlInputFilter
    */
 
+  exports.Input = Input;
+  exports.InputFilter = InputFilter;
   exports.noValidationRequired = noValidationRequired;
-  exports.validateInput = validateInput;
-  exports.validateIOInput = validateIOInput;
-  exports.runValidators = runValidators;
-  exports.runIOValidators = runIOValidators;
   exports.runFilters = runFilters;
   exports.runIOFilters = runIOFilters;
+  exports.runIOValidators = runIOValidators;
+  exports.runValidators = runValidators;
   exports.toInput = toInput;
-  exports.toInputValidationResult = toInputValidationResult;
-  exports.Input = Input;
-  exports.validateInputFilter = validateInputFilter;
-  exports.validateIOInputFilter = validateIOInputFilter;
-  exports.validateIOInputWithName = validateIOInputWithName;
   exports.toInputFilter = toInputFilter;
   exports.toInputFilterResult = toInputFilterResult;
-  exports.InputFilter = InputFilter;
+  exports.toInputValidationResult = toInputValidationResult;
+  exports.validateIOInput = validateIOInput;
+  exports.validateIOInputFilter = validateIOInputFilter;
+  exports.validateIOInputWithName = validateIOInputWithName;
+  exports.validateInput = validateInput;
+  exports.validateInputFilter = validateInputFilter;
 
   return exports;
 
-}({},fjl,fjlValidator));
+}({}, fjl, fjlValidator));
 //# sourceMappingURL=fjl-input-filter.js.map
