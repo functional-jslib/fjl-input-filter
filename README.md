@@ -7,7 +7,7 @@ Input filter validation functions - These allows you to create input and input-f
 to easily validate a body of input fields quickly and easily (see usage examples further below).
 
 ## Sections in Readme:
-- [Basic idea](#basic-idea)
+- [Definitions](#definitions)
 - [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Docs](#docs)
@@ -18,10 +18,41 @@ to easily validate a body of input fields quickly and easily (see usage examples
 - [Resources](#resources)
 - [Change log](#change-log)
 
-## Basic idea:
-- **Validators** - Functions that validate a given input and return a validation result.
-- **Filters** - Functions that take a value and give you a 'possibly' transformed value.
-- **Inputs** - Objects that contain rules used for validation (breakOnFailure, a list of validators, a list of filters etc.)
+## Definitions:
+- **Validation Result** -
+An object resulting from the validation of a value.
+
+Signature:
+```
+interface ValidationResult {
+    result: boolean,
+    messages?: [string]
+}
+```
+- **Validator** - 
+A Functions that takes a value and returns validation result.
+
+Signature:
+```
+(x: any) => {result: boolean, messages?: []}
+```
+- **Filters** - 
+Functions that take a value and give you a 'possibly' transformed/filtered value.
+Signature: 
+```
+(x: any) => x
+``` 
+
+- **Inputs** - Objects that contain rules used for validation (`breakOnFailure`, a list of validators, a list of filters etc.).
+```typescript
+interface Input<T> {
+    name: string,
+    rawValue: T,
+    value: T,
+    filteredValue: any,
+    obscuredValue: string
+}
+```
 - **InputFilters** - Collection of input objects that can be validated together as a whole.
 (see usage example(s) below): 
 

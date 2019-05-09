@@ -1,7 +1,6 @@
 
 In-line summary docs follow:
 
-
 ## Api:
 ### `validateInputFilter(inputFilter, incomingData)`
 ### `validateIOInputFilter(inputFilter, incomingData, ioErrorHandler)`
