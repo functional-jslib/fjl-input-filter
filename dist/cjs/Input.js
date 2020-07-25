@@ -321,9 +321,7 @@ exports.validateIOInput = validateIOInput;
 exports.validateInput = validateInput;
 exports.noValidationRequired = noValidationRequired;
 
-var Input =
-/*#__PURE__*/
-function () {
+var Input = /*#__PURE__*/function () {
   function Input(inputObj) {
     _classCallCheck(this, Input);
 

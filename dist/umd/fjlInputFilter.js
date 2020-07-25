@@ -10,7 +10,7 @@
     factory(mod.exports, global.Input, global.InputFilter);
     global.fjlInputFilter = mod.exports;
   }
-})(this, function (_exports, _Input, _InputFilter) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports, _Input, _InputFilter) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {

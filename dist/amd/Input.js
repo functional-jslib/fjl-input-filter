@@ -316,9 +316,7 @@ define(["exports", "fjl", "fjl-validator", "./Utils"], function (_exports, _fjl,
   _exports.validateInput = validateInput;
   _exports.noValidationRequired = noValidationRequired;
 
-  var Input =
-  /*#__PURE__*/
-  function () {
+  var Input = /*#__PURE__*/function () {
     function Input(inputObj) {
       _classCallCheck(this, Input);
 

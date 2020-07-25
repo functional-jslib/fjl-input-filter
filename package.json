@@ -1,6 +1,6 @@
 {
   "name": "fjl-input-filter",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "main": "./dist/cjs/fjlInputFilter.js",
   "module": "./dist/es6-module/fjl-input-filter.js",
   "license": "BSD-3-Clause",
@@ -13,20 +13,20 @@
     "docs": "gulp docs"
   },
   "dependencies": {
-    "fjl": "^1.11.3",
-    "fjl-validator": "^0.7.10"
+    "fjl": "^1.12.6",
+    "fjl-validator": "^0.7.15"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/plugin-external-helpers": "^7.2.0",
-    "@babel/plugin-transform-modules-amd": "^7.2.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
-    "@babel/plugin-transform-modules-umd": "^7.2.0",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "@babel/register": "^7.4.4",
-    "@types/jest": "^24.0.13",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/plugin-external-helpers": "^7.10.4",
+    "@babel/plugin-transform-modules-amd": "^7.10.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+    "@babel/plugin-transform-modules-umd": "^7.10.4",
+    "@babel/polyfill": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/register": "^7.10.5",
+    "@types/jest": "^24.9.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
     "babel-upgrade": "1.0.1",
@@ -43,8 +43,8 @@
     "gulp-replace": "^1.0.0",
     "gulp-uglify": "^3.0.2",
     "jest": "^24.8.0",
-    "rollup": "^1.14.4",
-    "rollup-plugin-babel": "^4.3.2",
+    "rollup": "^1.32.1",
+    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-node-resolve": "^5.0.1",
     "tui-jsdoc-template": "^1.2.2"
   },

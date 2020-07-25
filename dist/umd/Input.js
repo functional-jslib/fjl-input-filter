@@ -10,7 +10,7 @@
     factory(mod.exports, global.fjl, global.fjlValidator, global.Utils);
     global.Input = mod.exports;
   }
-})(this, function (_exports, _fjl, _fjlValidator, _Utils) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports, _fjl, _fjlValidator, _Utils) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -328,9 +328,7 @@
   _exports.validateInput = validateInput;
   _exports.noValidationRequired = noValidationRequired;
 
-  var Input =
-  /*#__PURE__*/
-  function () {
+  var Input = /*#__PURE__*/function () {
     function Input(inputObj) {
       _classCallCheck(this, Input);
 
