@@ -1,3 +1,6 @@
+> **Warning**
+> This repo is deprecated.  Please see the [fjl](https://github.com/functional-jslib/fjl/tree/monorepo) monorepo for the latest sources.
+
 [![Build Status](https://travis-ci.org/functional-jslib/fjl-input-filter.png)](https://travis-ci.org/functional-jslib/fjl-input-filter)
 [![GitHub version](https://badge.fury.io/gh/functional-jslib%2Ffjl-input-filter.svg)](http://badge.fury.io/gh/functional-jslib%2Ffjl-input-filter)
 [![NPM version](https://badge.fury.io/js/fjl-input-filter.svg)](http://badge.fury.io/js/fjl-input-filter)
